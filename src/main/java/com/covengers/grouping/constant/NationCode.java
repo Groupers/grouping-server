@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum NationCode {
 
-    SOUTH_KOREA("+82");
+    SOUTH_KOREA("+82", "0");
 
     private final String phoneNumberPrefix;
+    private final String replacePrefix;
 }

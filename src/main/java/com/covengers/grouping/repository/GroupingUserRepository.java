@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.covengers.grouping.constant.NationCode;
 import com.covengers.grouping.domain.GroupingUser;
 
 public interface GroupingUserRepository extends JpaRepository<GroupingUser, String> {
@@ -12,5 +13,5 @@ public interface GroupingUserRepository extends JpaRepository<GroupingUser, Stri
 
     Optional<GroupingUser> findTopByUserId(String userId);
 
-    Optional<GroupingUser> findTopByPhoneNumber(String phoneNumber);
+    Optional<GroupingUser> findTopByPhoneNumberAndNationCode(String phoneNumber, NationCode nationCode);
 }

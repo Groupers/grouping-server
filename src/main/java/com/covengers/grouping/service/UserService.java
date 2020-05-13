@@ -5,14 +5,16 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
-import com.covengers.grouping.dto.CheckEmailResponseDto;
 import com.covengers.grouping.dto.vo.CheckEmailResultVo;
 import com.covengers.grouping.dto.vo.CheckPhoneNumberResultVo;
 import com.covengers.grouping.dto.vo.CheckUserIdResultVo;
 import com.covengers.grouping.dto.vo.EnrollEmailRequestVo;
+import com.covengers.grouping.dto.vo.EnrollPhoneNumberRequestVo;
 import com.covengers.grouping.dto.vo.GroupingUserVo;
+import com.covengers.grouping.dto.vo.PhoneNationCodeSeparationVo;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
 
@@ -24,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
     private final GroupingUserRepository groupingUserRepository;
+    private final PhoneNationCodeClassifier phoneNationCodeClassifier;
 
     public CheckEmailResultVo checkEmail(String email) {
 
@@ -43,8 +46,14 @@ public class UserService {
 
     public CheckPhoneNumberResultVo checkPhoneNumber(String phoneNumber) {
 
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(phoneNumber);
+
         final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopByPhoneNumber(phoneNumber);
+                groupingUserRepository.findTopByPhoneNumberAndNationCode(
+                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                        phoneNationCodeSeparationVo.getNationCode());
+
         return CheckPhoneNumberResultVo.builder()
                                        .isPhoneNumberAvailable(!groupingUserOptional.isPresent())
                                        .build();
@@ -53,13 +62,38 @@ public class UserService {
     @Transactional
     public GroupingUserVo enrollEmail(EnrollEmailRequestVo requestVo) {
 
-        final boolean isEnrollEmailAvailable = !checkEmail(requestVo.getEmail()).isEmailAvailable();
+        final boolean isEnrollEmailAvailable = checkEmail(requestVo.getEmail()).isEmailAvailable();
 
         if (!isEnrollEmailAvailable) {
             throw new CommonException(ResponseCode.EMAIL_ALREADY_EXISTED);
         }
 
         final GroupingUser groupingUser = new GroupingUser(requestVo.getEmail());
+        groupingUserRepository.save(groupingUser);
+        return groupingUser.toVo();
+    }
+
+    @Transactional
+    public GroupingUserVo enrollPhoneNumber(EnrollPhoneNumberRequestVo requestVo) {
+        final boolean isEnrollPhoneNumberAvailable =
+                checkPhoneNumber(requestVo.getPhoneNumber()).isPhoneNumberAvailable();
+
+        if (!isEnrollPhoneNumberAvailable) {
+            throw new CommonException(ResponseCode.PHONE_NUMBER_ALREADY_EXISTED);
+        }
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findById(requestVo.getId());
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
+
+        groupingUser.updatePhoneInfo(phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                                     phoneNationCodeSeparationVo.getNationCode());
+
         groupingUserRepository.save(groupingUser);
         return groupingUser.toVo();
     }

@@ -12,6 +12,7 @@ import com.covengers.grouping.dto.CheckUserIdResponseDto;
 import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.EnrollEmailRequestDto;
+import com.covengers.grouping.dto.EnrollPhoneNumberRequestDto;
 import com.covengers.grouping.dto.GroupingUserDto;
 import com.covengers.grouping.service.UserService;
 
@@ -29,6 +30,7 @@ public class SignController extends AppApiV1Controller {
 
     @GetMapping("/sign/email")
     public CommonResponse<CheckEmailResponseDto> checkEmail(@RequestParam("email") String email) {
+        log.info("email : {}", email);
 
         final CheckEmailResponseDto responseDto =
                 CheckEmailResponseDto.of(userService.checkEmail(email));
@@ -71,7 +73,13 @@ public class SignController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-//    @PostMapping("/sign/user-id")
-//    @PostMapping("/sign/phone-number")
+    //    @PostMapping("/sign/user-id")
+    @PostMapping("/sign/phone-number")
+    public CommonResponse<GroupingUserDto> enrollPassword(@RequestBody EnrollPhoneNumberRequestDto requestDto) {
+        final GroupingUserDto responseDto =
+                GroupingUserDto.of(userService.enrollPhoneNumber(requestDto.toVo()));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
 
 }
