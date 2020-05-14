@@ -18,6 +18,7 @@ public enum ResponseCode {
     USER_NOT_EXISTED("1100", "user not existed."),
 
     INVALID_PHONE_NUMBER("1200", "Invalid phone number"),
+    INVALID_PASSWORD("1201", "Invalid password"),
 
     UNKNOWN_ERROR("9999", "Unknown Error");
 

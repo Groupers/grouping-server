@@ -97,7 +97,6 @@ public class GroupingUser extends AbstractAuditingEntity {
 
     public GroupingUserVo toVo() {
         return GroupingUserVo.builder()
-                             .id(id)
                              .userStatus(userStatus)
                              .email(email)
                              .nationCode(nationCode)

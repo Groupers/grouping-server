@@ -16,6 +16,7 @@ import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.EnrollEmailRequestDto;
 import com.covengers.grouping.dto.EnrollPhoneNumberRequestDto;
 import com.covengers.grouping.dto.GroupingUserDto;
+import com.covengers.grouping.dto.SignInRequestDto;
 import com.covengers.grouping.dto.SignUpRequestDto;
 import com.covengers.grouping.service.UserService;
 
@@ -93,6 +94,14 @@ public class SignController extends AppApiV1Controller {
     public CommonResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
 
         final GroupingUserDto responseDto = GroupingUserDto.of(userService.completeSignUp(requestDto.toVo()));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+    @PostMapping("/sign/login")
+    public CommonResponse<GroupingUserDto> signIn(@RequestBody SignInRequestDto requestDto) {
+
+        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signIn(requestDto.toVo()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

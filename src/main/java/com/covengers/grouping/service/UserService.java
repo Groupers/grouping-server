@@ -20,6 +20,7 @@ import com.covengers.grouping.dto.vo.EnrollEmailRequestVo;
 import com.covengers.grouping.dto.vo.EnrollPhoneNumberRequestVo;
 import com.covengers.grouping.dto.vo.GroupingUserVo;
 import com.covengers.grouping.dto.vo.PhoneNationCodeSeparationVo;
+import com.covengers.grouping.dto.vo.SignInRequestVo;
 import com.covengers.grouping.dto.vo.SignUpRequestVo;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
@@ -148,6 +149,22 @@ public class UserService {
                                                            phoneNationCodeSeparationVo.getPurePhoneNumber(),
                                                            phoneNationCodeSeparationVo.getNationCode());
         groupingUserRepository.save(groupingUser);
+
+        return groupingUser.toVo();
+    }
+
+    @Transactional(readOnly = true)
+    public GroupingUserVo signIn(SignInRequestVo requestVo) {
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByEmail(requestVo.getEmail());
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        if (!groupingUser.getPassword().equals(requestVo.getPassword())) {
+            throw new CommonException(ResponseCode.INVALID_PASSWORD);
+        }
 
         return groupingUser.toVo();
     }

@@ -14,7 +14,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class GroupingUserVo {
-    private final String id;
     private final UserStatus userStatus;
     private final String email;
     private final NationCode nationCode;
