@@ -14,6 +14,6 @@ public class SignInRequestDto {
     private final String password;
 
     public SignInRequestVo toVo() {
-        return SignInRequestVo.builder().email(email).password(password).build();
+        return SignInRequestVo.builder().email(email.toLowerCase()).password(password.toLowerCase()).build();
     }
 }

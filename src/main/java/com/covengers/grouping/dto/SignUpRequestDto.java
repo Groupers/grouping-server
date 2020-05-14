@@ -22,12 +22,12 @@ public class SignUpRequestDto {
 
     public SignUpRequestVo toVo() {
         return SignUpRequestVo.builder()
-                              .email(email)
+                              .email(email.toLowerCase())
                               .password(password)
                               .name(name)
                               .gender(gender)
                               .birthday(birthday)
-                              .phoneNumber(phoneNumber)
+                              .phoneNumber(phoneNumber.toLowerCase())
                               .build();
     }
 }

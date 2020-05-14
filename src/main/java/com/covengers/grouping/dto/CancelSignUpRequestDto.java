@@ -17,8 +17,12 @@ public class CancelSignUpRequestDto {
 
     public CancelSignUpRequestVo toVo() {
         return CancelSignUpRequestVo.builder()
-                                    .email(Optional.of(email))
-                                    .phoneNumber(Optional.of(phoneNumber))
+                                    .email(email != null ?
+                                           Optional.of(email.toLowerCase()) :
+                                           Optional.empty())
+                                    .phoneNumber(phoneNumber != null ?
+                                                 Optional.of(phoneNumber.toLowerCase()) :
+                                                 Optional.empty())
                                     .build();
     }
 }

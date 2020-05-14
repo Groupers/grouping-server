@@ -18,7 +18,7 @@ public class EnrollPhoneNumberRequestDto {
 
     public EnrollPhoneNumberRequestVo toVo() {
         return EnrollPhoneNumberRequestVo.builder()
-                                         .phoneNumber(phoneNumber)
+                                         .phoneNumber(phoneNumber.toLowerCase())
                                          .build();
     }
 }

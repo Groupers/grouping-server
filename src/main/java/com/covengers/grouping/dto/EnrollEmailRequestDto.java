@@ -17,6 +17,6 @@ public class EnrollEmailRequestDto {
     String email;
 
     public EnrollEmailRequestVo toVo() {
-        return EnrollEmailRequestVo.builder().email(email).build();
+        return EnrollEmailRequestVo.builder().email(email.toLowerCase()).build();
     }
 }

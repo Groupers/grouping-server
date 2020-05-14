@@ -36,7 +36,7 @@ public class SignController extends AppApiV1Controller {
     public CommonResponse<CheckEmailResponseDto> checkEmail(@RequestParam("email") String email) {
 
         final CheckEmailResponseDto responseDto =
-                CheckEmailResponseDto.of(userService.checkEmail(email));
+                CheckEmailResponseDto.of(userService.checkEmail(email.toLowerCase()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
@@ -46,7 +46,7 @@ public class SignController extends AppApiV1Controller {
             @RequestParam("phone-number") String phoneNumber) {
 
         final CheckPhoneNumberResponseDto responseDto =
-                CheckPhoneNumberResponseDto.of(userService.checkPhoneNumber(phoneNumber));
+                CheckPhoneNumberResponseDto.of(userService.checkPhoneNumber(phoneNumber.toLowerCase()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
@@ -55,7 +55,7 @@ public class SignController extends AppApiV1Controller {
     public CommonResponse<CheckUserIdResponseDto> checkUserId(@RequestParam("user-id") String userId) {
 
         final CheckUserIdResponseDto responseDto =
-                CheckUserIdResponseDto.of(userService.checkUserId(userId));
+                CheckUserIdResponseDto.of(userService.checkUserId(userId.toLowerCase()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

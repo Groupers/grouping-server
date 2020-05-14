@@ -20,6 +20,11 @@ public class CommonResponse<T> {
         setMessage(ResponseCode.SUCCESS.getMessage());
     }
 
+    public CommonResponse(ResponseCode responseCode) {
+        setCode(responseCode.getCode());
+        setMessage(responseCode.getMessage());
+    }
+
     public CommonResponse(ResponseCode responseCode, T data) {
         setCode(responseCode.getCode());
         setMessage(responseCode.getMessage());
@@ -32,5 +37,9 @@ public class CommonResponse<T> {
 
     public static <T> CommonResponse<T> of(ResponseCode responseCode, T data) {
         return new CommonResponse<>(responseCode, data);
+    }
+
+    public static <T> CommonResponse<Void> fail(ResponseCode responseCode) {
+        return new CommonResponse<>(responseCode);
     }
 }
