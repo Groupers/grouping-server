@@ -12,6 +12,8 @@ import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
+import com.covengers.grouping.dto.vo.CancelEmailRequestVo;
+import com.covengers.grouping.dto.vo.CancelPhoneNumberRequestVo;
 import com.covengers.grouping.dto.vo.CancelSignUpRequestVo;
 import com.covengers.grouping.dto.vo.CheckEmailResultVo;
 import com.covengers.grouping.dto.vo.CheckPhoneNumberResultVo;
@@ -120,6 +122,16 @@ public class UserService {
     public void cancelSignUp(CancelSignUpRequestVo requestVo) {
         requestVo.getEmail().ifPresent(redisTemplate::delete);
         requestVo.getPhoneNumber().ifPresent(redisTemplate::delete);
+    }
+
+    @Transactional
+    public void cancelSignUpEmail(CancelEmailRequestVo requestVo) {
+        redisTemplate.delete(requestVo.getEmail());
+    }
+
+    @Transactional
+    public void cancelSignUpPhoneNumber(CancelPhoneNumberRequestVo requestVo) {
+        redisTemplate.delete(requestVo.getPhoneNumber());
     }
 
     @Transactional

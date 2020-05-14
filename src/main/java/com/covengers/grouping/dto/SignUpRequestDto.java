@@ -17,7 +17,7 @@ public class SignUpRequestDto {
     private final String password;
     private final String name;
     private final Gender gender;
-    private final LocalDate birthday;
+    private final String birthday;
     private final String phoneNumber;
 
     public SignUpRequestVo toVo() {
@@ -26,7 +26,7 @@ public class SignUpRequestDto {
                               .password(password)
                               .name(name)
                               .gender(gender)
-                              .birthday(birthday)
+                              .birthday(LocalDate.parse(birthday.replaceAll("\\.","-")))
                               .phoneNumber(phoneNumber.toLowerCase())
                               .build();
     }
