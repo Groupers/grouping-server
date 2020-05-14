@@ -62,6 +62,20 @@ public class UserService {
     @Transactional
     public GroupingUserVo enrollEmail(EnrollEmailRequestVo requestVo) {
 
+        final Optional<String> idOptional = requestVo.getId();
+
+        if (idOptional.isPresent()) {
+            final Optional<GroupingUser> groupingUserOptional =
+                    groupingUserRepository.findById(idOptional.get());
+
+            if (groupingUserOptional.isPresent()) {
+                final GroupingUser groupingUser = groupingUserOptional.get();
+                groupingUser.updateEmail(requestVo.getEmail());
+                groupingUserRepository.save(groupingUser);
+                return groupingUser.toVo();
+            }
+        }
+
         final boolean isEnrollEmailAvailable = checkEmail(requestVo.getEmail()).isEmailAvailable();
 
         if (!isEnrollEmailAvailable) {
@@ -75,6 +89,7 @@ public class UserService {
 
     @Transactional
     public GroupingUserVo enrollPhoneNumber(EnrollPhoneNumberRequestVo requestVo) {
+
         final boolean isEnrollPhoneNumberAvailable =
                 checkPhoneNumber(requestVo.getPhoneNumber()).isPhoneNumberAvailable();
 
@@ -96,5 +111,15 @@ public class UserService {
 
         groupingUserRepository.save(groupingUser);
         return groupingUser.toVo();
+    }
+
+    @Transactional
+    public void cancelSignUp(String id) {
+        final Optional<GroupingUser> groupingUserOptional = groupingUserRepository.findById(id);
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        groupingUserRepository.delete(groupingUser);
     }
 }

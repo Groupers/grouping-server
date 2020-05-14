@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.dto.CancelSignUpRequestDto;
 import com.covengers.grouping.dto.CheckEmailResponseDto;
 import com.covengers.grouping.dto.CheckPhoneNumberResponseDto;
 import com.covengers.grouping.dto.CheckUserIdResponseDto;
@@ -80,6 +82,13 @@ public class SignController extends AppApiV1Controller {
                 GroupingUserDto.of(userService.enrollPhoneNumber(requestDto.toVo()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+    @PostMapping("/sign/cancel")
+    public CommonResponse<Void> cancelSignUp(@RequestBody CancelSignUpRequestDto requestDto) {
+
+        userService.cancelSignUp(requestDto.getId());
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
 }

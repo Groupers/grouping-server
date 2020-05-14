@@ -76,9 +76,15 @@ public class GroupingUser extends AbstractAuditingEntity {
         userStatus = UserStatus.SIGN_UP_IN_PROGRESS;
     }
 
+    public void updateEmail(String email) {
+        this.email = email;
+        userStatus = UserStatus.SIGN_UP_IN_PROGRESS;
+    }
+
     public void updatePhoneInfo(String phoneNumber, NationCode nationCode) {
         this.phoneNumber = phoneNumber;
         this.nationCode = nationCode;
+        userStatus = UserStatus.SIGN_UP_IN_PROGRESS;
     }
 
     public void signUpCompleted() {
