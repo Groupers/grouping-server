@@ -8,6 +8,5 @@ import lombok.ToString;
 @Getter
 @ToString
 public class EnrollPhoneNumberRequestVo {
-    private final String id;
     private final String phoneNumber;
 }

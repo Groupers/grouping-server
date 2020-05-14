@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.dto.vo.PhoneNationCodeSeparationVo;
@@ -20,6 +21,11 @@ public class PhoneNationCodeClassifier {
     private final List<PhoneNationSeparator> phoneNationSeparatorList;
 
     public PhoneNationCodeSeparationVo separate(String phoneNumber) {
+
+        if (StringUtils.isEmpty(phoneNumber)) {
+            throw new CommonException(ResponseCode.INVALID_PHONE_NUMBER);
+        }
+
         final Optional<PhoneNationSeparator> separatorOptional =
                 phoneNationSeparatorList.stream()
                                         .filter(phoneNationSeparator -> phoneNationSeparator

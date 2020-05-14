@@ -1,7 +1,5 @@
 package com.covengers.grouping.dto;
 
-import java.util.Optional;
-
 import com.covengers.grouping.dto.vo.EnrollEmailRequestVo;
 
 import lombok.AllArgsConstructor;
@@ -17,9 +15,8 @@ import lombok.ToString;
 @Builder
 public class EnrollEmailRequestDto {
     String email;
-    String id;
 
     public EnrollEmailRequestVo toVo() {
-        return EnrollEmailRequestVo.builder().id(Optional.of(id)).email(email).build();
+        return EnrollEmailRequestVo.builder().email(email).build();
     }
 }

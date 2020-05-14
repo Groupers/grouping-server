@@ -3,9 +3,11 @@ package com.covengers.grouping.constant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
 @RequiredArgsConstructor
-public enum UserStatus {
-    SIGN_UP_COMPLETED,
-    NORMAL
+@Getter
+public enum RedisCacheTime {
+    SIGN_UP_PHONE_NUMBER(60),
+    SIGN_UP_EMAIL(60);
+
+    private final Integer cacheTime;
 }

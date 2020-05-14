@@ -71,27 +71,27 @@ public class GroupingUser extends AbstractAuditingEntity {
     @Column(name = "represent_profile_image")
     private String representProfileImage;
 
-    public GroupingUser(String email) {
-        this.email = email;
-        userStatus = UserStatus.SIGN_UP_IN_PROGRESS;
-    }
+    public GroupingUser(String email,
+                        String password,
+                        String name,
+                        Gender gender,
+                        LocalDate birthDay,
+                        String phoneNumber,
+                        NationCode nationCode) {
 
-    public void updateEmail(String email) {
         this.email = email;
-        userStatus = UserStatus.SIGN_UP_IN_PROGRESS;
-    }
-
-    public void updatePhoneInfo(String phoneNumber, NationCode nationCode) {
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.birthDay = birthDay;
         this.phoneNumber = phoneNumber;
         this.nationCode = nationCode;
-        userStatus = UserStatus.SIGN_UP_IN_PROGRESS;
+        userStatus = UserStatus.SIGN_UP_COMPLETED;
     }
 
-    public void signUpCompleted() {
-        userStatus = UserStatus.BEFORE_EXTRA_INFO;
-    }
-
-    public void extraInfoCompleted() {
+    public void extraInfoCompleted(String userId, String representProfileImage) {
+        this.userId = userId;
+        this.representProfileImage = representProfileImage;
         userStatus = UserStatus.NORMAL;
     }
 

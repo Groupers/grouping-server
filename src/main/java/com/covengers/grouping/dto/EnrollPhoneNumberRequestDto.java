@@ -15,11 +15,9 @@ import lombok.ToString;
 @Builder
 public class EnrollPhoneNumberRequestDto {
     String phoneNumber;
-    String id;
 
     public EnrollPhoneNumberRequestVo toVo() {
         return EnrollPhoneNumberRequestVo.builder()
-                                         .id(id)
                                          .phoneNumber(phoneNumber)
                                          .build();
     }

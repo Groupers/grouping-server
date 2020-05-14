@@ -13,6 +13,7 @@ public enum ResponseCode {
     // 1xxx is signup error
     EMAIL_ALREADY_EXISTED("1000", "Email is already existed"),
     PHONE_NUMBER_ALREADY_EXISTED("1001", "Phone number is already existed"),
+    SIGN_UP_FAILED_FOR_INVALID_INFO("1010", "Sign up failed for invalid info"),
 
     USER_NOT_EXISTED("1100", "user not existed."),
 

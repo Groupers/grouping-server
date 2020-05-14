@@ -1,13 +1,18 @@
 package com.covengers.grouping.service;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.covengers.grouping.component.PhoneNationCodeClassifier;
+import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
+import com.covengers.grouping.dto.vo.CancelSignUpRequestVo;
 import com.covengers.grouping.dto.vo.CheckEmailResultVo;
 import com.covengers.grouping.dto.vo.CheckPhoneNumberResultVo;
 import com.covengers.grouping.dto.vo.CheckUserIdResultVo;
@@ -15,6 +20,7 @@ import com.covengers.grouping.dto.vo.EnrollEmailRequestVo;
 import com.covengers.grouping.dto.vo.EnrollPhoneNumberRequestVo;
 import com.covengers.grouping.dto.vo.GroupingUserVo;
 import com.covengers.grouping.dto.vo.PhoneNationCodeSeparationVo;
+import com.covengers.grouping.dto.vo.SignUpRequestVo;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
 
@@ -27,12 +33,23 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
     private final GroupingUserRepository groupingUserRepository;
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public CheckEmailResultVo checkEmail(String email) {
 
         final Optional<GroupingUser> groupingUserOptional = groupingUserRepository.findTopByEmail(email);
+
+        final String savedEmail = redisTemplate.opsForValue().get(email);
+
+        boolean isEmailAvailable = false;
+
+        if (StringUtils.isEmpty(savedEmail) && !groupingUserOptional.isPresent()) {
+            isEmailAvailable = true;
+
+        }
+
         return CheckEmailResultVo.builder()
-                                 .isEmailAvailable(!groupingUserOptional.isPresent())
+                                 .isEmailAvailable(isEmailAvailable)
                                  .build();
     }
 
@@ -46,6 +63,8 @@ public class UserService {
 
     public CheckPhoneNumberResultVo checkPhoneNumber(String phoneNumber) {
 
+        final String savedPhoneNumber = redisTemplate.opsForValue().get(phoneNumber);
+
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(phoneNumber);
 
@@ -54,27 +73,19 @@ public class UserService {
                         phoneNationCodeSeparationVo.getPurePhoneNumber(),
                         phoneNationCodeSeparationVo.getNationCode());
 
+        boolean isPhoneNumberAvailable = false;
+
+        if (StringUtils.isEmpty(savedPhoneNumber) && !groupingUserOptional.isPresent()) {
+            isPhoneNumberAvailable = true;
+        }
+
         return CheckPhoneNumberResultVo.builder()
-                                       .isPhoneNumberAvailable(!groupingUserOptional.isPresent())
+                                       .isPhoneNumberAvailable(isPhoneNumberAvailable)
                                        .build();
     }
 
     @Transactional
-    public GroupingUserVo enrollEmail(EnrollEmailRequestVo requestVo) {
-
-        final Optional<String> idOptional = requestVo.getId();
-
-        if (idOptional.isPresent()) {
-            final Optional<GroupingUser> groupingUserOptional =
-                    groupingUserRepository.findById(idOptional.get());
-
-            if (groupingUserOptional.isPresent()) {
-                final GroupingUser groupingUser = groupingUserOptional.get();
-                groupingUser.updateEmail(requestVo.getEmail());
-                groupingUserRepository.save(groupingUser);
-                return groupingUser.toVo();
-            }
-        }
+    public void enrollEmail(EnrollEmailRequestVo requestVo) {
 
         final boolean isEnrollEmailAvailable = checkEmail(requestVo.getEmail()).isEmailAvailable();
 
@@ -82,13 +93,14 @@ public class UserService {
             throw new CommonException(ResponseCode.EMAIL_ALREADY_EXISTED);
         }
 
-        final GroupingUser groupingUser = new GroupingUser(requestVo.getEmail());
-        groupingUserRepository.save(groupingUser);
-        return groupingUser.toVo();
+        redisTemplate.opsForValue().set(requestVo.getEmail(), requestVo.getEmail());
+        redisTemplate.expire(requestVo.getEmail(),
+                             RedisCacheTime.SIGN_UP_EMAIL.getCacheTime(),
+                             TimeUnit.MINUTES);
     }
 
     @Transactional
-    public GroupingUserVo enrollPhoneNumber(EnrollPhoneNumberRequestVo requestVo) {
+    public void enrollPhoneNumber(EnrollPhoneNumberRequestVo requestVo) {
 
         final boolean isEnrollPhoneNumberAvailable =
                 checkPhoneNumber(requestVo.getPhoneNumber()).isPhoneNumberAvailable();
@@ -97,29 +109,46 @@ public class UserService {
             throw new CommonException(ResponseCode.PHONE_NUMBER_ALREADY_EXISTED);
         }
 
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findById(requestVo.getId());
+        redisTemplate.opsForValue().set(requestVo.getPhoneNumber(), requestVo.getPhoneNumber());
+        redisTemplate.expire(requestVo.getPhoneNumber(),
+                             RedisCacheTime.SIGN_UP_PHONE_NUMBER.getCacheTime(),
+                             TimeUnit.MINUTES);
+    }
 
-        final GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+    @Transactional
+    public void cancelSignUp(CancelSignUpRequestVo requestVo) {
+        requestVo.getEmail().ifPresent(redisTemplate::delete);
+        requestVo.getPhoneNumber().ifPresent(redisTemplate::delete);
+    }
+
+    @Transactional
+    public GroupingUserVo completeSignUp(SignUpRequestVo requestVo) {
+
+        final boolean validEmail = !StringUtils.isEmpty(redisTemplate.opsForValue().get(requestVo.getEmail()))
+                                   && !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
 
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
-        groupingUser.updatePhoneInfo(phoneNationCodeSeparationVo.getPurePhoneNumber(),
-                                     phoneNationCodeSeparationVo.getNationCode());
+        final boolean validPhoneNumber =
+                !StringUtils.isEmpty(redisTemplate.opsForValue().get(requestVo.getPhoneNumber()))
+                && !groupingUserRepository.findTopByPhoneNumberAndNationCode(
+                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                        phoneNationCodeSeparationVo.getNationCode()).isPresent();
 
+        if (!validEmail || !validPhoneNumber) {
+            throw new CommonException(ResponseCode.SIGN_UP_FAILED_FOR_INVALID_INFO);
+        }
+
+        final GroupingUser groupingUser = new GroupingUser(requestVo.getEmail(),
+                                                           requestVo.getPassword(),
+                                                           requestVo.getName(),
+                                                           requestVo.getGender(),
+                                                           requestVo.getBirthday(),
+                                                           phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                                                           phoneNationCodeSeparationVo.getNationCode());
         groupingUserRepository.save(groupingUser);
+
         return groupingUser.toVo();
-    }
-
-    @Transactional
-    public void cancelSignUp(String id) {
-        final Optional<GroupingUser> groupingUserOptional = groupingUserRepository.findById(id);
-
-        final GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
-
-        groupingUserRepository.delete(groupingUser);
     }
 }

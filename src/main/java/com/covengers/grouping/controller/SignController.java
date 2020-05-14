@@ -16,6 +16,7 @@ import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.EnrollEmailRequestDto;
 import com.covengers.grouping.dto.EnrollPhoneNumberRequestDto;
 import com.covengers.grouping.dto.GroupingUserDto;
+import com.covengers.grouping.dto.SignUpRequestDto;
 import com.covengers.grouping.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +33,6 @@ public class SignController extends AppApiV1Controller {
 
     @GetMapping("/sign/email")
     public CommonResponse<CheckEmailResponseDto> checkEmail(@RequestParam("email") String email) {
-        log.info("email : {}", email);
 
         final CheckEmailResponseDto responseDto =
                 CheckEmailResponseDto.of(userService.checkEmail(email));
@@ -48,7 +48,6 @@ public class SignController extends AppApiV1Controller {
                 CheckPhoneNumberResponseDto.of(userService.checkPhoneNumber(phoneNumber));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-
     }
 
     @GetMapping("/sign/user-id")
@@ -58,7 +57,6 @@ public class SignController extends AppApiV1Controller {
                 CheckUserIdResponseDto.of(userService.checkUserId(userId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-
     }
 
     @ApiOperation(
@@ -68,27 +66,35 @@ public class SignController extends AppApiV1Controller {
                     "\n9999 : 서비스 점검 중"
     )
     @PostMapping("/sign/email")
-    public CommonResponse<GroupingUserDto> enrollEmail(@RequestBody EnrollEmailRequestDto requestDto) {
-        final GroupingUserDto responseDto =
-                GroupingUserDto.of(userService.enrollEmail(requestDto.toVo()));
+    public CommonResponse<Void> enrollEmail(@RequestBody EnrollEmailRequestDto requestDto) {
 
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+        userService.enrollEmail(requestDto.toVo());
+
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
-    //    @PostMapping("/sign/user-id")
     @PostMapping("/sign/phone-number")
-    public CommonResponse<GroupingUserDto> enrollPassword(@RequestBody EnrollPhoneNumberRequestDto requestDto) {
-        final GroupingUserDto responseDto =
-                GroupingUserDto.of(userService.enrollPhoneNumber(requestDto.toVo()));
+    public CommonResponse<Void> enrollPhoneNumber(@RequestBody EnrollPhoneNumberRequestDto requestDto) {
 
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+        userService.enrollPhoneNumber(requestDto.toVo());
+
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
     @PostMapping("/sign/cancel")
     public CommonResponse<Void> cancelSignUp(@RequestBody CancelSignUpRequestDto requestDto) {
 
-        userService.cancelSignUp(requestDto.getId());
+        userService.cancelSignUp(requestDto.toVo());
+
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
+    }
+
+    @PostMapping("/sign/complete")
+    public CommonResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
+
+        final GroupingUserDto responseDto = GroupingUserDto.of(userService.completeSignUp(requestDto.toVo()));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
 }
