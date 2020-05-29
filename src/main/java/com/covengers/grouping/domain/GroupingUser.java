@@ -1,6 +1,8 @@
 package com.covengers.grouping.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -70,6 +73,12 @@ public class GroupingUser extends AbstractAuditingEntity {
 
     @Column(name = "represent_profile_image")
     private String representProfileImage;
+
+    @OneToMany(mappedBy = "groupingUser")
+    private List<UserHashtagMapping> userHashtagMappingList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "groupingUser")
+    private List<UserCrewMapping> userCrewMappingList = new ArrayList<>();
 
     public GroupingUser(String email,
                         String password,
