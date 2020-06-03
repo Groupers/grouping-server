@@ -1,6 +1,7 @@
 package com.covengers.grouping.dto.vo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.constant.NationCode;
@@ -23,4 +24,6 @@ public class GroupingUserVo {
     private final Gender gender;
     private final LocalDate birthDay;
     private final String representProfileImage;
+    private final List<CrewVo> crewVoList;
+    private final List<HashtagVo> hashtagVoList;
 }

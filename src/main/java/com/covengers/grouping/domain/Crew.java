@@ -29,11 +29,11 @@ import lombok.Setter;
 public class Crew extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1383129876899942557L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "crew_id")
     private Long id;
-
 
     @Column(name = "title")
     private String title;
