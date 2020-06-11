@@ -1,5 +1,6 @@
 package com.covengers.grouping.domain;
 
+import com.covengers.grouping.constant.MessageType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,14 +26,20 @@ public class Message extends AbstractAuditingEntity {
     private Long id;
 
     @Column(name = "message_contents")
-    private String message_contents;
+    private String contents;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "message_type")
-    private String message_type;
-
-    @Column(name = "message_create_time")
-    private String message_create_time;
+    private MessageType type;
 
     @OneToMany(mappedBy = "message")
-    private List<MessageUserMapping> messageUserMappingList = new ArrayList<>();
+    private List<UserMessageMapping> userMessageMappingList = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name="grouping_user_id")
+    private GroupingUser groupingUser;
+
+    @ManyToOne
+    @JoinColumn(name="chat_room")
+    private ChatRoom chatRoom;
 }
