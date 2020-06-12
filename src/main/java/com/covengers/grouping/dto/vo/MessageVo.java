@@ -19,7 +19,7 @@ public class MessageVo {
 
     private final MessageType type;
 
-    private final GroupingUser groupingUser;
+    private final GroupingUserVo groupingUserVo;
 
-    private final ChatRoom chatRoom;
+    private final ChatRoomVo chatRoomVo;
 }

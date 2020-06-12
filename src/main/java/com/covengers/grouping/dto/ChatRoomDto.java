@@ -11,13 +11,11 @@ import lombok.ToString;
 public class ChatRoomDto {
     private final Long id;
     private final String name;
-    private final String imagePath;
 
     public ChatRoomDto of(ChatRoomVo vo) {
         return builder()
                 .id(vo.getId())
                 .name(vo.getName())
-                .imagePath(vo.getImagePath())
                 .build();
     }
 
@@ -25,7 +23,6 @@ public class ChatRoomDto {
         return ChatRoomVo.builder()
                 .id(id)
                 .name(name)
-                .imagePath(imagePath)
                 .build();
     }
 }
