@@ -7,12 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum MessageType {
 
-    TEXT("TXT", "TEXT"),
-    EMOTICON("EMO", "EMOTICON"),
-    PICTURE("PIC", "PICTURE"),
-    VIDEO("VID", "VIDEO"),
-    SOUND("SOD", "SOUND");
-
-    private final String type;
+    TEXT("TEXT"),
+    EMOTICON("EMOTICON"),
+    IMAGE("IMAGE"),
+    VIDEO("VIDEO"),
+    SOUND("SOUND");
     private final String value;
 }
