@@ -1,5 +1,6 @@
 package com.covengers.grouping.domain;
 
+import com.covengers.grouping.dto.vo.ChatRoomVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,9 +28,13 @@ public class ChatRoom extends AbstractAuditingEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "image_path")
-    private String imagePath;
-
     @OneToMany(mappedBy = "chatRoom")
     private List<Message> messageList = new ArrayList<>();
+
+    public ChatRoomVo toVo(){
+        return ChatRoomVo.builder()
+                .id(id)
+                .name(name)
+                .build();
+    }
 }

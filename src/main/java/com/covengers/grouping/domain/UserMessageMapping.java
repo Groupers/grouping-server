@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
-@Table(name = "message_user_mapping")
+@Table(name = "user_message_mapping")
 public class UserMessageMapping extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 3661741846592289721L;

@@ -1,6 +1,7 @@
 package com.covengers.grouping.domain;
 
 import com.covengers.grouping.constant.MessageType;
+import com.covengers.grouping.dto.vo.MessageVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,4 +43,14 @@ public class Message extends AbstractAuditingEntity {
     @ManyToOne
     @JoinColumn(name="chat_room")
     private ChatRoom chatRoom;
+
+    public MessageVo toVo(){
+        return MessageVo.builder()
+                .id(id)
+                .contents(contents)
+                .type(type)
+                .groupingUserVo(groupingUser.toVo())
+                .chatRoomVo(chatRoom.toVo())
+                .build();
+    }
 }
