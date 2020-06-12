@@ -10,5 +10,4 @@ import lombok.ToString;
 public class ChatRoomVo {
     private final Long id;
     private final String name;
-    private final String imagePath;
 }
