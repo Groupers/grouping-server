@@ -102,7 +102,7 @@ public class GroupingUser extends AbstractAuditingEntity {
         userStatus = UserStatus.NORMAL;
     }
 
-    public List<CrewVo> toList(){
+    public List<CrewVo> toCrewList(){
         return userCrewMappingList.stream()
                 .map(userCrewMapping ->
                         userCrewMapping.getCrew()
