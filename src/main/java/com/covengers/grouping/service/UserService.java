@@ -74,21 +74,17 @@ public class UserService {
                                        .build();
     }
 
-    // 20.06.15. group list by ljh
-    public BringCrewListVo bringCrewList(String userId) {
+    public CrewListResponseVo getCrewList(String userId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopByUserId(userId);
 
-        boolean existCrew = false;
-
-        if (groupingUserOptional.isPresent()) {
-            existCrew = true;
+        if (!groupingUserOptional.isPresent()) {
+            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
         }
 
-        return BringCrewListVo.builder()
-                .crewVoList(groupingUserOptional.get().toCrewList())
-                .existCrew(existCrew)
+        return CrewListResponseVo.builder()
+                .crewList(groupingUserOptional.get().toCrewList())
                 .build();
     }
 
