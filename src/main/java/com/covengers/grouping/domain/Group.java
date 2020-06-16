@@ -60,6 +60,27 @@ public class Group extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "group")
     private List<UserGroupMapping> userGroupMappingList = new ArrayList<>();
 
+    public Group(String title,
+                 Integer maxUserNumber,
+                 Integer maxUserAge,
+                 Integer minUserAge,
+                 Gender availableGender,
+                 String description,
+                 Long pointX,
+                 Long pointY,
+                 String pointDescription) {
+
+        this.title = title;
+        this.maxUserNumber = maxUserNumber;
+        this.maxUserAge = maxUserAge;
+        this.minUserAge = minUserAge;
+        this.availableGender = availableGender;
+        this.description = description;
+        this.pointX = pointX;
+        this.pointY = pointY;
+        this.pointDescription = pointDescription;
+    }
+
     public GroupVo toVoForGroupingUser(){
         return GroupVo.builder()
                 .id(getId())
@@ -72,6 +93,21 @@ public class Group extends AbstractAuditingEntity {
                 .pointX(getPointX())
                 .pointY(getPointY())
                 .pointDescription((getPointDescription()))
+                .build();
+    }
+
+    public GroupVo toVo(){
+        return GroupVo.builder()
+                .id(id)
+                .title(title)
+                .maxUserNumber(maxUserNumber)
+                .maxUserAge(maxUserAge)
+                .minUserAge(minUserAge)
+                .availableGender(availableGender)
+                .description(description)
+                .pointX(pointX)
+                .pointY(pointY)
+                .pointDescription(description)
                 .build();
     }
 }
