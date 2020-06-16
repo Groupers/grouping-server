@@ -3,7 +3,7 @@ package com.covengers.grouping.domain;
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.constant.NationCode;
 import com.covengers.grouping.constant.UserStatus;
-import com.covengers.grouping.dto.vo.CrewVo;
+import com.covengers.grouping.dto.vo.GroupVo;
 import com.covengers.grouping.dto.vo.GroupingUserVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -70,7 +70,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     private List<UserHashtagMapping> userHashtagMappingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupingUser")
-    private List<UserCrewMapping> userCrewMappingList = new ArrayList<>();
+    private List<UserGroupMapping> userGroupMappingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupingUser")
     private List<UserMessageMapping> userMessageMappingList = new ArrayList<>();
@@ -102,10 +102,10 @@ public class GroupingUser extends AbstractAuditingEntity {
         userStatus = UserStatus.NORMAL;
     }
 
-    public List<CrewVo> toCrewList(){
-        return userCrewMappingList.stream()
-                .map(userCrewMapping ->
-                        userCrewMapping.getCrew()
+    public List<GroupVo> toCrewList(){
+        return userGroupMappingList.stream()
+                .map(userGroupMapping ->
+                        userGroupMapping.getGroup()
                                         .toVoForGroupingUser())
                 .collect(Collectors.toList());
     }
