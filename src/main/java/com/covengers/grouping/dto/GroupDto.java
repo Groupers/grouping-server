@@ -1,7 +1,6 @@
 package com.covengers.grouping.dto;
 
 import com.covengers.grouping.constant.Gender;
-import com.covengers.grouping.dto.vo.EnrollGroupRequestVo;
 import com.covengers.grouping.dto.vo.GroupVo;
 import lombok.Builder;
 import lombok.Getter;
