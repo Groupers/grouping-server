@@ -1,34 +1,21 @@
 package com.covengers.grouping.service;
 
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
+import com.covengers.grouping.component.PhoneNationCodeClassifier;
+import com.covengers.grouping.constant.RedisCacheTime;
+import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.domain.GroupingUser;
+import com.covengers.grouping.dto.vo.*;
+import com.covengers.grouping.exception.CommonException;
+import com.covengers.grouping.repository.GroupingUserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.covengers.grouping.component.PhoneNationCodeClassifier;
-import com.covengers.grouping.constant.RedisCacheTime;
-import com.covengers.grouping.constant.ResponseCode;
-import com.covengers.grouping.domain.GroupingUser;
-import com.covengers.grouping.dto.vo.CancelEmailRequestVo;
-import com.covengers.grouping.dto.vo.CancelPhoneNumberRequestVo;
-import com.covengers.grouping.dto.vo.CancelSignUpRequestVo;
-import com.covengers.grouping.dto.vo.CheckEmailResultVo;
-import com.covengers.grouping.dto.vo.CheckPhoneNumberResultVo;
-import com.covengers.grouping.dto.vo.CheckUserIdResultVo;
-import com.covengers.grouping.dto.vo.EnrollEmailRequestVo;
-import com.covengers.grouping.dto.vo.EnrollPhoneNumberRequestVo;
-import com.covengers.grouping.dto.vo.GroupingUserVo;
-import com.covengers.grouping.dto.vo.PhoneNationCodeSeparationVo;
-import com.covengers.grouping.dto.vo.SignInRequestVo;
-import com.covengers.grouping.dto.vo.SignUpRequestVo;
-import com.covengers.grouping.exception.CommonException;
-import com.covengers.grouping.repository.GroupingUserRepository;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -85,6 +72,20 @@ public class UserService {
         return CheckPhoneNumberResultVo.builder()
                                        .isPhoneNumberAvailable(isPhoneNumberAvailable)
                                        .build();
+    }
+
+    public CrewListResponseVo getCrewList(String userId) {
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByUserId(userId);
+
+        if (!groupingUserOptional.isPresent()) {
+            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
+        }
+
+        return CrewListResponseVo.builder()
+                .crewList(groupingUserOptional.get().toCrewList())
+                .build();
     }
 
     @Transactional
