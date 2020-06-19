@@ -17,7 +17,7 @@ public class UserController extends AppApiV1Controller {
     private final UserService userService;
     private final CommonResponseMaker commonResponseMaker;
 
-    @GetMapping("/users/groups/{userId}")
+    @GetMapping("/users/{userId}/groups")
     public CommonResponse<GroupListResponseDto> getCrewList(@PathVariable("userId") String userId) {
 
         final GroupListResponseDto responseDto =
