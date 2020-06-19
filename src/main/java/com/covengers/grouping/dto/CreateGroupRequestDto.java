@@ -1,7 +1,7 @@
 package com.covengers.grouping.dto;
 
 import com.covengers.grouping.constant.Gender;
-import com.covengers.grouping.dto.vo.EnrollGroupRequestVo;
+import com.covengers.grouping.dto.vo.CreateGroupRequestVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class EnrollGroupRequestDto {
+public class CreateGroupRequestDto {
     private String title;
     private Integer maxUserNumber;
     private Integer minUserAge;
@@ -20,8 +20,8 @@ public class EnrollGroupRequestDto {
     private Long pointY;
     private String pointDescription;
 
-    public EnrollGroupRequestVo toVo(){
-        return EnrollGroupRequestVo.builder()
+    public CreateGroupRequestVo toVo() {
+        return CreateGroupRequestVo.builder()
                 .title(title)
                 .maxUserNumber(maxUserNumber)
                 .minUserAge(minUserAge)

@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class EnrollGroupRequestVo {
+public class CreateGroupRequestVo {
     private String title;
     private Integer maxUserNumber;
     private Integer minUserAge;
