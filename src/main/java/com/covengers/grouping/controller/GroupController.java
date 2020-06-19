@@ -2,7 +2,7 @@ package com.covengers.grouping.controller;
 
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.EnrollGroupRequestDto;
+import com.covengers.grouping.dto.CreateGroupRequestDto;
 import com.covengers.grouping.dto.GroupDto;
 import com.covengers.grouping.service.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,10 @@ public class GroupController {
     private final GroupService groupService;
     private final CommonResponseMaker commonResponseMaker;
 
-    @PostMapping("/group/complete")
-    public CommonResponse<GroupDto> enrollGroup(@RequestBody EnrollGroupRequestDto requestDto){
+    @PostMapping("/group")
+    public CommonResponse<GroupDto> createGroup(@RequestBody CreateGroupRequestDto requestDto) {
 
-        final GroupDto responseDto = GroupDto.of(groupService.enrollGroup(requestDto.toVo()));
+        final GroupDto responseDto = GroupDto.of(groupService.createGroup(requestDto.toVo()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
