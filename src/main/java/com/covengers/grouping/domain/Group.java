@@ -92,7 +92,7 @@ public class Group extends AbstractAuditingEntity {
                 .description(getDescription())
                 .pointX(getPointX())
                 .pointY(getPointY())
-                .pointDescription((getPointDescription()))
+                .pointDescription(getPointDescription())
                 .build();
     }
 
