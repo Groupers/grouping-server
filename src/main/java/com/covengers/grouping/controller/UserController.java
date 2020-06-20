@@ -1,8 +1,8 @@
 package com.covengers.grouping.controller;
 
 import com.covengers.grouping.component.CommonResponseMaker;
-import com.covengers.grouping.dto.CrewListResponseDto;
 import com.covengers.grouping.dto.CommonResponse;
+import com.covengers.grouping.dto.GroupListResponseDto;
 import com.covengers.grouping.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +17,11 @@ public class UserController extends AppApiV1Controller {
     private final UserService userService;
     private final CommonResponseMaker commonResponseMaker;
 
-    @GetMapping("/users/groups/{userId}")
-    public CommonResponse<CrewListResponseDto> getCrewList(@PathVariable("userId") String userId) {
+    @GetMapping("/users/{userId}/groups")
+    public CommonResponse<GroupListResponseDto> getCrewList(@PathVariable("userId") String userId) {
 
-        final CrewListResponseDto responseDto =
-                CrewListResponseDto.of(userService.getCrewList(userId));
+        final GroupListResponseDto responseDto =
+                GroupListResponseDto.of(userService.getGroupList(userId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

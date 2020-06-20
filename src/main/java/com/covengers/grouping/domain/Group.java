@@ -1,7 +1,7 @@
 package com.covengers.grouping.domain;
 
 import com.covengers.grouping.constant.Gender;
-import com.covengers.grouping.dto.vo.CrewVo;
+import com.covengers.grouping.dto.vo.GroupVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +17,13 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Table(name = "crew")
-public class Crew extends AbstractAuditingEntity {
+public class Group extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1383129876899942557L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crew_id")
+    @Column(name = "group_id")
     private Long id;
 
     @Column(name = "title")
@@ -54,14 +54,35 @@ public class Crew extends AbstractAuditingEntity {
     @Column(name = "point_description")
     private String pointDescription;
 
-    @OneToMany(mappedBy = "crew")
-    private List<CrewHashtagMapping> crewHashtagMappingList = new ArrayList<>();
+    @OneToMany(mappedBy = "group")
+    private List<GroupHashtagMapping> groupHashtagMappingList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "crew")
-    private List<UserCrewMapping> userCrewMappingList = new ArrayList<>();
+    @OneToMany(mappedBy = "group")
+    private List<UserGroupMapping> userGroupMappingList = new ArrayList<>();
 
-    public CrewVo toVoForGroupingUser(){
-        return CrewVo.builder()
+    public Group(String title,
+                 Integer maxUserNumber,
+                 Integer maxUserAge,
+                 Integer minUserAge,
+                 Gender availableGender,
+                 String description,
+                 Long pointX,
+                 Long pointY,
+                 String pointDescription) {
+
+        this.title = title;
+        this.maxUserNumber = maxUserNumber;
+        this.maxUserAge = maxUserAge;
+        this.minUserAge = minUserAge;
+        this.availableGender = availableGender;
+        this.description = description;
+        this.pointX = pointX;
+        this.pointY = pointY;
+        this.pointDescription = pointDescription;
+    }
+
+    public GroupVo toVoForGroupingUser(){
+        return GroupVo.builder()
                 .id(getId())
                 .title(getTitle())
                 .maxUserNumber(getMaxUserNumber())
@@ -72,6 +93,21 @@ public class Crew extends AbstractAuditingEntity {
                 .pointX(getPointX())
                 .pointY(getPointY())
                 .pointDescription((getPointDescription()))
+                .build();
+    }
+
+    public GroupVo toVo(){
+        return GroupVo.builder()
+                .id(id)
+                .title(title)
+                .maxUserNumber(maxUserNumber)
+                .maxUserAge(maxUserAge)
+                .minUserAge(minUserAge)
+                .availableGender(availableGender)
+                .description(description)
+                .pointX(pointX)
+                .pointY(pointY)
+                .pointDescription(description)
                 .build();
     }
 }

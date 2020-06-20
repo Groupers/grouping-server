@@ -19,21 +19,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
-@Table(name = "crew_hashtag_mapping")
-public class CrewHashtagMapping extends AbstractAuditingEntity {
+@Table(name = "user_group_mapping")
+public class UserGroupMapping extends AbstractAuditingEntity {
 
-    private static final long serialVersionUID = -2725017004732800746L;
-
+    private static final long serialVersionUID = -2710275756256697368L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crew_hashtag_mapping_id")
+    @Column(name = "user_group_mapping_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="crew_id")
-    private Crew crew;
-
+    @JoinColumn(name = "grouping_user_id")
+    private GroupingUser groupingUser;
     @ManyToOne
-    @JoinColumn(name = "hashtag_id")
-    private Hashtag hashtag;
+    @JoinColumn(name = "group_id")
+    private Group group;
+
 }

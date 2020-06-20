@@ -74,7 +74,7 @@ public class UserService {
                                        .build();
     }
 
-    public CrewListResponseVo getCrewList(String userId) {
+    public GroupListResponseVo getGroupList(String userId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopByUserId(userId);
@@ -83,8 +83,8 @@ public class UserService {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
         }
 
-        return CrewListResponseVo.builder()
-                .crewList(groupingUserOptional.get().toCrewList())
+        return GroupListResponseVo.builder()
+                .groupList(groupingUserOptional.get().toCrewList())
                 .build();
     }
 

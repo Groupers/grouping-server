@@ -9,7 +9,7 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString
-public class CrewVo {
+public class GroupVo {
     private final Long id;
 
     private final String title;
