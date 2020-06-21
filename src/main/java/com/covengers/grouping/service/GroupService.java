@@ -25,7 +25,6 @@ public class GroupService {
 
         final Group group = new Group(
                 requestVo.getTitle(),
-                requestVo.getMaxUserNumber(),
                 requestVo.getMaxUserAge(),
                 requestVo.getMinUserAge(),
                 requestVo.getAvailableGender(),
