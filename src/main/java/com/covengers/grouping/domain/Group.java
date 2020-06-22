@@ -2,12 +2,14 @@ package com.covengers.grouping.domain;
 
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.dto.vo.GroupVo;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +31,8 @@ public class Group extends AbstractAuditingEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "max_user_number")
-    private Integer maxUserNumber;
+    @Column(name = "is_hidden")
+    private Boolean isHidden;
 
     @Column(name = "min_user_age")
     private Integer minUserAge;
@@ -61,7 +63,6 @@ public class Group extends AbstractAuditingEntity {
     private List<UserGroupMapping> userGroupMappingList = new ArrayList<>();
 
     public Group(String title,
-                 Integer maxUserNumber,
                  Integer maxUserAge,
                  Integer minUserAge,
                  Gender availableGender,
@@ -71,7 +72,7 @@ public class Group extends AbstractAuditingEntity {
                  String pointDescription) {
 
         this.title = title;
-        this.maxUserNumber = maxUserNumber;
+        isHidden = false;
         this.maxUserAge = maxUserAge;
         this.minUserAge = minUserAge;
         this.availableGender = availableGender;
@@ -81,33 +82,33 @@ public class Group extends AbstractAuditingEntity {
         this.pointDescription = pointDescription;
     }
 
-    public GroupVo toVoForGroupingUser(){
+    public GroupVo toVoForGroupingUser() {
         return GroupVo.builder()
-                .id(getId())
-                .title(getTitle())
-                .maxUserNumber(getMaxUserNumber())
-                .maxUserAge(getMaxUserAge())
-                .minUserAge(getMinUserAge())
-                .availableGender(getAvailableGender())
-                .description(getDescription())
-                .pointX(getPointX())
-                .pointY(getPointY())
-                .pointDescription((getPointDescription()))
-                .build();
+                      .id(getId())
+                      .title(getTitle())
+                      .isHidden(getIsHidden())
+                      .maxUserAge(getMaxUserAge())
+                      .minUserAge(getMinUserAge())
+                      .availableGender(getAvailableGender())
+                      .description(getDescription())
+                      .pointX(getPointX())
+                      .pointY(getPointY())
+                      .pointDescription(getPointDescription())
+                      .build();
     }
 
-    public GroupVo toVo(){
+    public GroupVo toVo() {
         return GroupVo.builder()
-                .id(id)
-                .title(title)
-                .maxUserNumber(maxUserNumber)
-                .maxUserAge(maxUserAge)
-                .minUserAge(minUserAge)
-                .availableGender(availableGender)
-                .description(description)
-                .pointX(pointX)
-                .pointY(pointY)
-                .pointDescription(description)
-                .build();
+                      .id(id)
+                      .title(title)
+                      .isHidden(getIsHidden())
+                      .maxUserAge(maxUserAge)
+                      .minUserAge(minUserAge)
+                      .availableGender(availableGender)
+                      .description(description)
+                      .pointX(pointX)
+                      .pointY(pointY)
+                      .pointDescription(description)
+                      .build();
     }
 }

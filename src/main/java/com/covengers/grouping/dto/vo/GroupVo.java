@@ -14,7 +14,7 @@ public class GroupVo {
 
     private final String title;
 
-    private final Integer maxUserNumber;
+    private final Boolean isHidden;
 
     private final Integer minUserAge;
 

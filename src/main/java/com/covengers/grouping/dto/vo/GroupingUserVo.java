@@ -24,6 +24,6 @@ public class GroupingUserVo {
     private final Gender gender;
     private final LocalDate birthDay;
     private final String representProfileImage;
-    private final List<CrewVo> crewVoList;
+    private final List<GroupVo> crewVoList;
     private final List<HashtagVo> hashtagVoList;
 }

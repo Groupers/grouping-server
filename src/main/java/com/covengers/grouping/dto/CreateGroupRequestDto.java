@@ -2,6 +2,7 @@ package com.covengers.grouping.dto;
 
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.dto.vo.CreateGroupRequestVo;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,27 +11,27 @@ import lombok.ToString;
 @Builder
 @ToString
 public class CreateGroupRequestDto {
-    private String title;
-    private Integer maxUserNumber;
-    private Integer minUserAge;
-    private Integer maxUserAge;
-    private Gender availableGender;
-    private String description;
-    private Long pointX;
-    private Long pointY;
-    private String pointDescription;
+    private final String title;
+    private final Boolean isHidden;
+    private final Integer minUserAge;
+    private final Integer maxUserAge;
+    private final Gender availableGender;
+    private final String description;
+    private final Long pointX;
+    private final Long pointY;
+    private final String pointDescription;
 
     public CreateGroupRequestVo toVo() {
         return CreateGroupRequestVo.builder()
-                .title(title)
-                .maxUserNumber(maxUserNumber)
-                .minUserAge(minUserAge)
-                .maxUserAge(maxUserAge)
-                .availableGender(availableGender)
-                .description(description)
-                .pointX(pointX)
-                .pointY(pointY)
-                .pointDescription(pointDescription)
-                .build();
+                                   .title(title)
+                                   .isHidden(isHidden)
+                                   .minUserAge(minUserAge)
+                                   .maxUserAge(maxUserAge)
+                                   .availableGender(availableGender)
+                                   .description(description)
+                                   .pointX(pointX)
+                                   .pointY(pointY)
+                                   .pointDescription(pointDescription)
+                                   .build();
     }
 }
