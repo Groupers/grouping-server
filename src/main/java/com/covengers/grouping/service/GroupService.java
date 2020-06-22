@@ -1,13 +1,13 @@
 package com.covengers.grouping.service;
 
+import com.covengers.grouping.component.Word2VecRecommendMaker;
 import com.covengers.grouping.domain.Group;
 import com.covengers.grouping.dto.vo.CreateGroupRequestVo;
 import com.covengers.grouping.dto.vo.GroupVo;
+import com.covengers.grouping.dto.vo.RecommendGroupVo;
 import com.covengers.grouping.repository.GroupRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class GroupService {
     private final RedisTemplate<String, String> redisTemplate;
+    private final Word2VecRecommendMaker word2VecRecommendMaker;
     private final GroupRepository groupRepository;
 
     @Transactional
@@ -36,5 +37,12 @@ public class GroupService {
         groupRepository.save(group);
 
         return group.toVo();
+    }
+
+    public RecommendGroupVo recommendGroup(String keyword){
+
+        RecommendGroupVo recommendGroupVo = word2VecRecommendMaker.recommend(keyword);
+
+        return recommendGroupVo;
     }
 }

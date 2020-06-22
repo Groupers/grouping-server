@@ -4,12 +4,11 @@ import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.dto.CreateGroupRequestDto;
 import com.covengers.grouping.dto.GroupDto;
+import com.covengers.grouping.dto.RecommendGroupDto;
 import com.covengers.grouping.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +22,14 @@ public class GroupController {
     public CommonResponse<GroupDto> createGroup(@RequestBody CreateGroupRequestDto requestDto) {
 
         final GroupDto responseDto = GroupDto.of(groupService.createGroup(requestDto.toVo()));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+    @GetMapping("/group/keyword")
+    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam String keyword) {
+
+        final RecommendGroupDto responseDto = RecommendGroupDto.of(groupService.recommendGroup(keyword));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
