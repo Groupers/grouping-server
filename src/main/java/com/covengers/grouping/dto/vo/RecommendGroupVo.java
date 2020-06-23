@@ -10,5 +10,5 @@ import java.util.List;
 @ToString
 @Builder
 public class RecommendGroupVo {
-    private final List<String> groupList;
+    private final List<GroupVo> groupList;
 }
