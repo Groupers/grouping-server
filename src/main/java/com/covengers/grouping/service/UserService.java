@@ -84,7 +84,7 @@ public class UserService {
         }
 
         return GroupListResponseVo.builder()
-                .groupList(groupingUserOptional.get().toCrewList())
+                .groupList(groupingUserOptional.get().toGroupList())
                 .build();
     }
 
