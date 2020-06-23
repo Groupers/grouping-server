@@ -1,7 +1,6 @@
 package com.covengers.grouping.dto.vo;
 
 import com.covengers.grouping.constant.Gender;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -29,5 +28,18 @@ public class GroupVo {
     private final Long pointY;
 
     private final String pointDescription;
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof GroupVo)
+            return this.id == ((GroupVo) o).getId();
+        else
+            return false;
+    }
+
+    @Override
+    public int hashCode(){
+        return Long.hashCode(id);
+    }
 
 }
