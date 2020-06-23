@@ -2,10 +2,8 @@ package com.covengers.grouping.service;
 
 import com.covengers.grouping.component.HashtagRecommender;
 import com.covengers.grouping.domain.Group;
-import com.covengers.grouping.dto.vo.CreateGroupRequestVo;
-import com.covengers.grouping.dto.vo.GroupVo;
-import com.covengers.grouping.dto.vo.RecommendGroupVo;
-import com.covengers.grouping.dto.vo.RecommendHashtagVo;
+import com.covengers.grouping.domain.Hashtag;
+import com.covengers.grouping.dto.vo.*;
 import com.covengers.grouping.repository.GroupRepository;
 import com.covengers.grouping.repository.HashtagRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,9 +50,12 @@ public class GroupService {
 
         HashSet<GroupVo> groupHashSet = new HashSet<>();
 
-        for (String hashtag : recommendHashtagVo.getHashtagList()) {
-            List<GroupVo> list =
-            hashtagRepository.findByHashtag(hashtag).get().toGroupList();
+        for (String hashtagString : recommendHashtagVo.getHashtagList()) {
+            Optional<Hashtag> hashtag = hashtagRepository.findByHashtag(hashtagString);
+            if(!hashtag.isPresent())
+                continue;
+
+            List<GroupVo> list = hashtag.get().toGroupList();
             for (GroupVo groupVo : list) {
                 groupHashSet.add(groupVo);
             }
