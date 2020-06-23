@@ -1,5 +1,6 @@
 package com.covengers.grouping.domain;
 
+import com.covengers.grouping.dto.vo.GroupVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -28,9 +30,17 @@ public class Hashtag extends AbstractAuditingEntity {
     private String hashtag;
 
     @OneToMany(mappedBy = "hashtag")
-    private List<GroupHashtagMapping> crewHashtagMappingList = new ArrayList<>();
+    private List<GroupHashtagMapping> groupHashtagMappingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "hashtag")
     private List<UserHashtagMapping> userHashtagMappingList = new ArrayList<>();
+
+    public List<GroupVo> toGroupList(){
+        return groupHashtagMappingList.stream()
+                .map(groupHashtagMapping ->
+                        groupHashtagMapping.getGroup()
+                                .toVoForHashtag())
+                .collect(Collectors.toList());
+    }
 
 }

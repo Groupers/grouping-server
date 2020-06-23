@@ -97,6 +97,21 @@ public class Group extends AbstractAuditingEntity {
                       .build();
     }
 
+    public GroupVo toVoForHashtag() {
+        return GroupVo.builder()
+                .id(getId())
+                .title(getTitle())
+                .isHidden(getIsHidden())
+                .maxUserAge(getMaxUserAge())
+                .minUserAge(getMinUserAge())
+                .availableGender(getAvailableGender())
+                .description(getDescription())
+                .pointX(getPointX())
+                .pointY(getPointY())
+                .pointDescription(getPointDescription())
+                .build();
+    }
+
     public GroupVo toVo() {
         return GroupVo.builder()
                       .id(id)
