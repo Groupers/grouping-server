@@ -1,50 +1,12 @@
+
 plugins {
     id 'org.springframework.boot' version '2.2.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
 }
 
-group = 'com.covengers'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 repositories {
+    jcenter()
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
-//    implementation 'org.springframework.session:spring-session-core'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
-    implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-//    testImplementation 'org.springframework.security:spring-security-test'
-    implementation "org.deeplearning4j:deeplearning4j-ui:1.0.0-beta7"
-    implementation "org.deeplearning4j:deeplearning4j-nlp:1.0.0-beta7"
-    implementation "org.nd4j:nd4j-native:1.0.0-beta7"
-    implementation "org.nd4j:nd4j-cuda-10.2-platform:1.0.0-beta7"
-    implementation "org.deeplearning4j:deeplearning4j-core:1.0.0-beta7"
-    implementation "org.nd4j:nd4j-native-platform:1.0.0-beta7"
-    implementation "org.slf4j:slf4j-api:1.7.25"
-    implementation "org.deeplearning4j:deeplearning4j-cuda-9.2:1.0.0-beta6"
-}
-
-test {
-    useJUnitPlatform()
-}

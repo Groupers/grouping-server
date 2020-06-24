@@ -1,1 +1,5 @@
 rootProject.name = 'grouping'
+include 'grouping-api'
+include 'grouping-core'
+include 'grouping-batch'
+
