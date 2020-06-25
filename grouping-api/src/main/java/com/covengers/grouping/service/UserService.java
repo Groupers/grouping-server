@@ -1,24 +1,21 @@
 package com.covengers.grouping.service;
 
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import com.covengers.grouping.dto.FriendListRequestDto;
-import com.covengers.grouping.vo.*;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
-
+import com.covengers.grouping.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -91,7 +88,7 @@ public class UserService {
                 .build();
     }
 
-    public FriendListRequestVo getFriendList(String userId) {
+    public FriendListResultVo getFriendList(String userId) {
 
         Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopByUserId(userId);
@@ -100,7 +97,7 @@ public class UserService {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
         }
 
-        return FriendListRequestVo.builder()
+        return FriendListResultVo.builder()
                 .friendList(groupingUserOptional.get().toFriendList())
                 .build();
     }

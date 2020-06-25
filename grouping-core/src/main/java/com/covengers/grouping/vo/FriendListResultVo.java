@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
-public class FriendListRequestVo {
+public class FriendListResultVo {
     private final List<GroupingUserVo> friendList;
 }
