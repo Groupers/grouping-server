@@ -3,6 +3,8 @@ package com.covengers.grouping.service;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import com.covengers.grouping.dto.FriendListRequestDto;
+import com.covengers.grouping.vo.*;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,19 +16,6 @@ import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
-import com.covengers.grouping.vo.CancelEmailRequestVo;
-import com.covengers.grouping.vo.CancelPhoneNumberRequestVo;
-import com.covengers.grouping.vo.CancelSignUpRequestVo;
-import com.covengers.grouping.vo.CheckEmailResultVo;
-import com.covengers.grouping.vo.CheckPhoneNumberResultVo;
-import com.covengers.grouping.vo.CheckUserIdResultVo;
-import com.covengers.grouping.vo.EnrollEmailRequestVo;
-import com.covengers.grouping.vo.EnrollPhoneNumberRequestVo;
-import com.covengers.grouping.vo.GroupListResponseVo;
-import com.covengers.grouping.vo.GroupingUserVo;
-import com.covengers.grouping.vo.PhoneNationCodeSeparationVo;
-import com.covengers.grouping.vo.SignInRequestVo;
-import com.covengers.grouping.vo.SignUpRequestVo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -99,6 +88,20 @@ public class UserService {
 
         return GroupListResponseVo.builder()
                 .groupList(groupingUserOptional.get().toGroupList())
+                .build();
+    }
+
+    public FriendListRequestVo getFriendList(String userId) {
+
+        Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByUserId(userId);
+
+        if(!groupingUserOptional.isPresent()) {
+            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
+        }
+
+        return FriendListRequestVo.builder()
+                .friendList(groupingUserOptional.get().toFriendList())
                 .build();
     }
 

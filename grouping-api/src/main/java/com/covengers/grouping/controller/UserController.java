@@ -1,7 +1,10 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.dto.FriendListRequestDto;
+import com.covengers.grouping.vo.FriendListRequestVo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.covengers.grouping.component.CommonResponseMaker;
@@ -24,6 +27,15 @@ public class UserController extends AppApiV1Controller {
 
         final GroupListResponseDto responseDto =
                 GroupListResponseDto.of(userService.getGroupList(userId));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+    @GetMapping("/users/{userId}/friends")
+    public CommonResponse<FriendListRequestDto> getFriendList(@PathVariable String userId) {
+
+        final FriendListRequestDto responseDto =
+                FriendListRequestDto.of(userService.getFriendList(userId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
