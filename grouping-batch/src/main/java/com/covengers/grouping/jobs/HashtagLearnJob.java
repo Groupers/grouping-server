@@ -1,7 +1,16 @@
 package com.covengers.grouping.jobs;
 
-import javax.persistence.EntityManagerFactory;
-
+import com.covengers.grouping.constants.JobConstants;
+import com.covengers.grouping.domain.Group;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
+import org.deeplearning4j.models.word2vec.Word2Vec;
+import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
+import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
+import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -16,11 +25,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.covengers.grouping.constants.JobConstants;
-import com.covengers.grouping.domain.Group;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.persistence.EntityManagerFactory;
+import java.util.Iterator;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -60,8 +67,34 @@ public class HashtagLearnJob {
     @Bean
     public ItemProcessor<Group, Group> hashtagLearnProcessor() {
 
+        int batchSize = 1000;
+        int iterations = 3;
+        int layerSize = 150;
+
+        Word2Vec vec = new Word2Vec.Builder()
+                .batchSize(batchSize)
+                .minWordFrequency(1)
+                .useAdaGrad(false)
+                .layerSize(layerSize)
+                .iterations(iterations)
+                .learningRate(0.025)
+                .minLearningRate(1e-3)
+                .negativeSample(10)
+                .build();
+
         return group -> {
-            // 여기에서 학습.
+            final TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+            tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
+
+            Optional<String> optionalString =  group.toHashtagList().stream()
+                                                                    .map(hashtagVo -> hashtagVo.getHashtag())
+                                                                    .reduce((a,b) -> a + " " + b);
+            if(!optionalString.isPresent()) {
+                return group;
+            }
+            //vec.setSentenceIterator(new Iterator(optionalString.get()));
+            vec.setTokenizerFactory(tokenizerFactory);
+            vec.fit();
             return group;
         };
     }
