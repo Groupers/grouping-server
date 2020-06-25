@@ -52,7 +52,7 @@ public class HashtagLearnJob {
                 .name("groupReader")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(CHUNK_SIZE)
-                .queryString("SELECT a FROM Crew a")
+                .queryString("SELECT a FROM Group a")
                 .build();
     }
 

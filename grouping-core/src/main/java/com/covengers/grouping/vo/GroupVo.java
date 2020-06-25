@@ -31,10 +31,11 @@ public class GroupVo {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof GroupVo)
-            return this.id == ((GroupVo) o).getId();
-        else
+        if(o instanceof GroupVo) {
+            return id.equals(((GroupVo) o).getId());
+        } else {
             return false;
+        }
     }
 
     @Override
