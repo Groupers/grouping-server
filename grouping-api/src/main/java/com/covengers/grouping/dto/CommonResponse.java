@@ -39,7 +39,7 @@ public class CommonResponse<T> {
         return new CommonResponse<>(responseCode, data);
     }
 
-    public static <T> CommonResponse<Void> fail(ResponseCode responseCode) {
+    public static CommonResponse<Void> fail(ResponseCode responseCode) {
         return new CommonResponse<>(responseCode);
     }
 }
