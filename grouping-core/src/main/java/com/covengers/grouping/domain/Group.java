@@ -2,6 +2,7 @@ package com.covengers.grouping.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.vo.GroupVo;
 
+import com.covengers.grouping.vo.HashtagVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -133,5 +135,13 @@ public class Group extends AbstractAuditingEntity {
                       .pointY(pointY)
                       .pointDescription(description)
                       .build();
+    }
+
+    public List<HashtagVo> toHashtagList(){
+        return groupHashtagMappingList.stream()
+                .map(groupHashtagMapping ->
+                        groupHashtagMapping.getHashtag()
+                                .toVoForGroup())
+                .collect(Collectors.toList());
     }
 }
