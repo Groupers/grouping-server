@@ -1,31 +1,21 @@
 package com.covengers.grouping.domain;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-
-import com.covengers.grouping.constant.UserStatus;
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.constant.NationCode;
+import com.covengers.grouping.constant.UserStatus;
 import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.GroupingUserVo;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -88,6 +78,9 @@ public class GroupingUser extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "groupingUser")
     private List<Message> messageList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "groupingUser")
+    private List<UserFriendMapping> userFriendMappingList = new ArrayList<>();
+
     public GroupingUser(String email,
                         String password,
                         String name,
@@ -117,6 +110,14 @@ public class GroupingUser extends AbstractAuditingEntity {
                 .map(userGroupMapping ->
                         userGroupMapping.getGroup()
                                         .toVoForGroupingUser())
+                .collect(Collectors.toList());
+    }
+
+    public List<GroupingUserVo> toFriendList(){
+        return userFriendMappingList.stream()
+                .map(userFriendMapping ->
+                        userFriendMapping.getFriendUser()
+                                .toVo())
                 .collect(Collectors.toList());
     }
 
