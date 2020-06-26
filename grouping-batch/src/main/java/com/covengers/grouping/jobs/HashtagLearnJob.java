@@ -1,13 +1,14 @@
 package com.covengers.grouping.jobs;
 
-import com.covengers.grouping.constants.JobConstants;
-import com.covengers.grouping.domain.Group;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.EntityManagerFactory;
+
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.Word2Vec;
-import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
-import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
@@ -21,13 +22,17 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManagerFactory;
-import java.util.Iterator;
-import java.util.Optional;
+import com.covengers.grouping.HashtagLearnIterator;
+import com.covengers.grouping.constants.JobConstants;
+import com.covengers.grouping.domain.Group;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -39,9 +44,11 @@ public class HashtagLearnJob {
     private static final int CHUNK_SIZE = 10;
 
     private final EntityManagerFactory entityManagerFactory;
+    private final List<Group> groupList = new ArrayList<>();
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
+    private Word2Vec vec;
 
     @Bean
     public Job hashtagLearningJob() {
@@ -50,7 +57,6 @@ public class HashtagLearnJob {
                                 .start(hashtagLearnJobStep())
                                 .build();
     }
-
 
     @StepScope
     @Bean
@@ -65,13 +71,29 @@ public class HashtagLearnJob {
 
     @StepScope
     @Bean
-    public ItemProcessor<Group, Group> hashtagLearnProcessor() {
+    public CompositeItemProcessor<Group, Group> hashtagLearnProcessor() {
+        final CompositeItemProcessor<Group, Group> processor =
+                new CompositeItemProcessor<>();
 
-        int batchSize = 1000;
-        int iterations = 3;
-        int layerSize = 150;
+        processor.setDelegates(Arrays.asList(learnProcessor(), saveModelProcessor()));
 
-        Word2Vec vec = new Word2Vec.Builder()
+        return processor;
+    }
+
+
+    public ItemProcessor<Group, Group> learnProcessor() {
+        return group -> {
+            groupList.add(group);
+            return group;
+        };
+    }
+
+    public ItemProcessor<Group, Group> saveModelProcessor(){
+        final int batchSize = 1000;
+        final int iterations = 3;
+        final int layerSize = 150;
+
+        vec = new Word2Vec.Builder()
                 .batchSize(batchSize)
                 .minWordFrequency(1)
                 .useAdaGrad(false)
@@ -80,24 +102,25 @@ public class HashtagLearnJob {
                 .learningRate(0.025)
                 .minLearningRate(1e-3)
                 .negativeSample(10)
+
                 .build();
 
-        return group -> {
-            final TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
-            tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
+        final TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+        tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
+        vec.setTokenizerFactory(tokenizerFactory);
+        vec.setSequenceIterator(new HashtagLearnIterator(groupList));
+        vec.fit();
 
-            Optional<String> optionalString =  group.toHashtagList().stream()
-                                                                    .map(hashtagVo -> hashtagVo.getHashtag())
-                                                                    .reduce((a,b) -> a + " " + b);
-            if(!optionalString.isPresent()) {
-                return group;
-            }
-            //vec.setSentenceIterator(new Iterator(optionalString.get()));
-            vec.setTokenizerFactory(tokenizerFactory);
-            vec.fit();
+        try {
+            WordVectorSerializer.writeWordVectors(vec, "pathToWriteto.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return group -> {
             return group;
         };
     }
+
 
     @StepScope
     @Bean
@@ -105,10 +128,10 @@ public class HashtagLearnJob {
         final JpaItemWriter<Group> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
+
     }
 
-
-        @Bean
+    @Bean
     public Step hashtagLearnJobStep() {
         return stepBuilderFactory.get("hashtagLearnJobStep")
                 .<Group, Group>chunk(CHUNK_SIZE)

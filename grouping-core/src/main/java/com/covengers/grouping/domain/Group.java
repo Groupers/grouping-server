@@ -137,7 +137,7 @@ public class Group extends AbstractAuditingEntity {
                       .build();
     }
 
-    public List<HashtagVo> toHashtagList(){
+    public List<HashtagVo> getHashtagList(){
         return groupHashtagMappingList.stream()
                 .map(groupHashtagMapping ->
                         groupHashtagMapping.getHashtag()
