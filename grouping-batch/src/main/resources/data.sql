@@ -730,6 +730,19 @@ now(),
 6,
 8);
 
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(19,
+now(),
+now(),
+6,
+1);
+
 INSERT INTO `groupings`.`user_friend_mapping`
 (`user_friend_mapping_id`,
 `grouping_user_id`,
