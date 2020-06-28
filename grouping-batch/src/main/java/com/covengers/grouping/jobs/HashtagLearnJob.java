@@ -1,9 +1,15 @@
 package com.covengers.grouping.jobs;
 
-import com.covengers.grouping.constants.JobConstants;
-import com.covengers.grouping.domain.Group;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.function.Supplier;
+
+import javax.persistence.EntityManagerFactory;
+
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
@@ -18,16 +24,24 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
+import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.FileSystemResource;
 
-import javax.persistence.EntityManagerFactory;
-import java.util.Iterator;
-import java.util.Optional;
+import com.covengers.grouping.HashtagVoListExtractor;
+import com.covengers.grouping.constants.JobConstants;
+import com.covengers.grouping.domain.Group;
+import com.covengers.grouping.vo.HashtagVo;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,6 +51,23 @@ import java.util.Optional;
 public class HashtagLearnJob {
 
     private static final int CHUNK_SIZE = 10;
+    private static final String DELIMITER = "/";
+    private static final String CURRENT_FOLDER_PATH = "user.dir";
+    private static final String BASED_JOB_NAME = "hashtagLearnJob";
+    private static final String MODEL_FILE_NAME = "hashtag_word2vec.txt";
+    private static final String HASHTAG_FILE_NAME = "hashtag.txt";
+
+    private static final Supplier<Path> GET_HASHTAG_FILE_PATH = () ->
+            Paths.get(System.getProperty(CURRENT_FOLDER_PATH) + DELIMITER
+                      + BASED_JOB_NAME + DELIMITER + HASHTAG_FILE_NAME);
+
+    private static final Supplier<Path> GET_MODEL_FILE_PATH = () ->
+            Paths.get(System.getProperty(CURRENT_FOLDER_PATH) + DELIMITER
+                      + BASED_JOB_NAME + DELIMITER + MODEL_FILE_NAME);
+
+    private static final int BATCH_SIZE = 1000;
+    private static final int ITERATIONS = 3;
+    private static final int LAYER_SIZE = 150;
 
     private final EntityManagerFactory entityManagerFactory;
 
@@ -47,10 +78,10 @@ public class HashtagLearnJob {
     public Job hashtagLearningJob() {
         return jobBuilderFactory.get("hashtagLearnJob")
                                 .incrementer(new RunIdIncrementer())
-                                .start(hashtagLearnJobStep())
+                                .start(extractHashtagStep())
+                                .next(learnHashtagStep())
                                 .build();
     }
-
 
     @StepScope
     @Bean
@@ -65,57 +96,93 @@ public class HashtagLearnJob {
 
     @StepScope
     @Bean
-    public ItemProcessor<Group, Group> hashtagLearnProcessor() {
-
-        int batchSize = 1000;
-        int iterations = 3;
-        int layerSize = 150;
-
-        Word2Vec vec = new Word2Vec.Builder()
-                .batchSize(batchSize)
-                .minWordFrequency(1)
-                .useAdaGrad(false)
-                .layerSize(layerSize)
-                .iterations(iterations)
-                .learningRate(0.025)
-                .minLearningRate(1e-3)
-                .negativeSample(10)
-                .build();
-
-        return group -> {
-            final TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
-            tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
-
-            Optional<String> optionalString =  group.toHashtagList().stream()
-                                                                    .map(hashtagVo -> hashtagVo.getHashtag())
-                                                                    .reduce((a,b) -> a + " " + b);
-            if(!optionalString.isPresent()) {
-                return group;
-            }
-            //vec.setSentenceIterator(new Iterator(optionalString.get()));
-            vec.setTokenizerFactory(tokenizerFactory);
-            vec.fit();
-            return group;
-        };
+    public ItemProcessor<Group, List<HashtagVo>> extractHashtagFromGroupProcessor() {
+        return Group::getHashtagList;
     }
 
     @StepScope
     @Bean
-    public JpaItemWriter<Group> writer() {
-        final JpaItemWriter<Group> writer = new JpaItemWriter<>();
-        writer.setEntityManagerFactory(entityManagerFactory);
-        return writer;
+    public FlatFileItemWriter<List<HashtagVo>> hashTagWriter() {
+
+        final Path filePath = GET_HASHTAG_FILE_PATH.get();
+        if (!filePath.toFile().exists()) {
+            try {
+                Files.createDirectory(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        final HashtagVoListExtractor<List<HashtagVo>> fieldExtractor =
+                new HashtagVoListExtractor<>();
+
+        fieldExtractor.setNames(
+                new String[] { "hashtag" });
+
+        fieldExtractor.afterPropertiesSet();
+
+        final DelimitedLineAggregator<List<HashtagVo>> lineAggregator =
+                new DelimitedLineAggregator<>();
+        lineAggregator.setDelimiter(" ");
+        lineAggregator.setFieldExtractor(fieldExtractor);
+
+        return new FlatFileItemWriterBuilder<List<HashtagVo>>()
+                .name("hashTagWriter")
+                .resource(new FileSystemResource(GET_HASHTAG_FILE_PATH.get().toFile()))
+                .lineAggregator(lineAggregator)
+                .build();
     }
 
-
-        @Bean
-    public Step hashtagLearnJobStep() {
-        return stepBuilderFactory.get("hashtagLearnJobStep")
-                .<Group, Group>chunk(CHUNK_SIZE)
+    @Bean
+    public Step extractHashtagStep() {
+        return stepBuilderFactory.get("extractHashtagStep")
+                .<Group, List<HashtagVo>>chunk(CHUNK_SIZE)
                 .reader(hashtagLearnReader())
-                .processor(hashtagLearnProcessor())
-                .writer(writer())
+                .processor(extractHashtagFromGroupProcessor())
+                .writer(hashTagWriter())
                 .faultTolerant()
                 .build();
+    }
+
+    @Bean
+    public Step learnHashtagStep() {
+        return stepBuilderFactory.get("learnHashtagStep")
+                                 .tasklet((contribution, chunkContext) -> {
+                                     SentenceIterator iter = null;
+                                     try {
+                                         iter = new BasicLineIterator(GET_HASHTAG_FILE_PATH.get().toString());
+                                     } catch (FileNotFoundException e) {
+                                         e.printStackTrace();
+                                     }
+
+                                     final TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+                                     tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
+
+                                     final Word2Vec vec = new Word2Vec.Builder()
+                                             .batchSize(BATCH_SIZE)
+                                             .minWordFrequency(1)
+                                             .useAdaGrad(false)
+                                             .layerSize(LAYER_SIZE)
+                                             .iterations(ITERATIONS)
+                                             .learningRate(0.225)
+                                             .minLearningRate(1e-3)
+                                             .negativeSample(10)
+                                             .tokenizerFactory(tokenizerFactory)
+                                             .iterate(iter)
+                                             .build();
+
+                                     vec.fit();
+
+                                     WordVectorSerializer.writeFullModel(vec,
+                                                                         GET_MODEL_FILE_PATH.get().toString());
+
+                                     log.info("band : " + vec.wordsNearest("band", 2));
+                                     log.info("music : " + vec.wordsNearest("music", 2));
+                                     log.info("soccer : " + vec.wordsNearest("soccer", 2));
+                                     log.info("java" + vec.wordsNearest("java", 2));
+
+                                     return RepeatStatus.FINISHED;
+                                 })
+                                 .build();
     }
 }
