@@ -11,16 +11,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Slf4j
-public class FirebaseSdkInit {
-
-    private static final String KEY_PATH = "source-data.json";
+public class FirebaseInitializer {
 
     private static InputStream serviceAccount = null;
     private static FirebaseOptions options = null;
 
-    public static void initiateFirebaseSdk() {
+    public static void initFirebase() {
         try {
-            ClassPathResource resource = new ClassPathResource(KEY_PATH);
+            ClassPathResource resource = new ClassPathResource("source-data.json");
             serviceAccount = resource.getInputStream();
             options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))

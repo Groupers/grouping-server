@@ -1,6 +1,7 @@
 package com.covengers.grouping.jobs;
 
-import com.covengers.grouping.FirebaseSdkInit;
+import com.covengers.grouping.FirebaseInitializer;
+import com.covengers.grouping.NotificationMessage;
 import com.covengers.grouping.constants.JobConstants;
 import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -20,44 +21,54 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
 @ConditionalOnProperty(name = JobConstants.VM_OPTION_JOB_NAMES,
-        havingValue = "fcmMessagePushJob")
-public class FcmMessagePushJob {
+        havingValue = "groupingEventMessagePushJob")
+public class GroupingEventMessagePushJob {
 
     //private static final int CHUNK_SIZE = 10;
+
+    private static final NotificationMessage notificationMessage = new NotificationMessage();
+
+    private static final Supplier<Notification> GET_MEESAGE_SUPPLIER = () ->
+                    Notification.builder()
+            .setTitle(notificationMessage.getNotificationTitle())
+            .setBody(notificationMessage.getNotificationBody())
+            .build();
+
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Job fcmEventPushJob() {
-        return jobBuilderFactory.get("fcmMessagePushJob")
+    public Job GroupingEventMessagePushJob() {
+        return jobBuilderFactory.get("groupingEventMessagePushJob")
                 .incrementer(new RunIdIncrementer())
-                .start(fcmPush())
+                .start(GroupingEventMessagePushStep())
                 .build();
     }
 
     @Bean
-    public Step fcmPush() {
-        return stepBuilderFactory.get("fcmMessagePushStep")
+    public Step GroupingEventMessagePushStep() {
+        return stepBuilderFactory.get("groupingEventMessagePushStep")
                 .tasklet((contribution, chunkContext) -> {
 
-                    FirebaseSdkInit.initiateFirebaseSdk();
+                    FirebaseInitializer.initFirebase();
 
-                    List<String> registrationTokens =
-                            Arrays.asList("cds1VAHPlZU:APA91bEbRftOvIEZaNyZsqiMrESdk_N-RyJG1F0X-GmT0wFiurAHKBQfTksPwUDTTt8EiBZNke-gwBf4-wuwdZNla3MVbXMwzpTLmDOnVIXB32s3BIAz0bLNo5ZcyW0gnmASwy0jvChx");
-
-
-                    Notification notification = new Notification("타이틀","내용");
+                    final List<String> registrationTokens =
+                            Arrays.asList(
+                                    "cds1VAHPlZU:APA91bEbRftOvIEZaNyZsqiMrESdk_N-RyJG1F0X-GmT0wFiurAHKBQfTksPwUDTTt8EiBZNke-gwBf4-wuwdZNla3MVbXMwzpTLmDOnVIXB32s3BIAz0bLNo5ZcyW0gnmASwy0jvChx",
+                                    "dzoTIdAJTmI:APA91bEyJ-7aGaHlmg88Yy6NcsQknImrZ1wQ169JoCHDNvLmP0kjIa-8jgqn2wgTfZCFYNolp-s3Jz_V4-NBzeVe6Q3cLFy3KI1kN5xaE_g5gIQ6xBblOJDBMRGdWZuaUAqTKfy2aeUA"
+                            );
 
                     MulticastMessage message = MulticastMessage.builder()
-                            .putData("score", "850")
+                            //.putData(DATA_KEY, DATA_VALUE)
                             .addAllTokens(registrationTokens)
-                            .setNotification(notification)
+                            .setNotification(GET_MEESAGE_SUPPLIER.get())
                             .build();
 
                     BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
