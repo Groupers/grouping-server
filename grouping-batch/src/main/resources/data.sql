@@ -296,6 +296,168 @@ false,
 '301.81',
 'groupers 운동 모임');
 
+INSERT INTO `groupings`.`crew`
+(`group_id`,
+`created_at`,
+`updated_at`,
+`available_gender`,
+`description`,
+`is_hidden`,
+`max_user_age`,
+`min_user_age`,
+`point_description`,
+`point_x`,
+`point_y`,
+`title`)
+VALUES
+(7,
+now(),
+now(),
+'ALL',
+'운동 그룹2',
+false,
+'38',
+'23',
+'ground',
+'100.11',
+'301.81',
+'groupers 운동 모임2');
+
+INSERT INTO `groupings`.`crew`
+(`group_id`,
+`created_at`,
+`updated_at`,
+`available_gender`,
+`description`,
+`is_hidden`,
+`max_user_age`,
+`min_user_age`,
+`point_description`,
+`point_x`,
+`point_y`,
+`title`)
+VALUES
+(8,
+now(),
+now(),
+'ALL',
+'운동 그룹3',
+false,
+'38',
+'23',
+'ground',
+'100.11',
+'301.81',
+'groupers 운동 모임3');
+
+INSERT INTO `groupings`.`crew`
+(`group_id`,
+`created_at`,
+`updated_at`,
+`available_gender`,
+`description`,
+`is_hidden`,
+`max_user_age`,
+`min_user_age`,
+`point_description`,
+`point_x`,
+`point_y`,
+`title`)
+VALUES
+(9,
+now(),
+now(),
+'ALL',
+'운동 그룹4',
+false,
+'38',
+'23',
+'ground',
+'100.11',
+'301.81',
+'groupers 운동 모임4');
+
+INSERT INTO `groupings`.`crew`
+(`group_id`,
+`created_at`,
+`updated_at`,
+`available_gender`,
+`description`,
+`is_hidden`,
+`max_user_age`,
+`min_user_age`,
+`point_description`,
+`point_x`,
+`point_y`,
+`title`)
+VALUES
+(10,
+now(),
+now(),
+'ALL',
+'술 모임',
+false,
+'38',
+'23',
+'hope',
+'100.11',
+'301.81',
+'groupers 술 모임');
+
+INSERT INTO `groupings`.`crew`
+(`group_id`,
+`created_at`,
+`updated_at`,
+`available_gender`,
+`description`,
+`is_hidden`,
+`max_user_age`,
+`min_user_age`,
+`point_description`,
+`point_x`,
+`point_y`,
+`title`)
+VALUES
+(11,
+now(),
+now(),
+'ALL',
+'소믈리에 모임',
+false,
+'38',
+'23',
+'hope',
+'100.11',
+'301.81',
+'groupers 소믈리에 모임');
+
+INSERT INTO `groupings`.`crew`
+(`group_id`,
+`created_at`,
+`updated_at`,
+`available_gender`,
+`description`,
+`is_hidden`,
+`max_user_age`,
+`min_user_age`,
+`point_description`,
+`point_x`,
+`point_y`,
+`title`)
+VALUES
+(12,
+now(),
+now(),
+'ALL',
+'제빵 모임',
+false,
+'38',
+'23',
+'hope',
+'100.11',
+'301.81',
+'groupers 제빵 모임');
+
 INSERT INTO `groupings`.`user_group_mapping`
 (`user_group_mapping_id`,
 `created_at`,
@@ -495,6 +657,193 @@ VALUES
 now(),
 now(),
 'guitar');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(18,
+now(),
+now(),
+'fashion');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(19,
+now(),
+now(),
+'shoes');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(20,
+now(),
+now(),
+'car');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(21,
+now(),
+now(),
+'bike');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(22,
+now(),
+now(),
+'motorcycle');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(23,
+now(),
+now(),
+'vehicle');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(24,
+now(),
+now(),
+'cook');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(25,
+now(),
+now(),
+'bakery');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(26,
+now(),
+now(),
+'Patissier');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(27,
+now(),
+now(),
+'sommelier');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(28,
+now(),
+now(),
+'baseball');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(29,
+now(),
+now(),
+'basketball');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(30,
+now(),
+now(),
+'golf');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(31,
+now(),
+now(),
+'daily');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(32,
+now(),
+now(),
+'travel');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(33,
+now(),
+now(),
+'trip');
+
+INSERT INTO `groupings`.`hashtag`
+(`hashtag_id`,
+`created_at`,
+`updated_at`,
+`hashtag`)
+VALUES
+(34,
+now(),
+now(),
+'community');
 
 INSERT INTO `groupings`.`group_hashtag_mapping`
 (`group_hashtag_mapping_id`,
@@ -742,6 +1091,227 @@ now(),
 now(),
 6,
 1);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(20,
+now(),
+now(),
+7,
+5);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(21,
+now(),
+now(),
+7,
+8);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(22,
+now(),
+now(),
+7,
+28);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(23,
+now(),
+now(),
+7,
+34);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(24,
+now(),
+now(),
+8,
+5);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(25,
+now(),
+now(),
+8,
+29);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(26,
+now(),
+now(),
+9,
+5);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(27,
+now(),
+now(),
+9,
+28);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(28,
+now(),
+now(),
+10,
+34);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(29,
+now(),
+now(),
+10,
+5);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(30,
+now(),
+now(),
+10,
+31);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(31,
+now(),
+now(),
+11,
+31);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(32,
+now(),
+now(),
+11,
+27);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(33,
+now(),
+now(),
+12,
+31);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(34,
+now(),
+now(),
+12,
+24);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(35,
+now(),
+now(),
+12,
+25);
+
+INSERT INTO `groupings`.`group_hashtag_mapping`
+(`group_hashtag_mapping_id`,
+`created_at`,
+`updated_at`,
+`group_id`,
+`hashtag_id`)
+VALUES
+(36,
+now(),
+now(),
+12,
+26);
 
 INSERT INTO `groupings`.`user_friend_mapping`
 (`user_friend_mapping_id`,
