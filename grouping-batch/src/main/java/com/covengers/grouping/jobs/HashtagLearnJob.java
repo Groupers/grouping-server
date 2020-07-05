@@ -57,11 +57,11 @@ public class HashtagLearnJob {
     private static final String MODEL_FILE_NAME = "hashtag_word2vec.txt";
     private static final String HASHTAG_FILE_NAME = "hashtag.txt";
 
-    private static final Supplier<Path> GET_HASHTAG_FILE_PATH = () ->
+    private static final Supplier<Path> GET_HASHTAG_FILE_PATH_SUPPLIER = () ->
             Paths.get(System.getProperty(CURRENT_FOLDER_PATH) + DELIMITER
                       + BASED_JOB_NAME + DELIMITER + HASHTAG_FILE_NAME);
 
-    private static final Supplier<Path> GET_MODEL_FILE_PATH = () ->
+    private static final Supplier<Path> GET_MODEL_FILE_PATH_SUPPLIER = () ->
             Paths.get(System.getProperty(CURRENT_FOLDER_PATH) + DELIMITER
                       + BASED_JOB_NAME + DELIMITER + MODEL_FILE_NAME);
 
@@ -104,7 +104,7 @@ public class HashtagLearnJob {
     @Bean
     public FlatFileItemWriter<List<HashtagVo>> hashTagWriter() {
 
-        final Path filePath = GET_HASHTAG_FILE_PATH.get();
+        final Path filePath = GET_HASHTAG_FILE_PATH_SUPPLIER.get();
         if (!filePath.toFile().exists()) {
             try {
                 Files.createDirectory(filePath);
@@ -128,7 +128,7 @@ public class HashtagLearnJob {
 
         return new FlatFileItemWriterBuilder<List<HashtagVo>>()
                 .name("hashTagWriter")
-                .resource(new FileSystemResource(GET_HASHTAG_FILE_PATH.get().toFile()))
+                .resource(new FileSystemResource(GET_HASHTAG_FILE_PATH_SUPPLIER.get().toFile()))
                 .lineAggregator(lineAggregator)
                 .build();
     }
@@ -150,7 +150,7 @@ public class HashtagLearnJob {
                                  .tasklet((contribution, chunkContext) -> {
                                      SentenceIterator iter = null;
                                      try {
-                                         iter = new BasicLineIterator(GET_HASHTAG_FILE_PATH.get().toString());
+                                         iter = new BasicLineIterator(GET_HASHTAG_FILE_PATH_SUPPLIER.get().toString());
                                      } catch (FileNotFoundException e) {
                                          e.printStackTrace();
                                      }
@@ -174,7 +174,7 @@ public class HashtagLearnJob {
                                      vec.fit();
 
                                      WordVectorSerializer.writeFullModel(vec,
-                                                                         GET_MODEL_FILE_PATH.get().toString());
+                                             GET_MODEL_FILE_PATH_SUPPLIER.get().toString());
 
                                      log.info("band : " + vec.wordsNearest("band", 2));
                                      log.info("music : " + vec.wordsNearest("music", 2));

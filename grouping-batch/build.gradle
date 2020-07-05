@@ -41,6 +41,9 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    compile group: 'com.google.firebase', name: 'firebase-admin', version: '6.14.0'
+
 }
 
 
