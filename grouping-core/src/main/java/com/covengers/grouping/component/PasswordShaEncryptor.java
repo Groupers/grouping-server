@@ -1,6 +1,6 @@
 package com.covengers.grouping.component;
 
-import com.covengers.grouping.vo.EncryptPasswordResultVo;
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import org.springframework.stereotype.Component;
 
 import java.security.MessageDigest;
@@ -8,28 +8,18 @@ import java.security.MessageDigest;
 @Component
 public class PasswordShaEncryptor {
 
-    public EncryptPasswordResultVo encrytPassword(String password) {
-        String encryptedPassword = "";
+    private String encryptedPassword;
+
+    public String encrytPassword(String password) {
 
         try {
-            final MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(password.getBytes());
-            encryptedPassword = byteArraytoHex(md.digest());
+            final MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(password.getBytes());
+            encryptedPassword = new String(HexBin.encode(messageDigest.digest()));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return EncryptPasswordResultVo.builder()
-                .encrytedPassword(encryptedPassword)
-                .build();
-    }
-
-    public String byteArraytoHex(byte byteArray[]) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for(byte getByte : byteArray) {
-            stringBuffer.append(String.format("%02x", getByte));
-        }
-
-        return stringBuffer.toString();
+        return encryptedPassword;
     }
 }
