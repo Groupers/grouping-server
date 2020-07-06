@@ -1,6 +1,7 @@
 package com.covengers.grouping.service;
 
 import com.covengers.grouping.component.PhoneNationCodeClassifier;
+import com.covengers.grouping.component.PasswordShaEncryptor;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class UserService {
     private final GroupingUserRepository groupingUserRepository;
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
+    private final PasswordShaEncryptor passwordShaEncryptor;
     private final RedisTemplate<String, String> redisTemplate;
 
     public CheckEmailResultVo checkEmail(String email) {
@@ -158,6 +160,8 @@ public class UserService {
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
+        final EncryptPasswordResultVo encryptPasswordResultVo = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+
         final boolean validPhoneNumber =
                 !StringUtils.isEmpty(redisTemplate.opsForValue().get(requestVo.getPhoneNumber()))
                 && !groupingUserRepository.findTopByPhoneNumberAndNationCode(
@@ -169,7 +173,7 @@ public class UserService {
         }
 
         final GroupingUser groupingUser = new GroupingUser(requestVo.getEmail(),
-                                                           requestVo.getPassword(),
+                                                           encryptPasswordResultVo.getEncrytedPassword(),
                                                            requestVo.getName(),
                                                            requestVo.getGender(),
                                                            requestVo.getBirthday(),
@@ -189,7 +193,9 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        if (!groupingUser.getPassword().equals(requestVo.getPassword())) {
+        final EncryptPasswordResultVo encryptPasswordResultVo = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+
+        if (!groupingUser.getPassword().equals(encryptPasswordResultVo.getEncrytedPassword())) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
         }
 

@@ -50,7 +50,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "password")
+    @Column(name = "password", length = 500)
     private String password;
 
     @Column(name = "user_id")
