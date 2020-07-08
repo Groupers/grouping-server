@@ -18,20 +18,20 @@ public class UserController extends AppApiV1Controller {
     private final UserService userService;
     private final CommonResponseMaker commonResponseMaker;
 
-    @GetMapping("/users/{userId}/groups")
-    public CommonResponse<GroupListResponseDto> getGroupList(@PathVariable("userId") String userId) {
+    @GetMapping("/users/{groupingUserId}/groups")
+    public CommonResponse<GroupListResponseDto> getGroupList(@PathVariable("groupingUserId") String groupingUserId) {
 
         final GroupListResponseDto responseDto =
-                GroupListResponseDto.of(userService.getGroupList(userId));
+                GroupListResponseDto.of(userService.getGroupList(groupingUserId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @GetMapping("/users/{userId}/friends")
-    public CommonResponse<FriendListResultDto> getFriendList(@PathVariable String userId) {
+    @GetMapping("/users/{groupingUserId}/friends")
+    public CommonResponse<FriendListResultDto> getFriendList(@PathVariable("groupingUserId") String groupingUserId) {
 
         final FriendListResultDto responseDto =
-                FriendListResultDto.of(userService.getFriendList(userId));
+                FriendListResultDto.of(userService.getFriendList(groupingUserId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
