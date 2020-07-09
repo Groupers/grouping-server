@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Builder
 @ToString
@@ -19,4 +21,5 @@ public class CreateGroupRequestVo {
     private final Long pointX;
     private final Long pointY;
     private final String pointDescription;
+    private final List<String> hashtagList;
 }
