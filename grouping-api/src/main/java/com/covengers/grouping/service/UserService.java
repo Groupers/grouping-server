@@ -76,10 +76,10 @@ public class UserService {
                                        .build();
     }
 
-    public GroupListResponseVo getGroupList(String userId) {
+    public GroupListResponseVo getGroupList(String groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopByUserId(userId);
+                groupingUserRepository.findTopById(groupingUserId);
 
         if (!groupingUserOptional.isPresent()) {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
@@ -90,10 +90,10 @@ public class UserService {
                 .build();
     }
 
-    public FriendListResultVo getFriendList(String userId) {
+    public FriendListResultVo getFriendList(String groupingUserId) {
 
         Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopByUserId(userId);
+                groupingUserRepository.findTopById(groupingUserId);
 
         if(!groupingUserOptional.isPresent()) {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
