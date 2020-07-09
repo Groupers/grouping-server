@@ -193,9 +193,9 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
 
-        if (!groupingUser.getPassword().equals(encryptPassword)) {
+        if (!groupingUser.getPassword().equals(encryptedPassword)) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
         }
 
