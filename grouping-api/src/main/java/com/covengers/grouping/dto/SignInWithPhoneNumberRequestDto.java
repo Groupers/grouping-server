@@ -1,21 +1,20 @@
 package com.covengers.grouping.dto;
 
-import com.covengers.grouping.vo.SignInPhoneNumberRequestVo;
+import com.covengers.grouping.vo.SignInWithPhoneNumberRequestVo;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @ToString
 @Builder
-public class SignInPhoneNumberRequestDto {
+public class SignInWithPhoneNumberRequestDto {
 
     private final String phoneNumber;
     private final String password;
 
-    public SignInPhoneNumberRequestVo toVo() {
-        return SignInPhoneNumberRequestVo.builder()
+    public SignInWithPhoneNumberRequestVo toVo() {
+        return SignInWithPhoneNumberRequestVo.builder()
                 .phoneNumber(phoneNumber)
                 .password(password)
                 .build();

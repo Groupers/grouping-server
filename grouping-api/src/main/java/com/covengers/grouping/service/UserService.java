@@ -149,18 +149,18 @@ public class UserService {
     @Transactional
     public GroupingUserVo completeSignUp(SignUpRequestVo requestVo) {
 
-        final boolean validEmail = !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
+        final boolean isValidEmail = !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
 
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
         final String encryptPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
 
-        final boolean validPhoneNumber = !groupingUserRepository.findTopByPhoneNumberAndNationCode(
+        final boolean isValidPhoneNumber = !groupingUserRepository.findTopByPhoneNumberAndNationCode(
                         phoneNationCodeSeparationVo.getPurePhoneNumber(),
                         phoneNationCodeSeparationVo.getNationCode()).isPresent();
 
-        if (!validEmail || !validPhoneNumber) {
+        if (!isValidEmail || !isValidPhoneNumber) {
             throw new CommonException(ResponseCode.SIGN_UP_FAILED_FOR_INVALID_INFO);
         }
 
@@ -177,7 +177,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public GroupingUserVo signInEmail(SignInEmailRequestVo requestVo) {
+    public GroupingUserVo signInWithEmail(SignInWithEmailRequestVo requestVo) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopByEmail(requestVo.getEmail());
@@ -195,7 +195,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public GroupingUserVo signInPhoneNumber(SignInPhoneNumberRequestVo requestVo) {
+    public GroupingUserVo signInWithPhoneNumber(SignInWithPhoneNumberRequestVo requestVo) {
 
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());

@@ -4,10 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-@Builder
 @Getter
 @ToString
-public class SignInEmailRequestVo {
-    private final String email;
+@Builder
+public class SignInWithPhoneNumberRequestVo {
+
+    private final String phoneNumber;
     private final String password;
 }

@@ -110,17 +110,17 @@ public class SignController extends AppApiV1Controller {
     }
 
     @PostMapping("/sign/login/email")
-    public CommonResponse<GroupingUserDto> signInEmail(@RequestBody SignInEmailRequestDto requestDto) {
+    public CommonResponse<GroupingUserDto> signInWithEmail(@RequestBody SignInWithEmailRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInEmail(requestDto.toVo()));
+        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInWithEmail(requestDto.toVo()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
     @PostMapping("/sign/login/phone-number")
-    public CommonResponse<GroupingUserDto> signInPhoneNumber(@RequestBody SignInPhoneNumberRequestDto requestDto) {
+    public CommonResponse<GroupingUserDto> signInWithPhoneNumber(@RequestBody SignInWithPhoneNumberRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInPhoneNumber(requestDto.toVo()));
+        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInWithPhoneNumber(requestDto.toVo()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
