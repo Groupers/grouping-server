@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -31,11 +30,9 @@ public class UserService {
 
         final Optional<GroupingUser> groupingUserOptional = groupingUserRepository.findTopByEmail(email);
 
-        final String savedEmail = redisTemplate.opsForValue().get(email);
-
         boolean isEmailAvailable = false;
 
-        if (StringUtils.isEmpty(savedEmail) && !groupingUserOptional.isPresent()) {
+        if (!groupingUserOptional.isPresent()) {
             isEmailAvailable = true;
 
         }
@@ -55,8 +52,6 @@ public class UserService {
 
     public CheckPhoneNumberResultVo checkPhoneNumber(String phoneNumber) {
 
-        final String savedPhoneNumber = redisTemplate.opsForValue().get(phoneNumber);
-
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(phoneNumber);
 
@@ -67,7 +62,7 @@ public class UserService {
 
         boolean isPhoneNumberAvailable = false;
 
-        if (StringUtils.isEmpty(savedPhoneNumber) && !groupingUserOptional.isPresent()) {
+        if (!groupingUserOptional.isPresent()) {
             isPhoneNumberAvailable = true;
         }
 
@@ -154,21 +149,18 @@ public class UserService {
     @Transactional
     public GroupingUserVo completeSignUp(SignUpRequestVo requestVo) {
 
-        final boolean validEmail = !StringUtils.isEmpty(redisTemplate.opsForValue().get(requestVo.getEmail()))
-                                   && !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
+        final boolean isValidEmail = !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
 
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
         final String encryptPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
 
-        final boolean validPhoneNumber =
-                !StringUtils.isEmpty(redisTemplate.opsForValue().get(requestVo.getPhoneNumber()))
-                && !groupingUserRepository.findTopByPhoneNumberAndNationCode(
+        final boolean isValidPhoneNumber = !groupingUserRepository.findTopByPhoneNumberAndNationCode(
                         phoneNationCodeSeparationVo.getPurePhoneNumber(),
                         phoneNationCodeSeparationVo.getNationCode()).isPresent();
 
-        if (!validEmail || !validPhoneNumber) {
+        if (!isValidEmail || !isValidPhoneNumber) {
             throw new CommonException(ResponseCode.SIGN_UP_FAILED_FOR_INVALID_INFO);
         }
 
@@ -185,10 +177,33 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public GroupingUserVo signIn(SignInRequestVo requestVo) {
+    public GroupingUserVo signInWithEmail(SignInWithEmailRequestVo requestVo) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopByEmail(requestVo.getEmail());
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+
+        if (!groupingUser.getPassword().equals(encryptedPassword)) {
+            throw new CommonException(ResponseCode.INVALID_PASSWORD);
+        }
+
+        return groupingUser.toVo();
+    }
+
+    @Transactional(readOnly = true)
+    public GroupingUserVo signInWithPhoneNumber(SignInWithPhoneNumberRequestVo requestVo) {
+
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByPhoneNumberAndNationCode(
+                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                        phoneNationCodeSeparationVo.getNationCode());
 
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));

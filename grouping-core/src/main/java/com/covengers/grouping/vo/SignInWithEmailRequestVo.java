@@ -7,7 +7,7 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString
-public class SignInRequestVo {
+public class SignInWithEmailRequestVo {
     private final String email;
     private final String password;
 }
