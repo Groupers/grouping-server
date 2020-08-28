@@ -123,6 +123,7 @@ public class GroupingUser extends AbstractAuditingEntity {
 
     public GroupingUserVo toVo() {
         return GroupingUserVo.builder()
+                             .groupingUserId(id)
                              .userStatus(userStatus)
                              .email(email)
                              .nationCode(nationCode)
