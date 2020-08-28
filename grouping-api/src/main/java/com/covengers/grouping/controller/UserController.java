@@ -1,15 +1,12 @@
 package com.covengers.grouping.controller;
 
 import com.covengers.grouping.component.CommonResponseMaker;
-import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.FriendListResultDto;
-import com.covengers.grouping.dto.GroupListResponseDto;
+import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.dto.*;
 import com.covengers.grouping.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,5 +31,23 @@ public class UserController extends AppApiV1Controller {
                 FriendListResultDto.of(userService.getFriendList(groupingUserId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+    @PostMapping("/users")
+    public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
+            @RequestBody CheckUserWithEmailAndPhoneNumberRequestDto requestDto) {
+
+        final GroupingUserDto groupingUserDto =
+                GroupingUserDto.of(userService.checkUserWithEmailAndPhoneNumber(requestDto.toVo()));
+
+        return commonResponseMaker.makeSucceedCommonResponse(groupingUserDto);
+    }
+
+    @PutMapping("/users/{groupingUserId}/password")
+    public CommonResponse<Void> resetPassword(@RequestBody ResetPasswordRequestDto requestDto) {
+
+        userService.resetPassword(requestDto.toVo());
+
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 }
