@@ -5,6 +5,7 @@ import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
+import com.covengers.grouping.dto.CheckUserWithEmailAndPhoneNumberRequestDto;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.vo.*;
@@ -97,6 +98,25 @@ public class UserService {
         return FriendListResultVo.builder()
                 .friendList(groupingUserOptional.get().toFriendList())
                 .build();
+    }
+
+    public GroupingUserVo checkUserWithEmailAndPhoneNumber(
+            CheckUserWithEmailAndPhoneNumberRequestVo requestVo
+    ) {
+
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByEmailAndPhoneNumberAndNationCode(
+                        requestVo.getEmail(),
+                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                        phoneNationCodeSeparationVo.getNationCode());
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        return groupingUser.toVo();
     }
 
     @Transactional
@@ -215,5 +235,21 @@ public class UserService {
         }
 
         return groupingUser.toVo();
+    }
+
+    @Transactional
+    public void resetPassword(ResetPasswordRequestVo requestVo) {
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopById(requestVo.getGroupingUserId());
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getNewPassword());
+
+        groupingUser.setPassword(encryptedPassword);
+
+        groupingUserRepository.save(groupingUser);
     }
 }
