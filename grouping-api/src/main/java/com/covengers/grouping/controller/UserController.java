@@ -33,20 +33,21 @@ public class UserController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @PostMapping("/users")
+    @GetMapping("/users")
     public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
-            @RequestBody CheckUserWithEmailAndPhoneNumberRequestDto requestDto) {
+            @RequestParam String email, @RequestParam String phoneNumber) {
 
         final GroupingUserDto groupingUserDto =
-                GroupingUserDto.of(userService.checkUserWithEmailAndPhoneNumber(requestDto.toVo()));
+                GroupingUserDto.of(userService.checkUserWithEmailAndPhoneNumber(email, phoneNumber));
 
         return commonResponseMaker.makeSucceedCommonResponse(groupingUserDto);
     }
 
     @PutMapping("/users/{groupingUserId}/password")
-    public CommonResponse<Void> resetPassword(@RequestBody ResetPasswordRequestDto requestDto) {
+    public CommonResponse<Void> resetPassword(
+            @PathVariable String groupingUserId, @RequestParam String newPassword) {
 
-        userService.resetPassword(requestDto.toVo());
+        userService.resetPassword(groupingUserId, newPassword);
 
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }

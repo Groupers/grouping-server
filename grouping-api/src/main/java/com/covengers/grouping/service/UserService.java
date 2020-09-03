@@ -5,7 +5,6 @@ import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
-import com.covengers.grouping.dto.CheckUserWithEmailAndPhoneNumberRequestDto;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.vo.*;
@@ -35,7 +34,6 @@ public class UserService {
 
         if (!groupingUserOptional.isPresent()) {
             isEmailAvailable = true;
-
         }
 
         return CheckEmailResultVo.builder()
@@ -100,16 +98,14 @@ public class UserService {
                 .build();
     }
 
-    public GroupingUserVo checkUserWithEmailAndPhoneNumber(
-            CheckUserWithEmailAndPhoneNumberRequestVo requestVo
-    ) {
+    public GroupingUserVo checkUserWithEmailAndPhoneNumber(String email, String phoneNumber) {
 
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
-                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
+                phoneNationCodeClassifier.separate(phoneNumber);
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopByEmailAndPhoneNumberAndNationCode(
-                        requestVo.getEmail(),
+                        email,
                         phoneNationCodeSeparationVo.getPurePhoneNumber(),
                         phoneNationCodeSeparationVo.getNationCode());
 
@@ -238,15 +234,15 @@ public class UserService {
     }
 
     @Transactional
-    public void resetPassword(ResetPasswordRequestVo requestVo) {
+    public void resetPassword(String groupingUserId, String newPassword) {
 
         final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(requestVo.getGroupingUserId());
+                groupingUserRepository.findTopById(groupingUserId);
 
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getNewPassword());
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(newPassword);
 
         groupingUser.setPassword(encryptedPassword);
 
