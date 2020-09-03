@@ -66,6 +66,9 @@ public class Group extends AbstractAuditingEntity {
     @Column(name = "point_description")
     private String pointDescription;
 
+    @Column(name = "representGroupImage")
+    private String representGroupingUserImage;
+
     @OneToMany(mappedBy = "group")
     private List<GroupHashtagMapping> groupHashtagMappingList = new ArrayList<>();
 
@@ -79,7 +82,8 @@ public class Group extends AbstractAuditingEntity {
                  String description,
                  Long pointX,
                  Long pointY,
-                 String pointDescription) {
+                 String pointDescription,
+                 String representGroupingUserImage) {
 
         this.title = title;
         isHidden = false;
@@ -90,6 +94,7 @@ public class Group extends AbstractAuditingEntity {
         this.pointX = pointX;
         this.pointY = pointY;
         this.pointDescription = pointDescription;
+        this.representGroupingUserImage = representGroupingUserImage;
     }
 
     public GroupVo toVoForGroupingUser() {
@@ -104,6 +109,7 @@ public class Group extends AbstractAuditingEntity {
                       .pointX(getPointX())
                       .pointY(getPointY())
                       .pointDescription(getPointDescription())
+                      .representGroupingUserImage(getRepresentGroupingUserImage())
                       .build();
     }
 
@@ -119,6 +125,7 @@ public class Group extends AbstractAuditingEntity {
                 .pointX(getPointX())
                 .pointY(getPointY())
                 .pointDescription(getPointDescription())
+                .representGroupingUserImage(getRepresentGroupingUserImage())
                 .build();
     }
 
@@ -134,6 +141,7 @@ public class Group extends AbstractAuditingEntity {
                       .pointX(pointX)
                       .pointY(pointY)
                       .pointDescription(description)
+                      .representGroupingUserImage(getRepresentGroupingUserImage())
                       .build();
     }
 
