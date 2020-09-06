@@ -45,9 +45,9 @@ public class UserController extends AppApiV1Controller {
 
     @PutMapping("/users/{groupingUserId}/password")
     public CommonResponse<Void> resetPassword(
-            @PathVariable String groupingUserId, @RequestParam String newPassword) {
+            @PathVariable String groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
 
-        userService.resetPassword(groupingUserId, newPassword);
+        userService.resetPassword(groupingUserId, requestDto.toVo());
 
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }

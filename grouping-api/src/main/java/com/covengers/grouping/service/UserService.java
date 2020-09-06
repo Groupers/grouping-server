@@ -234,7 +234,7 @@ public class UserService {
     }
 
     @Transactional
-    public void resetPassword(String groupingUserId, String newPassword) {
+    public void resetPassword(String groupingUserId, ResetPasswordRequestVo requestVo) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -242,7 +242,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptedPassword = passwordShaEncryptor.encrytPassword(newPassword);
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
 
         groupingUser.setPassword(encryptedPassword);
 
