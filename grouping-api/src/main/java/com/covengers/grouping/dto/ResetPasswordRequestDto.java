@@ -1,13 +1,13 @@
 package com.covengers.grouping.dto;
 
 import com.covengers.grouping.vo.ResetPasswordRequestVo;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResetPasswordRequestDto {
     private String password;
 

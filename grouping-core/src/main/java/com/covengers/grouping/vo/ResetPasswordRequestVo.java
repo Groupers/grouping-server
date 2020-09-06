@@ -1,12 +1,12 @@
 package com.covengers.grouping.vo;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResetPasswordRequestVo {
     private String password;
 }
