@@ -15,6 +15,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class GroupingUserVo {
+
+    private final String groupingUserId;
     private final UserStatus userStatus;
     private final String email;
     private final NationCode nationCode;
@@ -24,6 +26,6 @@ public class GroupingUserVo {
     private final Gender gender;
     private final LocalDate birthDay;
     private final String representProfileImage;
-    private final List<GroupVo> crewVoList;
+    private final List<GroupVo> groupVoList;
     private final List<HashtagVo> hashtagVoList;
 }

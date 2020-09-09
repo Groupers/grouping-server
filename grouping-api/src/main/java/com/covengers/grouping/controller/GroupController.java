@@ -1,25 +1,19 @@
 package com.covengers.grouping.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.dto.CreateGroupRequestDto;
 import com.covengers.grouping.dto.GroupDto;
 import com.covengers.grouping.dto.RecommendGroupDto;
 import com.covengers.grouping.service.GroupService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class GroupController {
+public class GroupController extends AppApiV1Controller {
 
     private final GroupService groupService;
     private final CommonResponseMaker commonResponseMaker;

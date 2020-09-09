@@ -29,6 +29,8 @@ public class GroupVo {
 
     private final String pointDescription;
 
+    private final String representGroupingUserImage;
+
     @Override
     public boolean equals(Object o) {
         if(o instanceof GroupVo) {

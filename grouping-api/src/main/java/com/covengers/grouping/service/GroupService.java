@@ -1,12 +1,22 @@
 package com.covengers.grouping.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
 import com.covengers.grouping.component.HashtagRecommender;
-import com.covengers.grouping.domain.Group;
-import com.covengers.grouping.domain.GroupHashtagMapping;
-import com.covengers.grouping.domain.Hashtag;
-import com.covengers.grouping.repository.GroupHashtagMappingRepository;
-import com.covengers.grouping.repository.GroupRepository;
-import com.covengers.grouping.repository.HashtagRepository;
+import com.covengers.grouping.constant.GroupUserType;
+import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.domain.*;
+import com.covengers.grouping.exception.CommonException;
+import com.covengers.grouping.repository.*;
 import com.covengers.grouping.vo.CreateGroupRequestVo;
 import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.RecommendGroupVo;
@@ -31,6 +41,8 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final HashtagRepository hashtagRepository;
     private final GroupHashtagMappingRepository groupHashtagMappingRepository;
+    private final GroupingUserRepository groupingUserRepository;
+    private final UserGroupMappingRepository userGroupMappingRepository;
 
     @Transactional
     public GroupVo createGroup(CreateGroupRequestVo requestVo) {
@@ -43,18 +55,31 @@ public class GroupService {
                 requestVo.getDescription(),
                 requestVo.getPointX(),
                 requestVo.getPointY(),
-                requestVo.getPointDescription());
+                requestVo.getPointDescription(),
+                requestVo.getRepresentGroupImage());
 
         groupRepository.save(group);
 
+        Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopById(requestVo.getRepresentGroupingUserId());
+
+        GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        UserGroupMapping userGroupMapping = new UserGroupMapping(groupingUser, group, GroupUserType.MASTER);
+
+        userGroupMappingRepository.save(userGroupMapping);
+
         for(String hashtagString : requestVo.getHashtagList()) {
-            final Optional<Hashtag> optionalHashtag = hashtagRepository.findByHashtag(hashtagString);
+            final Optional<Hashtag> hashtagOptional = hashtagRepository.findByHashtag(hashtagString);
 
-            if(optionalHashtag.isPresent()) {
-                continue;
+            Hashtag hashtag = null;
+
+            if(hashtagOptional.isPresent()) {
+                hashtag = hashtagOptional.get();
+            } else {
+                hashtag = new Hashtag(hashtagString);
             }
-
-            final Hashtag hashtag = new Hashtag(hashtagString);
 
             hashtagRepository.save(hashtag);
 

@@ -34,7 +34,6 @@ public class UserService {
 
         if (!groupingUserOptional.isPresent()) {
             isEmailAvailable = true;
-
         }
 
         return CheckEmailResultVo.builder()
@@ -97,6 +96,23 @@ public class UserService {
         return FriendListResultVo.builder()
                 .friendList(groupingUserOptional.get().toFriendList())
                 .build();
+    }
+
+    public GroupingUserVo checkUserWithEmailAndPhoneNumber(String email, String phoneNumber) {
+
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(phoneNumber);
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByEmailAndPhoneNumberAndNationCode(
+                        email,
+                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                        phoneNationCodeSeparationVo.getNationCode());
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        return groupingUser.toVo();
     }
 
     @Transactional
@@ -215,5 +231,21 @@ public class UserService {
         }
 
         return groupingUser.toVo();
+    }
+
+    @Transactional
+    public void resetPassword(String groupingUserId, ResetPasswordRequestVo requestVo) {
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopById(groupingUserId);
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+
+        groupingUser.setPassword(encryptedPassword);
+
+        groupingUserRepository.save(groupingUser);
     }
 }
