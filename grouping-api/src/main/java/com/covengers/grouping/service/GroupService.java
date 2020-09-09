@@ -1,5 +1,16 @@
 package com.covengers.grouping.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
 import com.covengers.grouping.component.HashtagRecommender;
 import com.covengers.grouping.constant.GroupUserType;
 import com.covengers.grouping.constant.ResponseCode;
