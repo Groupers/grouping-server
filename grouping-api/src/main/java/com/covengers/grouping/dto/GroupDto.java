@@ -2,6 +2,7 @@ package com.covengers.grouping.dto;
 
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.vo.GroupVo;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -23,7 +24,7 @@ public class GroupDto {
     private final String representGroupImage;
     private final String image;
 
-    public static GroupDto of(GroupVo vo){
+    public static GroupDto of(GroupVo vo) {
         return builder()
                 .id(vo.getId())
                 .title(vo.getTitle())
