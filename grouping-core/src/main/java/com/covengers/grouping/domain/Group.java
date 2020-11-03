@@ -15,9 +15,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.covengers.grouping.constant.Gender;
+import com.covengers.grouping.vo.GroupImageVo;
 import com.covengers.grouping.vo.GroupVo;
-
 import com.covengers.grouping.vo.HashtagVo;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -69,6 +70,9 @@ public class Group extends AbstractAuditingEntity {
     @Column(name = "representGroupImage")
     private String representGroupingUserImage;
 
+    @Column(name = "image")
+    private String image;
+
     @OneToMany(mappedBy = "group")
     private List<GroupHashtagMapping> groupHashtagMappingList = new ArrayList<>();
 
@@ -115,18 +119,18 @@ public class Group extends AbstractAuditingEntity {
 
     public GroupVo toVoForHashtag() {
         return GroupVo.builder()
-                .id(getId())
-                .title(getTitle())
-                .isHidden(getIsHidden())
-                .maxUserAge(getMaxUserAge())
-                .minUserAge(getMinUserAge())
-                .availableGender(getAvailableGender())
-                .description(getDescription())
-                .pointX(getPointX())
-                .pointY(getPointY())
-                .pointDescription(getPointDescription())
-                .representGroupingUserImage(getRepresentGroupingUserImage())
-                .build();
+                      .id(getId())
+                      .title(getTitle())
+                      .isHidden(getIsHidden())
+                      .maxUserAge(getMaxUserAge())
+                      .minUserAge(getMinUserAge())
+                      .availableGender(getAvailableGender())
+                      .description(getDescription())
+                      .pointX(getPointX())
+                      .pointY(getPointY())
+                      .pointDescription(getPointDescription())
+                      .representGroupingUserImage(getRepresentGroupingUserImage())
+                      .build();
     }
 
     public GroupVo toVo() {
@@ -145,11 +149,27 @@ public class Group extends AbstractAuditingEntity {
                       .build();
     }
 
-    public List<HashtagVo> getHashtagList(){
+    public GroupImageVo toVoForImage() {
+        return GroupImageVo.builder()
+                           .id(id)
+                           .title(title)
+                           .isHidden(getIsHidden())
+                           .maxUserAge(maxUserAge)
+                           .minUserAge(minUserAge)
+                           .availableGender(availableGender)
+                           .description(description)
+                           .pointX(pointX)
+                           .pointY(pointY)
+                           .pointDescription(description)
+                           .image(image)
+                           .build();
+    }
+
+    public List<HashtagVo> getHashtagList() {
         return groupHashtagMappingList.stream()
-                .map(groupHashtagMapping ->
-                        groupHashtagMapping.getHashtag()
-                                .toVoForGroup())
-                .collect(Collectors.toList());
+                                      .map(groupHashtagMapping ->
+                                                   groupHashtagMapping.getHashtag()
+                                                                      .toVoForGroup())
+                                      .collect(Collectors.toList());
     }
 }
