@@ -1,8 +1,8 @@
 package com.covengers.grouping.dto;
 
 import com.covengers.grouping.constant.Gender;
+import com.covengers.grouping.vo.GroupImageVo;
 import com.covengers.grouping.vo.GroupVo;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class GroupDto {
+public class GroupImageDto {
     private final Long id;
     private final String title;
     private final Boolean isHidden;
@@ -23,7 +23,7 @@ public class GroupDto {
     private final String pointDescription;
     private final String image;
 
-    public static GroupDto of(GroupVo vo){
+    public static GroupImageDto of(GroupImageVo vo){
         return builder()
                 .id(vo.getId())
                 .title(vo.getTitle())
@@ -35,6 +35,7 @@ public class GroupDto {
                 .pointX(vo.getPointX())
                 .pointY(vo.getPointY())
                 .pointDescription(vo.getPointDescription())
+                .image(vo.getImage())
                 .build();
     }
 }
