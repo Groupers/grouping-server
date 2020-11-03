@@ -21,7 +21,6 @@ public class GroupDto {
     private final Long pointX;
     private final Long pointY;
     private final String pointDescription;
-    private final String image;
 
     public static GroupDto of(GroupVo vo){
         return builder()
