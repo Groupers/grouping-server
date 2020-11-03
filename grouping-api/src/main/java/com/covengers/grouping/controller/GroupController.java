@@ -36,7 +36,7 @@ public class GroupController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @PostMapping(value = "/group-image")
+    @PostMapping("/group-image")
     public CommonResponse<GroupImageDto> uploadGroupImage(
             @RequestParam("imageFile") MultipartFile imageFile,
             @RequestParam final Long groupId) throws IOException {
