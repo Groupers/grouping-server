@@ -13,7 +13,6 @@ import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.dto.CreateGroupRequestDto;
 import com.covengers.grouping.dto.GroupDto;
-import com.covengers.grouping.dto.GroupInfoDto;
 import com.covengers.grouping.dto.RecommendGroupDto;
 import com.covengers.grouping.service.GroupService;
 
@@ -37,11 +36,11 @@ public class GroupController extends AppApiV1Controller {
     }
 
     @PostMapping("/group-image")
-    public CommonResponse<GroupInfoDto> uploadGroupImage(
+    public CommonResponse<GroupDto> uploadGroupImage(
             @RequestParam("imageFile") MultipartFile imageFile,
             @RequestParam final Long groupId
     ) throws IOException {
-        final GroupInfoDto responseDto = GroupInfoDto.of(groupService.uploadGroupImage(imageFile, groupId));
+        final GroupDto responseDto = GroupDto.of(groupService.uploadGroupImage(imageFile, groupId));
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 

@@ -1,6 +1,9 @@
 package com.covengers.grouping.vo;
 
+import java.util.Optional;
+
 import com.covengers.grouping.constant.Gender;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -29,11 +32,11 @@ public class GroupVo {
 
     private final String pointDescription;
 
-    private final String representGroupingUserImage;
+    private final Optional<String> image;
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof GroupVo) {
+        if (o instanceof GroupVo) {
             return id.equals(((GroupVo) o).getId());
         } else {
             return false;
@@ -41,7 +44,7 @@ public class GroupVo {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
