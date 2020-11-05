@@ -2,6 +2,7 @@ package com.covengers.grouping.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.Column;
@@ -15,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.covengers.grouping.constant.Gender;
-import com.covengers.grouping.vo.GroupImageVo;
+import com.covengers.grouping.vo.GroupInfoVo;
 import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.HashtagVo;
 
@@ -71,7 +72,7 @@ public class Group extends AbstractAuditingEntity {
     private String representGroupingUserImage;
 
     @Column(name = "image")
-    private String image;
+    private Optional<String> image;
 
     @OneToMany(mappedBy = "group")
     private List<GroupHashtagMapping> groupHashtagMappingList = new ArrayList<>();
@@ -133,36 +134,20 @@ public class Group extends AbstractAuditingEntity {
                       .build();
     }
 
-    public GroupVo toVo() {
-        return GroupVo.builder()
-                      .id(id)
-                      .title(title)
-                      .isHidden(getIsHidden())
-                      .maxUserAge(maxUserAge)
-                      .minUserAge(minUserAge)
-                      .availableGender(availableGender)
-                      .description(description)
-                      .pointX(pointX)
-                      .pointY(pointY)
-                      .pointDescription(description)
-                      .representGroupingUserImage(getRepresentGroupingUserImage())
-                      .build();
-    }
-
-    public GroupImageVo toVoForImage() {
-        return GroupImageVo.builder()
-                           .id(id)
-                           .title(title)
-                           .isHidden(getIsHidden())
-                           .maxUserAge(maxUserAge)
-                           .minUserAge(minUserAge)
-                           .availableGender(availableGender)
-                           .description(description)
-                           .pointX(pointX)
-                           .pointY(pointY)
-                           .pointDescription(description)
-                           .image(image)
-                           .build();
+    public GroupInfoVo toVo() {
+        return GroupInfoVo.builder()
+                .id(id)
+                .title(title)
+                .isHidden(getIsHidden())
+                .maxUserAge(maxUserAge)
+                .minUserAge(minUserAge)
+                .availableGender(availableGender)
+                .description(description)
+                .pointX(pointX)
+                .pointY(pointY)
+                .pointDescription(description)
+                .image(image)
+                .build();
     }
 
     public List<HashtagVo> getHashtagList() {

@@ -1,29 +1,28 @@
 package com.covengers.grouping.dto;
 
 import com.covengers.grouping.constant.Gender;
-import com.covengers.grouping.vo.GroupImageVo;
-import com.covengers.grouping.vo.GroupVo;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import com.covengers.grouping.vo.GroupInfoVo;
+import lombok.*;
 
 @Getter
 @Builder
 @ToString
-public class GroupImageDto {
-    private final Long id;
-    private final String title;
-    private final Boolean isHidden;
-    private final Integer minUserAge;
-    private final Integer maxUserAge;
-    private final Gender availableGender;
-    private final String description;
-    private final Long pointX;
-    private final Long pointY;
-    private final String pointDescription;
-    private final String image;
+@AllArgsConstructor
+@NoArgsConstructor
+public class GroupInfoDto {
+    private Long id;
+    private String title;
+    private Boolean isHidden;
+    private Integer minUserAge;
+    private Integer maxUserAge;
+    private Gender availableGender;
+    private String description;
+    private Long pointX;
+    private Long pointY;
+    private String pointDescription;
+    private String image;
 
-    public static GroupImageDto of(GroupImageVo vo){
+    public static GroupInfoDto of(GroupInfoVo vo){
         return builder()
                 .id(vo.getId())
                 .title(vo.getTitle())
