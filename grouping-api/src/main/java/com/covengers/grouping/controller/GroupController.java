@@ -29,10 +29,11 @@ public class GroupController {
     }
 
     @PostMapping("/group-image")
-    public CommonResponse<GroupImageDto> uploadGroupImage(
+    public CommonResponse<GroupInfoDto> uploadGroupImage(
             @RequestParam("imageFile") MultipartFile imageFile,
-            @RequestParam final Long groupId) throws IOException {
-        final GroupImageDto responseDto = GroupImageDto.of(groupService.uploadGroupImage(imageFile,groupId));
+            @RequestParam final Long groupId
+    ) throws IOException {
+        final GroupInfoDto responseDto = GroupInfoDto.of(groupService.uploadGroupImage(imageFile,groupId));
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 

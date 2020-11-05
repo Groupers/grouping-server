@@ -51,11 +51,11 @@ public class GroupService {
     }
 
     @Transactional
-    public GroupImageVo uploadGroupImage(MultipartFile imageFile, Long groupId) throws IOException {
-        imageFile.transferTo(new File("C:/image/" + imageFile.getOriginalFilename()));
-        Group group = groupRepository.getOne(groupId);
+    public GroupInfoVo uploadGroupImage(MultipartFile imageFile, Long groupId) throws IOException {
+        imageFile.transferTo(new File(System.getProperty("user.home") + imageFile.getOriginalFilename()));
+        final Group group = groupRepository.getOne(groupId);
         group.setImage(imageFile.getOriginalFilename());
-        return group.toVoForImage();
+        return group.toVoWithImage();
     }
 
     public RecommendGroupVo recommendGroup(String keyword){

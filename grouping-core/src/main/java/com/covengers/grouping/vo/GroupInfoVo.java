@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class GroupImageVo {
+public class GroupInfoVo {
     private final Long id;
 
     private final String title;
@@ -33,8 +33,8 @@ public class GroupImageVo {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof GroupImageVo) {
-            return id.equals(((GroupImageVo) o).getId());
+        if(o instanceof GroupInfoVo) {
+            return id.equals(((GroupInfoVo) o).getId());
         } else {
             return false;
         }
