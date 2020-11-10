@@ -2,6 +2,7 @@ package com.covengers.grouping.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.Column;
@@ -66,6 +67,9 @@ public class Group extends AbstractAuditingEntity {
     @Column(name = "point_description")
     private String pointDescription;
 
+    @Column(name = "image")
+    private String image;
+
     @OneToMany(mappedBy = "group")
     private List<GroupHashtagMapping> groupHashtagMappingList = new ArrayList<>();
 
@@ -104,6 +108,7 @@ public class Group extends AbstractAuditingEntity {
                       .pointX(getPointX())
                       .pointY(getPointY())
                       .pointDescription(getPointDescription())
+                      .image(Optional.ofNullable(getImage()))
                       .build();
     }
 
@@ -119,22 +124,24 @@ public class Group extends AbstractAuditingEntity {
                 .pointX(getPointX())
                 .pointY(getPointY())
                 .pointDescription(getPointDescription())
+                .image(Optional.ofNullable(getImage()))
                 .build();
     }
 
     public GroupVo toVo() {
         return GroupVo.builder()
-                      .id(id)
-                      .title(title)
-                      .isHidden(getIsHidden())
-                      .maxUserAge(maxUserAge)
-                      .minUserAge(minUserAge)
-                      .availableGender(availableGender)
-                      .description(description)
-                      .pointX(pointX)
-                      .pointY(pointY)
-                      .pointDescription(description)
-                      .build();
+                .id(id)
+                .title(title)
+                .isHidden(getIsHidden())
+                .maxUserAge(maxUserAge)
+                .minUserAge(minUserAge)
+                .availableGender(availableGender)
+                .description(description)
+                .pointX(pointX)
+                .pointY(pointY)
+                .pointDescription(description)
+                .image(Optional.ofNullable(image))
+                .build();
     }
 
     public List<HashtagVo> getHashtagList(){

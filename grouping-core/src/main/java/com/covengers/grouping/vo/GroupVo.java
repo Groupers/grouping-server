@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Optional;
+
 @Builder
 @Getter
 @ToString
@@ -28,6 +30,8 @@ public class GroupVo {
     private final Long pointY;
 
     private final String pointDescription;
+
+    private final Optional<String> image;
 
     @Override
     public boolean equals(Object o) {
