@@ -67,13 +67,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     private String representProfileImage;
 
     @OneToMany(mappedBy = "groupingUser")
-    private List<UserHashtagMapping> userHashtagMappingList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "groupingUser")
     private List<UserGroupMapping> userGroupMappingList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "groupingUser")
-    private List<UserMessageMapping> userMessageMappingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupingUser")
     private List<Message> messageList = new ArrayList<>();

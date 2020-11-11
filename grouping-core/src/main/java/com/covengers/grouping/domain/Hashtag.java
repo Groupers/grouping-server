@@ -33,9 +33,6 @@ public class Hashtag extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "hashtag")
     private List<GroupHashtagMapping> groupHashtagMappingList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hashtag")
-    private List<UserHashtagMapping> userHashtagMappingList = new ArrayList<>();
-
     public List<GroupVo> toGroupList(){
         return groupHashtagMappingList.stream()
                 .map(groupHashtagMapping ->
