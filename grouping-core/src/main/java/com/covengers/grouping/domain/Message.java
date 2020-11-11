@@ -3,17 +3,7 @@ package com.covengers.grouping.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.covengers.grouping.constant.MessageType;
 import com.covengers.grouping.vo.MessageVo;
@@ -45,11 +35,11 @@ public class Message extends AbstractAuditingEntity {
     @Column(name = "message_type")
     private MessageType type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="grouping_user_id")
     private GroupingUser groupingUser;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="chat_room")
     private ChatRoom chatRoom;
 

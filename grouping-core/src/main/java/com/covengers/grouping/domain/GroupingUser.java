@@ -70,9 +70,6 @@ public class GroupingUser extends AbstractAuditingEntity {
     private List<UserGroupMapping> userGroupMappingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupingUser")
-    private List<Message> messageList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "groupingUser")
     private List<UserFriendMapping> userFriendMappingList = new ArrayList<>();
 
     public GroupingUser(String email,
