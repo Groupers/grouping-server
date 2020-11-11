@@ -45,9 +45,6 @@ public class Message extends AbstractAuditingEntity {
     @Column(name = "message_type")
     private MessageType type;
 
-    @OneToMany(mappedBy = "message")
-    private List<UserMessageMapping> userMessageMappingList = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name="grouping_user_id")
     private GroupingUser groupingUser;
