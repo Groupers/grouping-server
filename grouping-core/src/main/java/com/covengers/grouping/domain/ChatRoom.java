@@ -36,9 +36,6 @@ public class ChatRoom extends AbstractAuditingEntity {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "chatRoom")
-    private List<Message> messageList = new ArrayList<>();
-
     public ChatRoomVo toVo(){
         return ChatRoomVo.builder()
                 .id(id)

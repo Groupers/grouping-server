@@ -21,10 +21,10 @@ public class UserFriendMapping extends AbstractAuditingEntity {
     @Column(name = "user_friend_mapping_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grouping_user_id")
     private GroupingUser groupingUser;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_id")
     private GroupingUser friendUser;
 }
