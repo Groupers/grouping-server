@@ -29,6 +29,8 @@ dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
 //    implementation 'org.springframework.session:spring-session-core'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+//    implementation 'org.springframework.kafka:spring-kafka'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
@@ -46,8 +48,8 @@ dependencies {
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-
     }
+//    testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 
