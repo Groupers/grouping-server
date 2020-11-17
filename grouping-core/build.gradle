@@ -27,9 +27,7 @@ bootJar {
 jar {
     enabled = true
     manifest {
-        attributes 'Title':'Grouping',
-        'Version':1.0,
-        'Main-Class':'com.covengers.grouping.GroupingApiApplication'
+        attributes 'Main-Class':'com.covengers.grouping.GroupingApiApplication'
     }
     from {
         configurations.compile.collect {it.isDirectory()? it: zipTree(it)}
