@@ -1,4 +1,11 @@
-FROM openjdk:8-jdk-alpine
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM java:8
+
+VOLUME /tmp
+
+EXPOSE 10754
+
+ARG JAR_FILE=grouping-core/build/libs/grouping-core-0.0.1-SNAPSHOT.jar
+
+COPY ${JAR_FILE} grouping.jar
+
+ENTRYPOINT ["java","-jar","/grouping.jar"]
