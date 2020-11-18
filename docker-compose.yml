@@ -13,7 +13,7 @@ services:
       MYSQL_USER: covengers
       MYSQL_PASSWORD: covengers
 
-  grouping_application:
+  app:
     build :
       context : .
       dockerfile: Dockerfile
