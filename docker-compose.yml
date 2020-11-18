@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: groupings
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: covengers
+      MYSQL_PASSWORD: covengers
+    ports:
+      - 3306:3306
+
+  grouping_application:
+    image: grouping
+    ports:
+      - 10754:10754
+    depends_on:
+      - mysql
