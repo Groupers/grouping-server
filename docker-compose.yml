@@ -1,16 +1,17 @@
-version: '3.8'
+version: '3.7'
 
 services:
   mysql:
     container_name: mysql
-    image: mysql:latest
-    environment:
-      MYSQL_DATABASE: groupings
-      MYSQL_ROOT_PASSWORD: 0000
-      MYSQL_USER: covengers
-      MYSQL_PASSWORD: covengers
+    image: mysql
     ports:
       - 3306:3306
+    environment:
+      MYSQL_DATABASE: groupings
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: covengers
+      MYSQL_PASSWORD: covengers
 
   grouping_application:
     build :
@@ -18,5 +19,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 10754:10754
+    restart: always
     depends_on:
       - mysql
