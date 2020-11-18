@@ -4,7 +4,7 @@ VOLUME /tmp
 
 EXPOSE 10754
 
-ARG JAR_FILE=grouping-core/build/libs/grouping-core-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=grouping-api/build/libs/grouping-api-0.0.1-SNAPSHOT.jar
 
 COPY ${JAR_FILE} grouping.jar
 
