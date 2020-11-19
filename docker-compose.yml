@@ -13,6 +13,12 @@ services:
       MYSQL_USER: covengers
       MYSQL_PASSWORD: covengers
 
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+    - 6379:6379
+
   app:
     build :
       context : .
@@ -22,3 +28,4 @@ services:
     restart: always
     depends_on:
       - mysql
+      - redis
