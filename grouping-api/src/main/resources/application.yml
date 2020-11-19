@@ -1,6 +1,6 @@
 server:
-#  address: localhost # Without Docker
-  address: 0.0.0.0   # With Docker
+  address: localhost # Without Docker
+#  address: 0.0.0.0   # With Docker
   port: 10754
 
 spring:
@@ -9,8 +9,8 @@ spring:
     initialization-mode: always
     password: covengers
     sql-script-encoding: UTF-8
-#    url: jdbc:mysql://localhost:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC    # Without Docker
-    url: jdbc:mysql://mysql:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC    # With Docker
+    url: jdbc:mysql://localhost:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC    # Without Docker
+#    url: jdbc:mysql://mysql:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC    # With Docker
     username: covengers
 
   jpa:
