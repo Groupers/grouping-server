@@ -1,5 +1,6 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.dto.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -7,18 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.covengers.grouping.component.CommonResponseMaker;
-import com.covengers.grouping.dto.CancelEmailRequestDto;
-import com.covengers.grouping.dto.CancelPhoneNumberRequestDto;
-import com.covengers.grouping.dto.CancelSignUpRequestDto;
-import com.covengers.grouping.dto.CheckEmailResponseDto;
-import com.covengers.grouping.dto.CheckPhoneNumberResponseDto;
-import com.covengers.grouping.dto.CheckUserIdResponseDto;
-import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.EnrollEmailRequestDto;
-import com.covengers.grouping.dto.EnrollPhoneNumberRequestDto;
-import com.covengers.grouping.dto.GroupingUserDto;
-import com.covengers.grouping.dto.SignInRequestDto;
-import com.covengers.grouping.dto.SignUpRequestDto;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.service.UserService;
 
@@ -68,6 +57,8 @@ public class SignController extends AppApiV1Controller {
                     "\n1000 : 이미 존재하는 이메일입니다.." +
                     "\n9999 : 서비스 점검 중"
     )
+
+    @Deprecated
     @PostMapping("/sign/email")
     public CommonResponse<Void> enrollEmail(@RequestBody EnrollEmailRequestDto requestDto) {
 
@@ -76,6 +67,7 @@ public class SignController extends AppApiV1Controller {
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
+    @Deprecated
     @PostMapping("/sign/phone-number")
     public CommonResponse<Void> enrollPhoneNumber(@RequestBody EnrollPhoneNumberRequestDto requestDto) {
 
@@ -84,6 +76,7 @@ public class SignController extends AppApiV1Controller {
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
+    @Deprecated
     @PostMapping("/sign/cancel/email")
     public CommonResponse<Void> cancelSignUpEmail(@RequestBody CancelEmailRequestDto requestDto) {
 
@@ -91,6 +84,7 @@ public class SignController extends AppApiV1Controller {
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
+    @Deprecated
     @PostMapping("/sign/cancel/phone-number")
     public CommonResponse<Void> cancelSignUpPhoneNumber(@RequestBody CancelPhoneNumberRequestDto requestDto) {
 
@@ -98,6 +92,7 @@ public class SignController extends AppApiV1Controller {
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
+    @Deprecated
     @PostMapping("/sign/cancel")
     public CommonResponse<Void> cancelSignUp(@RequestBody CancelSignUpRequestDto requestDto) {
 
@@ -114,12 +109,19 @@ public class SignController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @PostMapping("/sign/login")
-    public CommonResponse<GroupingUserDto> signIn(@RequestBody SignInRequestDto requestDto) {
+    @PostMapping("/sign/login/email")
+    public CommonResponse<GroupingUserDto> signInWithEmail(@RequestBody SignInWithEmailRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signIn(requestDto.toVo()));
+        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInWithEmail(requestDto.toVo()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
+    @PostMapping("/sign/login/phone-number")
+    public CommonResponse<GroupingUserDto> signInWithPhoneNumber(@RequestBody SignInWithPhoneNumberRequestDto requestDto) {
+
+        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInWithPhoneNumber(requestDto.toVo()));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
 }

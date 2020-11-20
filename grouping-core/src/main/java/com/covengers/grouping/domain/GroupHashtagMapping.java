@@ -29,4 +29,9 @@ public class GroupHashtagMapping extends AbstractAuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
+
+    public GroupHashtagMapping(Group group, Hashtag hashtag) {
+        this.group = group;
+        this.hashtag = hashtag;
+    }
 }

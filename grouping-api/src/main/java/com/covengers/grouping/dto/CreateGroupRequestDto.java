@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Builder
 @ToString
@@ -20,6 +22,9 @@ public class CreateGroupRequestDto {
     private final Long pointX;
     private final Long pointY;
     private final String pointDescription;
+    private final String representGroupingUserId;
+    private final String representGroupImage;
+    private final List<String> hashtagList;
 
     public CreateGroupRequestVo toVo() {
         return CreateGroupRequestVo.builder()
@@ -32,6 +37,9 @@ public class CreateGroupRequestDto {
                                    .pointX(pointX)
                                    .pointY(pointY)
                                    .pointDescription(pointDescription)
+                                   .representGroupingUserId(representGroupingUserId)
+                                   .representGroupImage(representGroupImage)
+                                   .hashtagList(hashtagList)
                                    .build();
     }
 }

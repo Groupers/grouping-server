@@ -1,5 +1,6 @@
 package com.covengers.grouping.service;
 
+import com.covengers.grouping.component.PasswordShaEncryptor;
 import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
@@ -12,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -23,19 +23,17 @@ import java.util.concurrent.TimeUnit;
 public class UserService {
     private final GroupingUserRepository groupingUserRepository;
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
+    private final PasswordShaEncryptor passwordShaEncryptor;
     private final RedisTemplate<String, String> redisTemplate;
 
     public CheckEmailResultVo checkEmail(String email) {
 
         final Optional<GroupingUser> groupingUserOptional = groupingUserRepository.findTopByEmail(email);
 
-        final String savedEmail = redisTemplate.opsForValue().get(email);
-
         boolean isEmailAvailable = false;
 
-        if (StringUtils.isEmpty(savedEmail) && !groupingUserOptional.isPresent()) {
+        if (!groupingUserOptional.isPresent()) {
             isEmailAvailable = true;
-
         }
 
         return CheckEmailResultVo.builder()
@@ -53,8 +51,6 @@ public class UserService {
 
     public CheckPhoneNumberResultVo checkPhoneNumber(String phoneNumber) {
 
-        final String savedPhoneNumber = redisTemplate.opsForValue().get(phoneNumber);
-
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(phoneNumber);
 
@@ -65,7 +61,7 @@ public class UserService {
 
         boolean isPhoneNumberAvailable = false;
 
-        if (StringUtils.isEmpty(savedPhoneNumber) && !groupingUserOptional.isPresent()) {
+        if (!groupingUserOptional.isPresent()) {
             isPhoneNumberAvailable = true;
         }
 
@@ -74,10 +70,10 @@ public class UserService {
                                        .build();
     }
 
-    public GroupListResponseVo getGroupList(String userId) {
+    public GroupListResponseVo getGroupList(String groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopByUserId(userId);
+                groupingUserRepository.findTopById(groupingUserId);
 
         if (!groupingUserOptional.isPresent()) {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
@@ -88,10 +84,10 @@ public class UserService {
                 .build();
     }
 
-    public FriendListResultVo getFriendList(String userId) {
+    public FriendListResultVo getFriendList(String groupingUserId) {
 
         Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopByUserId(userId);
+                groupingUserRepository.findTopById(groupingUserId);
 
         if(!groupingUserOptional.isPresent()) {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
@@ -100,6 +96,23 @@ public class UserService {
         return FriendListResultVo.builder()
                 .friendList(groupingUserOptional.get().toFriendList())
                 .build();
+    }
+
+    public GroupingUserVo checkUserWithEmailAndPhoneNumber(String email, String phoneNumber) {
+
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(phoneNumber);
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByEmailAndPhoneNumberAndNationCode(
+                        email,
+                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                        phoneNationCodeSeparationVo.getNationCode());
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        return groupingUser.toVo();
     }
 
     @Transactional
@@ -152,24 +165,23 @@ public class UserService {
     @Transactional
     public GroupingUserVo completeSignUp(SignUpRequestVo requestVo) {
 
-        final boolean validEmail = !StringUtils.isEmpty(redisTemplate.opsForValue().get(requestVo.getEmail()))
-                                   && !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
+        final boolean isValidEmail = !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
 
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
-        final boolean validPhoneNumber =
-                !StringUtils.isEmpty(redisTemplate.opsForValue().get(requestVo.getPhoneNumber()))
-                && !groupingUserRepository.findTopByPhoneNumberAndNationCode(
+        final String encryptPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+
+        final boolean isValidPhoneNumber = !groupingUserRepository.findTopByPhoneNumberAndNationCode(
                         phoneNationCodeSeparationVo.getPurePhoneNumber(),
                         phoneNationCodeSeparationVo.getNationCode()).isPresent();
 
-        if (!validEmail || !validPhoneNumber) {
+        if (!isValidEmail || !isValidPhoneNumber) {
             throw new CommonException(ResponseCode.SIGN_UP_FAILED_FOR_INVALID_INFO);
         }
 
         final GroupingUser groupingUser = new GroupingUser(requestVo.getEmail(),
-                                                           requestVo.getPassword(),
+                                                           encryptPassword,
                                                            requestVo.getName(),
                                                            requestVo.getGender(),
                                                            requestVo.getBirthday(),
@@ -181,7 +193,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public GroupingUserVo signIn(SignInRequestVo requestVo) {
+    public GroupingUserVo signInWithEmail(SignInWithEmailRequestVo requestVo) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopByEmail(requestVo.getEmail());
@@ -189,10 +201,51 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        if (!groupingUser.getPassword().equals(requestVo.getPassword())) {
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+
+        if (!groupingUser.getPassword().equals(encryptedPassword)) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
         }
 
         return groupingUser.toVo();
+    }
+
+    @Transactional(readOnly = true)
+    public GroupingUserVo signInWithPhoneNumber(SignInWithPhoneNumberRequestVo requestVo) {
+
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByPhoneNumberAndNationCode(
+                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                        phoneNationCodeSeparationVo.getNationCode());
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+
+        if (!groupingUser.getPassword().equals(encryptedPassword)) {
+            throw new CommonException(ResponseCode.INVALID_PASSWORD);
+        }
+
+        return groupingUser.toVo();
+    }
+
+    @Transactional
+    public void resetPassword(String groupingUserId, ResetPasswordRequestVo requestVo) {
+
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopById(groupingUserId);
+
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+
+        groupingUser.setPassword(encryptedPassword);
+
+        groupingUserRepository.save(groupingUser);
     }
 }

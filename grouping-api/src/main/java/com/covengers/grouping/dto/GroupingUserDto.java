@@ -15,6 +15,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class GroupingUserDto {
+    private final String groupingUserId;
     private final UserStatus userStatus;
     private final String email;
     private final NationCode nationCode;
@@ -27,6 +28,7 @@ public class GroupingUserDto {
 
     public static GroupingUserDto of(GroupingUserVo vo) {
         return builder()
+                .groupingUserId(vo.getGroupingUserId())
                 .userStatus(vo.getUserStatus())
                 .email(vo.getEmail())
                 .nationCode(vo.getNationCode())

@@ -50,7 +50,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "password")
+    @Column(name = "password", length = 64)
     private String password;
 
     @Column(name = "user_id")
@@ -114,6 +114,7 @@ public class GroupingUser extends AbstractAuditingEntity {
 
     public GroupingUserVo toVo() {
         return GroupingUserVo.builder()
+                             .groupingUserId(id)
                              .userStatus(userStatus)
                              .email(email)
                              .nationCode(nationCode)

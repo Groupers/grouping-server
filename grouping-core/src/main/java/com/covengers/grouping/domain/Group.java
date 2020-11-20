@@ -17,8 +17,8 @@ import javax.persistence.Table;
 
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.vo.GroupVo;
-
 import com.covengers.grouping.vo.HashtagVo;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -67,6 +67,9 @@ public class Group extends AbstractAuditingEntity {
     @Column(name = "point_description")
     private String pointDescription;
 
+    @Column(name = "representGroupImage")
+    private String representGroupingUserImage;
+
     @Column(name = "image")
     private String image;
 
@@ -83,7 +86,8 @@ public class Group extends AbstractAuditingEntity {
                  String description,
                  Long pointX,
                  Long pointY,
-                 String pointDescription) {
+                 String pointDescription,
+                 String representGroupingUserImage) {
 
         this.title = title;
         isHidden = false;
@@ -94,6 +98,7 @@ public class Group extends AbstractAuditingEntity {
         this.pointX = pointX;
         this.pointY = pointY;
         this.pointDescription = pointDescription;
+        this.representGroupingUserImage = representGroupingUserImage;
     }
 
     public GroupVo toVoForGroupingUser() {
@@ -114,41 +119,41 @@ public class Group extends AbstractAuditingEntity {
 
     public GroupVo toVoForHashtag() {
         return GroupVo.builder()
-                .id(getId())
-                .title(getTitle())
-                .isHidden(getIsHidden())
-                .maxUserAge(getMaxUserAge())
-                .minUserAge(getMinUserAge())
-                .availableGender(getAvailableGender())
-                .description(getDescription())
-                .pointX(getPointX())
-                .pointY(getPointY())
-                .pointDescription(getPointDescription())
-                .image(Optional.ofNullable(getImage()))
-                .build();
+                      .id(getId())
+                      .title(getTitle())
+                      .isHidden(getIsHidden())
+                      .maxUserAge(getMaxUserAge())
+                      .minUserAge(getMinUserAge())
+                      .availableGender(getAvailableGender())
+                      .description(getDescription())
+                      .pointX(getPointX())
+                      .pointY(getPointY())
+                      .pointDescription(getPointDescription())
+                      .image(Optional.ofNullable(getImage()))
+                      .build();
     }
 
     public GroupVo toVo() {
         return GroupVo.builder()
-                .id(id)
-                .title(title)
-                .isHidden(getIsHidden())
-                .maxUserAge(maxUserAge)
-                .minUserAge(minUserAge)
-                .availableGender(availableGender)
-                .description(description)
-                .pointX(pointX)
-                .pointY(pointY)
-                .pointDescription(description)
-                .image(Optional.ofNullable(image))
-                .build();
+                      .id(id)
+                      .title(title)
+                      .isHidden(getIsHidden())
+                      .maxUserAge(maxUserAge)
+                      .minUserAge(minUserAge)
+                      .availableGender(availableGender)
+                      .description(description)
+                      .pointX(pointX)
+                      .pointY(pointY)
+                      .pointDescription(description)
+                      .image(Optional.ofNullable(image))
+                      .build();
     }
 
-    public List<HashtagVo> getHashtagList(){
+    public List<HashtagVo> getHashtagList() {
         return groupHashtagMappingList.stream()
-                .map(groupHashtagMapping ->
-                        groupHashtagMapping.getHashtag()
-                                .toVoForGroup())
-                .collect(Collectors.toList());
+                                      .map(groupHashtagMapping ->
+                                                   groupHashtagMapping.getHashtag()
+                                                                      .toVoForGroup())
+                                      .collect(Collectors.toList());
     }
 }

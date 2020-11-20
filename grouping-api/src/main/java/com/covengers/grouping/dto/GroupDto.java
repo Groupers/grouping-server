@@ -1,11 +1,13 @@
 package com.covengers.grouping.dto;
 
+import java.util.Optional;
+
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.vo.GroupVo;
 
-import lombok.*;
-
-import java.util.Optional;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
@@ -23,7 +25,7 @@ public class GroupDto {
     private final String pointDescription;
     private final Optional<String> image;
 
-    public static GroupDto of(GroupVo vo){
+    public static GroupDto of(GroupVo vo) {
         return builder()
                 .id(vo.getId())
                 .title(vo.getTitle())
