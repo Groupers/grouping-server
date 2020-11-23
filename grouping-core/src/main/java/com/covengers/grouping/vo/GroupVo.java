@@ -32,7 +32,7 @@ public class GroupVo {
 
     private final String pointDescription;
 
-    private final Optional<String> image;
+    private final Optional<String> representGroupImage;
 
     @Override
     public boolean equals(Object o) {

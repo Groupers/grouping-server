@@ -1,5 +1,6 @@
 package com.covengers.grouping.dto;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.covengers.grouping.constant.Gender;
@@ -23,7 +24,7 @@ public class GroupDto {
     private final Long pointX;
     private final Long pointY;
     private final String pointDescription;
-    private final Optional<String> image;
+    private final Optional<String> representGroupImage;
 
     public static GroupDto of(GroupVo vo) {
         return builder()
@@ -37,7 +38,8 @@ public class GroupDto {
                 .pointX(vo.getPointX())
                 .pointY(vo.getPointY())
                 .pointDescription(vo.getPointDescription())
-                .image(vo.getImage())
+                .representGroupImage(vo.getRepresentGroupImage())
                 .build();
     }
+
 }
