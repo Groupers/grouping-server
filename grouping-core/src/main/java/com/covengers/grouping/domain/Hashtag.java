@@ -56,4 +56,7 @@ public class Hashtag extends AbstractAuditingEntity {
                         .build();
     }
 
+    public Hashtag(String hashtag) {
+        this.hashtag = hashtag;
+    }
 }
