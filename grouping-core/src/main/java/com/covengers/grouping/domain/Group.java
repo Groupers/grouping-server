@@ -68,10 +68,7 @@ public class Group extends AbstractAuditingEntity {
     private String pointDescription;
 
     @Column(name = "representGroupImage")
-    private String representGroupingUserImage;
-
-    @Column(name = "image")
-    private String image;
+    private String representGroupImage;
 
     @OneToMany(mappedBy = "group")
     private List<GroupHashtagMapping> groupHashtagMappingList = new ArrayList<>();
@@ -87,7 +84,7 @@ public class Group extends AbstractAuditingEntity {
                  Long pointX,
                  Long pointY,
                  String pointDescription,
-                 String representGroupingUserImage) {
+                 String representGroupImage) {
 
         this.title = title;
         isHidden = false;
@@ -98,7 +95,7 @@ public class Group extends AbstractAuditingEntity {
         this.pointX = pointX;
         this.pointY = pointY;
         this.pointDescription = pointDescription;
-        this.representGroupingUserImage = representGroupingUserImage;
+        this.representGroupImage = representGroupImage;
     }
 
     public GroupVo toVoForGroupingUser() {
@@ -113,7 +110,7 @@ public class Group extends AbstractAuditingEntity {
                       .pointX(getPointX())
                       .pointY(getPointY())
                       .pointDescription(getPointDescription())
-                      .image(Optional.ofNullable(getImage()))
+                      .representGroupImage(Optional.ofNullable(getRepresentGroupImage()))
                       .build();
     }
 
@@ -129,7 +126,7 @@ public class Group extends AbstractAuditingEntity {
                       .pointX(getPointX())
                       .pointY(getPointY())
                       .pointDescription(getPointDescription())
-                      .image(Optional.ofNullable(getImage()))
+                      .representGroupImage(Optional.ofNullable(getRepresentGroupImage()))
                       .build();
     }
 
@@ -145,7 +142,7 @@ public class Group extends AbstractAuditingEntity {
                       .pointX(pointX)
                       .pointY(pointY)
                       .pointDescription(description)
-                      .image(Optional.ofNullable(image))
+                      .representGroupImage(Optional.ofNullable(representGroupImage))
                       .build();
     }
 

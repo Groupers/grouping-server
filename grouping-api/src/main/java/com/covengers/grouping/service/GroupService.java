@@ -28,7 +28,6 @@ import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.repository.HashtagRepository;
 import com.covengers.grouping.repository.UserGroupMappingRepository;
 import com.covengers.grouping.vo.CreateGroupRequestVo;
-import com.covengers.grouping.vo.GroupImageVo;
 import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.RecommendGroupVo;
 import com.covengers.grouping.vo.RecommendHashtagVo;
@@ -99,7 +98,7 @@ public class GroupService {
     public GroupVo uploadGroupImage(MultipartFile imageFile, Long groupId) throws IOException {
         imageFile.transferTo(new File(System.getProperty("user.home")+ "/" + imageFile.getOriginalFilename()));
         final Group group = groupRepository.getOne(groupId);
-        group.setImage(imageFile.getOriginalFilename());
+        group.setRepresentGroupImage(imageFile.getOriginalFilename());
         return group.toVo();
     }
 
