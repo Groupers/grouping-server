@@ -26,16 +26,20 @@ public class ChatController extends AppApiV1Controller {
     private final ChatRoomRepository chatRoomRepository;
     private final CommonResponseMaker commonResponseMaker;
 
+    @PostMapping("/room")
+    public CommonResponse<ChatRoomDto> createChatRoom(@RequestParam String title) {
+        final ChatRoomDto responseDto = ChatRoomDto.of(chatService.createChatRoom(title));
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
     @MessageMapping("/chat/message")
     public void sendMessage(ChatMessage chatMessage) {
         redisPublisher.publish(chatRoomRepository.getTopic(chatMessage.getChatRoomId()),chatMessage);
     }
 
-    @PostMapping("/chat/room")
-    public CommonResponse<ChatRoomDto> createChatRoom(@RequestParam String title) {
-        final ChatRoomDto responseDto = ChatRoomDto.of(chatService.createChatRoom(title));
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-    }
+
+
+
 
 
 }
