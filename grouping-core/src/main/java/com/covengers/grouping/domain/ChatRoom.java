@@ -9,10 +9,11 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class ChatRoom {
+public class ChatRoom extends AbstractAuditingEntity{
+
+    private static final long serialVersionUID = 1489983754860461043L;
 
     private String title;
-
     private String id;
 
     public static ChatRoom create(String title) {
