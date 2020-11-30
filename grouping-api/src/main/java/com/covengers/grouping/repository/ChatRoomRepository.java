@@ -32,9 +32,9 @@ public class ChatRoomRepository {
         topics = new HashMap<>();
     }
 
-    public List<ChatRoom> findAllChatRoom() {
-        return hashOpsChatRoom.values(CHAT_ROOM);
-    }
+//    public List<ChatRoom> findAllChatRoom() {
+//        return hashOpsChatRoom.values(CHAT_ROOM);
+//    }
 
     public ChatRoom findChatRoomById(String chatRoomId) {
         return hashOpsChatRoom.get(CHAT_ROOM, chatRoomId);
