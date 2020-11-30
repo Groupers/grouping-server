@@ -39,7 +39,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class GroupService {
-    private final RedisTemplate<String, String> redisTemplate;
     private final HashtagRecommender hashtagRecommender;
     private final GroupRepository groupRepository;
     private final HashtagRepository hashtagRepository;

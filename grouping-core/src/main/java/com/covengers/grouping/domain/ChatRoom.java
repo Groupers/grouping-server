@@ -1,32 +1,45 @@
 package com.covengers.grouping.domain;
 
+import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.vo.ChatRoomVo;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-import java.util.Optional;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Getter
 @Setter
-public class ChatRoom implements Serializable {
+@NoArgsConstructor
+@Entity
+@EqualsAndHashCode(of = "id", callSuper = false)
+@Table(name = "chat_room")
+public class ChatRoom extends AbstractAuditingEntity {
 
-    private static final long serialVersionUID = -3528943370988201172L;
+    private static final long serialVersionUID = 1489983754860461043L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "chat_room_id")
+    private Long id;
+
+    @Column(name = "title")
     private String title;
-    private String id;
 
-    public static ChatRoom create(String title) {
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.id = UUID.randomUUID().toString();
-        chatRoom.title = title;
-        return chatRoom;
+    @Column(name = "topic_id")
+    private String topicId;
+
+
+    public ChatRoom(String title) {
+        this.title = title;
+        this.topicId = UUID.randomUUID().toString();
     }
 
     public ChatRoomVo toVo() {
         return ChatRoomVo.builder()
-                .id(id)
+                .id(topicId)
                 .title(title)
                 .build();
     }

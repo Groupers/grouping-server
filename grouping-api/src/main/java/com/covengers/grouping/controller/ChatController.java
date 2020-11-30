@@ -4,7 +4,6 @@ import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.domain.ChatMessage;
 import com.covengers.grouping.dto.ChatRoomDto;
 import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.repository.ChatRoomRepository;
 import com.covengers.grouping.service.ChatService;
 import com.covengers.grouping.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatController extends AppApiV1Controller {
 
     private final RedisPublisher redisPublisher;
-    private final SimpMessageSendingOperations messageSendingOperations;
     private final ChatService chatService;
-    private final ChatRoomRepository chatRoomRepository;
     private final CommonResponseMaker commonResponseMaker;
 
     @PostMapping("/room")
@@ -40,7 +37,7 @@ public class ChatController extends AppApiV1Controller {
 
     @MessageMapping("/chat/message")
     public void sendMessage(ChatMessage chatMessage) {
-        redisPublisher.publish(chatRoomRepository.getTopic(chatMessage.getChatRoomId()),chatMessage);
+        redisPublisher.publish(chatService.getTopic(chatMessage.getTopicId()),chatMessage);
     }
 
 
