@@ -1,5 +1,6 @@
 package com.covengers.grouping.service;
 
+import com.covengers.grouping.domain.ChatMessage;
 import com.covengers.grouping.domain.ChatRoom;
 import com.covengers.grouping.repository.ChatRoomRepository;
 import com.covengers.grouping.vo.ChatRoomVo;
@@ -21,6 +22,7 @@ public class ChatService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final RedisMessageListenerContainer redisMessageListener;
+    private final RedisPublisher redisPublisher;
     private final RedisSubscriber redisSubscriber;
     private Map<String, ChannelTopic> topics;
 
@@ -35,7 +37,7 @@ public class ChatService {
         return chatRoom.toVo();
     }
 
-    public ChatRoomVo enterChatRoom(String chatRoomId) {
+    public ChatRoomVo enterChatRoom(Long chatRoomId) {
         final ChatRoom chatRoom = chatRoomRepository.getOne(chatRoomId);
         final String topicId = chatRoom.getTopicId();
         ChannelTopic topic = topics.get(topicId);
@@ -47,9 +49,8 @@ public class ChatService {
         return chatRoom.toVo();
     }
 
-    public ChannelTopic getTopic(String topicId) {
-        return topics.get(topicId);
+    public void sendMessage(ChatMessage chatMessage) {
+        redisPublisher.publish(topics.get(chatMessage.getTopicId()),chatMessage);
     }
-
 
 }

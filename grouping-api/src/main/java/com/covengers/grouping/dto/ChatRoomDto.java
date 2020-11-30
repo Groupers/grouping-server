@@ -10,13 +10,16 @@ import lombok.*;
 @Builder
 public class ChatRoomDto {
 
-    private String id;
+    private Long id;
+
+    private String topicId;
 
     private String title;
 
     public static ChatRoomDto of(ChatRoomVo vo) {
         return builder()
                 .id(vo.getId())
+                .topicId(vo.getTopicId())
                 .title(vo.getTitle())
                 .build();
     }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatController extends AppApiV1Controller {
 
-    private final RedisPublisher redisPublisher;
     private final ChatService chatService;
     private final CommonResponseMaker commonResponseMaker;
 
@@ -30,14 +29,14 @@ public class ChatController extends AppApiV1Controller {
     }
 
     @PostMapping("/room/enter")
-    public CommonResponse<ChatRoomDto> enterChatRoom(@RequestParam String chatRoomId) {
-        final ChatRoomDto responseDto = ChatRoomDto.of(chatService.enterChatRoom(chatRoomId));
+    public CommonResponse<ChatRoomDto> enterChatRoom(@RequestParam Long id) {
+        final ChatRoomDto responseDto = ChatRoomDto.of(chatService.enterChatRoom(id));
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
     @MessageMapping("/chat/message")
     public void sendMessage(ChatMessage chatMessage) {
-        redisPublisher.publish(chatService.getTopic(chatMessage.getTopicId()),chatMessage);
+        chatService.sendMessage(chatMessage);
     }
 
 

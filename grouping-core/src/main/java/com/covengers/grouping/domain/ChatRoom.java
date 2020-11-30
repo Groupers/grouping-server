@@ -39,7 +39,8 @@ public class ChatRoom extends AbstractAuditingEntity {
 
     public ChatRoomVo toVo() {
         return ChatRoomVo.builder()
-                .id(topicId)
+                .id(id)
+                .topicId(topicId)
                 .title(title)
                 .build();
     }
