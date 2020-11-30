@@ -15,7 +15,12 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
 
     public ChatRoomVo createChatRoom(String title) {
-        ChatRoom chatRoom = chatRoomRepository.createChatRoom(title);
+        final ChatRoom chatRoom = chatRoomRepository.createChatRoom(title);
+        return chatRoom.toVo();
+    }
+
+    public ChatRoomVo enterChatRoom(String chatRoomid) {
+        final ChatRoom chatRoom = chatRoomRepository.enterChatRoom(chatRoomid);
         return chatRoom.toVo();
     }
 

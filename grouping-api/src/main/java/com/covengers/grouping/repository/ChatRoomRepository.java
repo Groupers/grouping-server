@@ -41,18 +41,20 @@ public class ChatRoomRepository {
     }
 
     public ChatRoom createChatRoom(String title) {
-        ChatRoom chatRoom = ChatRoom.create(title);
+        final ChatRoom chatRoom = ChatRoom.create(title);
         hashOpsChatRoom.put(CHAT_ROOM, chatRoom.getId(), chatRoom);
         return chatRoom;
     }
 
-    public void enterChatRoom(String chatRoomId) {
+    public ChatRoom enterChatRoom(String chatRoomId) {
+        final ChatRoom chatRoom = findChatRoomById(chatRoomId);
         ChannelTopic topic = topics.get(chatRoomId);
         if (topic==null) {
             topic = new ChannelTopic(chatRoomId);
             redisMessageListener.addMessageListener(redisSubscriber, topic);
             topics.put(chatRoomId, topic);
         }
+        return chatRoom;
     }
 
     public ChannelTopic getTopic(String chatRoomId) {
