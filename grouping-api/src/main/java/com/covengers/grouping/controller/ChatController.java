@@ -38,10 +38,5 @@ public class ChatController extends AppApiV1Controller {
     public void sendMessage(ChatMessage chatMessage) {
         chatService.sendMessage(chatMessage);
     }
-
-
-
-
-
-
+    
 }
