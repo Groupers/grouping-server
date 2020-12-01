@@ -2,6 +2,19 @@ spring:
   profiles:
     active: local
 
+---
+
+spring:
+  profiles: local
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    password: covengers
+    sql-script-encoding: UTF-8
+    url: jdbc:mysql://localhost:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC  # Without Docker
+    username: covengers
+
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -9,6 +22,10 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
   kafka:
     bootstrap-servers: 127.0.0.1:9092
@@ -30,26 +47,9 @@ spring:
   servlet:
     multipart:
       file-size-threshold: 1MB
-#      location: C:/Temp
-#      max-file-size: 100MB
-#      max-request-size: 100MB
-
----
-
-spring:
-  profiles: local
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    initialization-mode: always
-    password: covengers
-    sql-script-encoding: UTF-8
-    url: jdbc:mysql://localhost:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC  # Without Docker
-    username: covengers
-
-  redis:
-    host: 127.0.0.1
-    port: 6379
+  #      location: C:/Temp
+  #      max-file-size: 100MB
+  #      max-request-size: 100MB
 
 server:
   address: localhost
@@ -68,9 +68,41 @@ spring:
     url: jdbc:mysql://mysql:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC    # With Docker
     username: covengers
 
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
   redis:
-    host: 127.0.0.1
+    host: 0.0.0.0
     port: 6379
+
+  kafka:
+    bootstrap-servers: 0.0.0.0:9092
+    consumer:
+      medium-jjeaby-group-id: medium-jjeaby-group
+      company-jjeaby-group-id: company-jjeaby-group
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 1000
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    template:
+      company-jjeaby-topic: company-jjeaby-topic
+      medium-jjeaby-topic: medium-jjeaby-topic
+
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+  #      location: C:/Temp
+  #      max-file-size: 100MB
+  #      max-request-size: 100MB
 
 server:
   address: 0.0.0.0
