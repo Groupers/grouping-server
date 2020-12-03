@@ -10,7 +10,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
-    password: covengers
+    password: Covengers2020@
     sql-script-encoding: UTF-8
     url: jdbc:mysql://localhost:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC  # Without Docker
     username: covengers
@@ -63,9 +63,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
-    password: covengers
+    password: Covengers2020@
     sql-script-encoding: UTF-8
-    url: jdbc:mysql://mysql:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC    # With Docker
+    url: jdbc:mysql://0.0.0.0:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC    # With Docker
     username: covengers
 
   jpa:

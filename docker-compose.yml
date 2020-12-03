@@ -8,9 +8,9 @@ services:
     environment:
       MYSQL_DATABASE: groupings
       MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: Covengers2020@
       MYSQL_USER: covengers
-      MYSQL_PASSWORD: convengers
+      MYSQL_PASSWORD: Covengers2020@
 
   redis:
     image: redis:latest
