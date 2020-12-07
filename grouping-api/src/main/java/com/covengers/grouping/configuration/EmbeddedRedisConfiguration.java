@@ -8,7 +8,6 @@ import redis.embedded.RedisServer;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-@Profile("local")
 @Configuration
 public class EmbeddedRedisConfiguration {
 
