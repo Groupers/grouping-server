@@ -10,7 +10,7 @@ import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,7 @@ public class UserService {
     private final GroupingUserRepository groupingUserRepository;
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
     private final PasswordShaEncryptor passwordShaEncryptor;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
     public CheckEmailResultVo checkEmail(String email) {
 
@@ -124,8 +124,8 @@ public class UserService {
             throw new CommonException(ResponseCode.EMAIL_ALREADY_EXISTED);
         }
 
-        redisTemplate.opsForValue().set(requestVo.getEmail(), requestVo.getEmail());
-        redisTemplate.expire(requestVo.getEmail(),
+        stringRedisTemplate.opsForValue().set(requestVo.getEmail(), requestVo.getEmail());
+        stringRedisTemplate.expire(requestVo.getEmail(),
                              RedisCacheTime.SIGN_UP_EMAIL.getCacheTime(),
                              TimeUnit.MINUTES);
     }
@@ -140,26 +140,26 @@ public class UserService {
             throw new CommonException(ResponseCode.PHONE_NUMBER_ALREADY_EXISTED);
         }
 
-        redisTemplate.opsForValue().set(requestVo.getPhoneNumber(), requestVo.getPhoneNumber());
-        redisTemplate.expire(requestVo.getPhoneNumber(),
+        stringRedisTemplate.opsForValue().set(requestVo.getPhoneNumber(), requestVo.getPhoneNumber());
+        stringRedisTemplate.expire(requestVo.getPhoneNumber(),
                              RedisCacheTime.SIGN_UP_PHONE_NUMBER.getCacheTime(),
                              TimeUnit.MINUTES);
     }
 
     @Transactional
     public void cancelSignUp(CancelSignUpRequestVo requestVo) {
-        requestVo.getEmail().ifPresent(redisTemplate::delete);
-        requestVo.getPhoneNumber().ifPresent(redisTemplate::delete);
+        requestVo.getEmail().ifPresent(stringRedisTemplate::delete);
+        requestVo.getPhoneNumber().ifPresent(stringRedisTemplate::delete);
     }
 
     @Transactional
     public void cancelSignUpEmail(CancelEmailRequestVo requestVo) {
-        redisTemplate.delete(requestVo.getEmail());
+        stringRedisTemplate.delete(requestVo.getEmail());
     }
 
     @Transactional
     public void cancelSignUpPhoneNumber(CancelPhoneNumberRequestVo requestVo) {
-        redisTemplate.delete(requestVo.getPhoneNumber());
+        stringRedisTemplate.delete(requestVo.getPhoneNumber());
     }
 
     @Transactional
