@@ -1,6 +1,5 @@
 package com.covengers.grouping.domain;
 
-import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.vo.ChatRoomVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

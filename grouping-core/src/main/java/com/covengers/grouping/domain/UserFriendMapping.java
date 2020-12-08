@@ -16,6 +16,7 @@ import javax.persistence.*;
 public class UserFriendMapping extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = -2710275756256638368L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_friend_mapping_id")
@@ -24,6 +25,7 @@ public class UserFriendMapping extends AbstractAuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grouping_user_id")
     private GroupingUser groupingUser;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_id")
     private GroupingUser friendUser;
