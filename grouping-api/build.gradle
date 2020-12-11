@@ -29,6 +29,7 @@ dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
 //    implementation 'org.springframework.session:spring-session-core'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 //    implementation 'org.springframework.kafka:spring-kafka'
     compileOnly 'org.projectlombok:lombok'

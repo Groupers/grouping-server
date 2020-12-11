@@ -26,6 +26,7 @@ import lombok.Setter;
 public class UserGroupMapping extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = -2710275756256697368L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_group_mapping_id")
@@ -37,6 +38,7 @@ public class UserGroupMapping extends AbstractAuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grouping_user_id")
     private GroupingUser groupingUser;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private Group group;

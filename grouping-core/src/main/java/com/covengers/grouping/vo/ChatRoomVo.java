@@ -9,7 +9,9 @@ import lombok.ToString;
 @ToString
 public class ChatRoomVo {
 
-    private final String id;
+    private final Long id;
+
+    private final String topicId;
 
     private final String title;
 }
