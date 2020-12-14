@@ -43,7 +43,7 @@ public class UserController extends AppApiV1Controller {
     }
 
 
-    @GetMapping("/users/{groupingUserId}/search/history")
+    @GetMapping("/users/{groupingUserId}/search")
     public CommonResponse<SearchListResultDto> getSearchList(@PathVariable("groupingUserId") String groupingUserId) {
 
         final SearchListResultDto responseDto =
