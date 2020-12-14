@@ -10,6 +10,6 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
-public class SearchListResponseVo {
-    private final List<Keyword> searchList;
+public class SearchListResultVo {
+    private final List<KeywordVo> searchList;
 }

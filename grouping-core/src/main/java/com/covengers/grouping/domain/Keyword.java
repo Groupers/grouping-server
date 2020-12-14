@@ -1,5 +1,6 @@
 package com.covengers.grouping.domain;
 
+import com.covengers.grouping.vo.KeywordVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,13 @@ public class Keyword {
     @Column(name = "keyword")
     private String keyword;
 
+    public KeywordVo toVo() {
+        return KeywordVo.builder()
+                .keyword(getKeyword())
+                .build();
+    }
+
+    public Keyword(String keyword) {
+        this.keyword = keyword;
+    }
 }
