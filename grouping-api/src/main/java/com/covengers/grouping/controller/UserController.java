@@ -33,6 +33,15 @@ public class UserController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
+    @GetMapping("/users/{groupingUserId}/search")
+    public CommonResponse<SearchListResponseDto> getSearchList(@PathVariable("groupingUserId") String groupingUserId) {
+
+        final SearchListResponseDto responseDto =
+                SearchListResponseDto.of(userService.getSearchList(groupingUserId));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
     @GetMapping("/users")
     public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
             @RequestParam String email, @RequestParam String phoneNumber) {
