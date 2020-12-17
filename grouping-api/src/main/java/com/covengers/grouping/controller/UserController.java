@@ -33,25 +33,6 @@ public class UserController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @PostMapping("/users/{groupingUserId}/search")
-    public CommonResponse<SearchResponseDto> addSearchHistory(@PathVariable("groupingUserId") String groupingUserId,
-                                                              @RequestParam String keyword) {
-        final SearchResponseDto responseDto =
-                SearchResponseDto.of(userService.addSearchHistory(groupingUserId, keyword));
-
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-    }
-
-
-    @GetMapping("/users/{groupingUserId}/search")
-    public CommonResponse<SearchListResultDto> getSearchList(@PathVariable("groupingUserId") String groupingUserId) {
-
-        final SearchListResultDto responseDto =
-                SearchListResultDto.of(userService.getSearchList(groupingUserId));
-
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-    }
-
     @GetMapping("/users")
     public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
             @RequestParam String email, @RequestParam String phoneNumber) {

@@ -27,7 +27,6 @@ public class UserService {
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
     private final PasswordShaEncryptor passwordShaEncryptor;
     private final StringRedisTemplate stringRedisTemplate;
-    private final KeywordRepository keywordRepository;
 
     public CheckEmailResultVo checkEmail(String email) {
 
@@ -101,21 +100,6 @@ public class UserService {
                 .build();
     }
 
-
-    public SearchListResultVo getSearchList(String groupingUserId) {
-
-        Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(groupingUserId);
-
-        if(!groupingUserOptional.isPresent()) {
-            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
-        }
-
-        return SearchListResultVo.builder()
-                .searchList(groupingUserOptional.get().toSearchList())
-                .build();
-    }
-
     public GroupingUserVo checkUserWithEmailAndPhoneNumber(String email, String phoneNumber) {
 
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
@@ -131,24 +115,6 @@ public class UserService {
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
         return groupingUser.toVo();
-    }
-
-    @Transactional
-    public KeywordVo addSearchHistory(String groupingUserId, String keyword) {
-
-        Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(groupingUserId);
-
-        GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
-
-        final Keyword keywordEntity = new Keyword(keyword);
-
-        keywordRepository.save(keywordEntity);
-
-        groupingUser.getSearchHistory().add(keywordEntity);
-
-        return keywordEntity.toVo();
     }
 
     @Transactional
