@@ -5,7 +5,6 @@ import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.dto.SearchListResultDto;
 import com.covengers.grouping.dto.SearchResponseDto;
 import com.covengers.grouping.service.KeywordService;
-import com.covengers.grouping.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

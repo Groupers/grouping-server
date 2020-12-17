@@ -88,7 +88,7 @@ public class UserService {
 
     public FriendListResultVo getFriendList(String groupingUserId) {
 
-        Optional<GroupingUser> groupingUserOptional =
+        final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
         if(!groupingUserOptional.isPresent()) {

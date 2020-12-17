@@ -22,7 +22,7 @@ public class KeywordService {
 
     public SearchListResultVo getSearchList(String groupingUserId) {
 
-        Optional<GroupingUser> groupingUserOptional =
+        final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
         if(!groupingUserOptional.isPresent()) {
@@ -37,7 +37,7 @@ public class KeywordService {
     @Transactional
     public KeywordVo addSearchHistory(String groupingUserId, String keyword) {
 
-        Optional<GroupingUser> groupingUserOptional =
+        final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
         GroupingUser groupingUser =
