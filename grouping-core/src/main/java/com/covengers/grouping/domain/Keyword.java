@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Keyword extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 8828364393278084521L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "keyword_id")

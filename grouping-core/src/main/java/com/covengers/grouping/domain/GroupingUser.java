@@ -73,7 +73,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "groupingUser")
     private List<UserFriendMapping> userFriendMappingList = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "grouping_user_id")
     private List<Keyword> searchHistory = new ArrayList<>();
 
