@@ -2,11 +2,9 @@ package com.covengers.grouping.controller;
 
 import java.io.IOException;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.covengers.grouping.service.KeywordService;
+import com.covengers.grouping.vo.KeywordVo;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.covengers.grouping.component.CommonResponseMaker;
@@ -25,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GroupController extends AppApiV1Controller {
 
     private final GroupService groupService;
+    private final KeywordService keywordService;
     private final CommonResponseMaker commonResponseMaker;
 
     @PostMapping("/group")
@@ -45,7 +44,9 @@ public class GroupController extends AppApiV1Controller {
     }
 
     @GetMapping("/group/keyword")
-    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam String keyword) {
+    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam String groupingUserId, @RequestParam String keyword) {
+
+        keywordService.addSearchHistory(groupingUserId, keyword);
 
         final RecommendGroupDto responseDto = RecommendGroupDto.of(groupService.recommendGroup(keyword));
 

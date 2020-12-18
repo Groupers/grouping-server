@@ -35,7 +35,7 @@ public class KeywordService {
     }
 
     @Transactional
-    public KeywordVo addSearchHistory(String groupingUserId, String keyword) {
+    public void addSearchHistory(String groupingUserId, String keyword) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -49,6 +49,6 @@ public class KeywordService {
 
         groupingUser.getSearchHistory().add(keywordEntity);
 
-        return keywordEntity.toVo();
+        return;
     }
 }

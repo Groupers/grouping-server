@@ -16,17 +16,7 @@ public class KeywordController extends AppApiV1Controller {
     private final KeywordService keywordService;
     private final CommonResponseMaker commonResponseMaker;
 
-    @PostMapping("/keywords/{groupingUserId}/search")
-    public CommonResponse<SearchResponseDto> addSearchHistory(@PathVariable("groupingUserId") String groupingUserId,
-                                                              @RequestParam String keyword) {
-        final SearchResponseDto responseDto =
-                SearchResponseDto.of(keywordService.addSearchHistory(groupingUserId, keyword));
-
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-    }
-
-
-    @GetMapping("/keywords/{groupingUserId}/search")
+    @GetMapping("/keywords/{groupingUserId}/search/history")
     public CommonResponse<SearchListResultDto> getSearchList(@PathVariable("groupingUserId") String groupingUserId) {
 
         final SearchListResultDto responseDto =
