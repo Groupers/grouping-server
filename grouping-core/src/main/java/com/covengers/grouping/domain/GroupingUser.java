@@ -5,6 +5,7 @@ import com.covengers.grouping.constant.NationCode;
 import com.covengers.grouping.constant.UserStatus;
 import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.GroupingUserVo;
+import com.covengers.grouping.vo.KeywordVo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,6 +73,10 @@ public class GroupingUser extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "groupingUser")
     private List<UserFriendMapping> userFriendMappingList = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "grouping_user_id")
+    private List<Keyword> searchHistory = new ArrayList<>();
+
     public GroupingUser(String email,
                         String password,
                         String name,
@@ -109,6 +114,14 @@ public class GroupingUser extends AbstractAuditingEntity {
                 .map(userFriendMapping ->
                         userFriendMapping.getFriendUser()
                                 .toVo())
+                .collect(Collectors.toList());
+    }
+
+    public List<KeywordVo> toSearchList() {
+        return searchHistory.stream()
+                .map(keyword ->
+                        keyword.toVo()
+                )
                 .collect(Collectors.toList());
     }
 

@@ -5,8 +5,10 @@ import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
+import com.covengers.grouping.domain.Keyword;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
+import com.covengers.grouping.repository.KeywordRepository;
 import com.covengers.grouping.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +88,7 @@ public class UserService {
 
     public FriendListResultVo getFriendList(String groupingUserId) {
 
-        Optional<GroupingUser> groupingUserOptional =
+        final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
         if(!groupingUserOptional.isPresent()) {
@@ -248,4 +250,5 @@ public class UserService {
 
         groupingUserRepository.save(groupingUser);
     }
+
 }
