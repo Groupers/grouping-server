@@ -1,0 +1,58 @@
+spring:
+  profiles:
+    active: dev
+
+---
+
+spring:
+  profiles: local
+
+  batch:
+    initialize-schema: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: covengers
+    password: Covengers2020@
+    initialization-mode: always
+    sql-script-encoding: UTF-8
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    show-sql: true
+
+server:
+  address: localhost
+  port: 10755
+
+---
+
+spring:
+  profiles: dev
+
+  batch:
+    initialize-schema: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://0.0.0.0:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: covengers
+    password: Covengers2020@
+    initialization-mode: always
+    sql-script-encoding: UTF-8
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    show-sql: true
+
+server:
+  address: 0.0.0.0
+  port: 10755
+
