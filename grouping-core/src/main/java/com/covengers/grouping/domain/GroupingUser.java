@@ -62,7 +62,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     private Gender gender;
 
     @Column(name = "birth_day", columnDefinition = "timestamp")
-    private LocalDate birthDay;
+    private LocalDate birthday;
 
     @Column(name = "represent_profile_image")
     private String representProfileImage;
@@ -81,7 +81,7 @@ public class GroupingUser extends AbstractAuditingEntity {
                         String password,
                         String name,
                         Gender gender,
-                        LocalDate birthDay,
+                        LocalDate birthday,
                         String phoneNumber,
                         NationCode nationCode) {
 
@@ -89,7 +89,7 @@ public class GroupingUser extends AbstractAuditingEntity {
         this.password = password;
         this.name = name;
         this.gender = gender;
-        this.birthDay = birthDay;
+        this.birthday = birthday;
         this.phoneNumber = phoneNumber;
         this.nationCode = nationCode;
         userStatus = UserStatus.SIGN_UP_COMPLETED;
@@ -135,7 +135,7 @@ public class GroupingUser extends AbstractAuditingEntity {
                              .name(name)
                              .userId(userId)
                              .gender(gender)
-                             .birthDay(birthDay)
+                             .birthday(birthday)
                              .representProfileImage(representProfileImage)
                              .build();
     }
