@@ -117,7 +117,7 @@ public class GroupingUser extends AbstractAuditingEntity {
                 .collect(Collectors.toList());
     }
 
-    public List<KeywordVo> toSearchList() {
+    public List<KeywordVo> toSearchHistoryList() {
         return searchHistory.stream()
                 .map(keyword ->
                         keyword.toVo()

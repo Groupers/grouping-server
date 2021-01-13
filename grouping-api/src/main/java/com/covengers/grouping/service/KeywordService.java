@@ -6,8 +6,7 @@ import com.covengers.grouping.domain.Keyword;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.repository.KeywordRepository;
-import com.covengers.grouping.vo.KeywordVo;
-import com.covengers.grouping.vo.SearchListResultVo;
+import com.covengers.grouping.vo.SearchHistoryListResultVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,7 @@ public class KeywordService {
     private final GroupingUserRepository groupingUserRepository;
     private final KeywordRepository keywordRepository;
 
-    public SearchListResultVo getSearchList(String groupingUserId) {
+    public SearchHistoryListResultVo getSearchHistoryList(String groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -29,8 +28,8 @@ public class KeywordService {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
         }
 
-        return SearchListResultVo.builder()
-                .searchList(groupingUserOptional.get().toSearchList())
+        return SearchHistoryListResultVo.builder()
+                .searchHistoryList(groupingUserOptional.get().toSearchHistoryList())
                 .build();
     }
 
