@@ -24,4 +24,13 @@ public class KeywordController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
+    @GetMapping("/keywords/search/trends")
+    public CommonResponse<SearchTrendsListResultDto> getSearchTrendsList() {
+
+        final SearchTrendsListResultDto responseDto =
+                SearchTrendsListResultDto.of(keywordService.getSearchTrendsList());
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
 }
