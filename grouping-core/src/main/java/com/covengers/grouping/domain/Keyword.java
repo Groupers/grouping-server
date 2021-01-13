@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
-@Table(name = "keyword", indexes = @Index(name = "index_created_at", columnList = "created_at"))
+@Table(name = "keyword")
 public class Keyword extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 8828364393278084521L;
