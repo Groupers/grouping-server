@@ -7,6 +7,7 @@ import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.repository.KeywordRepository;
 import com.covengers.grouping.vo.SearchHistoryListResultVo;
+import com.covengers.grouping.vo.SearchTrendsListResultVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,10 @@ public class KeywordService {
                 .build();
     }
 
+    public SearchTrendsListResultVo getSearchTrendsList() {
+        return null;
+    }
+
     @Transactional
     public void addSearchHistory(String groupingUserId, String keyword) {
 
@@ -50,4 +55,5 @@ public class KeywordService {
 
         return;
     }
+
 }

@@ -3,6 +3,7 @@ package com.covengers.grouping.controller;
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.dto.SearchHistoryListResultDto;
+import com.covengers.grouping.dto.SearchTrendsListResultDto;
 import com.covengers.grouping.service.KeywordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
