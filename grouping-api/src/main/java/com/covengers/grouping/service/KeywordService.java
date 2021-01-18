@@ -54,7 +54,7 @@ public class KeywordService {
         Collections.sort(searchTrendsList, (o1, o2) -> (keywordMap.get(o2).compareTo(keywordMap.get(o1))));
 
         if (searchTrendsList.size() > keywordCount) {
-            searchTrendsList = searchTrendsList.subList(0, keywordCount-1);
+            searchTrendsList = searchTrendsList.subList(0, keywordCount);
         }
 
         return SearchTrendsListResultVo.builder()
