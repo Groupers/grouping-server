@@ -1,7 +1,7 @@
 
 INSERT INTO `groupings`.`grouping_user`
 (`grouping_user_id`,
-`birth_day`,
+`birthday`,
 `email`,
 `gender`,
 `name`,
@@ -28,7 +28,7 @@ now());
 
 INSERT INTO `groupings`.`grouping_user`
 (`grouping_user_id`,
-`birth_day`,
+`birthday`,
 `email`,
 `gender`,
 `name`,
@@ -55,7 +55,7 @@ now());
 
 INSERT INTO `groupings`.`grouping_user`
 (`grouping_user_id`,
-`birth_day`,
+`birthday`,
 `email`,
 `gender`,
 `name`,
@@ -82,7 +82,7 @@ now());
 
 INSERT INTO `groupings`.`grouping_user`
 (`grouping_user_id`,
-`birth_day`,
+`birthday`,
 `email`,
 `gender`,
 `name`,
@@ -109,7 +109,7 @@ now());
 
 INSERT INTO `groupings`.`grouping_user`
 (`grouping_user_id`,
-`birth_day`,
+`birthday`,
 `email`,
 `gender`,
 `name`,

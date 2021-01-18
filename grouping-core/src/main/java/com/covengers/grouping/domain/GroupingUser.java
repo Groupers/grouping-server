@@ -61,7 +61,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     @Column(name = "gender")
     private Gender gender;
 
-    @Column(name = "birth_day", columnDefinition = "timestamp")
+    @Column(name = "birthday", columnDefinition = "timestamp")
     private LocalDate birthday;
 
     @Column(name = "represent_profile_image")
