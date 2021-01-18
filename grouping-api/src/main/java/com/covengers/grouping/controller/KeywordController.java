@@ -29,8 +29,8 @@ public class KeywordController extends AppApiV1Controller {
     public CommonResponse<SearchTrendsListResultDto> getSearchTrendsList() {
 
         final SearchTrendsListResultDto responseDto =
-                SearchTrendsListResultDto.of(keywordService.getSearchTrendsList());
-
+                SearchTrendsListResultDto.of(keywordService.getSearchTrendsList(1,5));
+ 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 

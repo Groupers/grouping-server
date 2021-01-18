@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -39,9 +38,25 @@ public class KeywordService {
                 .build();
     }
 
-    public SearchTrendsListResultVo getSearchTrendsList() {
-        final LocalDateTime startPoint = LocalDateTime.now().minusDays(1);
-        final List<String> searchTrendsList = keywordRepository.findKeywordByCreatedAtAfter(startPoint);
+    public SearchTrendsListResultVo getSearchTrendsList(int dayPeriod, int keywordCount) {
+
+        final LocalDateTime startPoint = LocalDateTime.now().minusDays(dayPeriod);
+
+        final List<String> keywordList = keywordRepository.findKeywordByCreatedAtAfter(startPoint);
+
+        HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
+
+        for (String key : keywordList) {
+            keywordMap.put(key, keywordMap.getOrDefault(key, 0) + 1);
+        }
+
+        List<String> searchTrendsList = new ArrayList(keywordMap.keySet());
+        Collections.sort(searchTrendsList, (o1, o2) -> (keywordMap.get(o2).compareTo(keywordMap.get(o1))));
+
+        if (searchTrendsList.size() > keywordCount) {
+            searchTrendsList = searchTrendsList.subList(0, keywordCount-1);
+        }
+
         return SearchTrendsListResultVo.builder()
                 .searchTrendsList(searchTrendsList.stream().map(keyword -> KeywordVo.builder()
                         .keyword(keyword)
