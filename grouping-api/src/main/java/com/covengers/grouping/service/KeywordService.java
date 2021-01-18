@@ -6,13 +6,18 @@ import com.covengers.grouping.domain.Keyword;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.repository.KeywordRepository;
+import com.covengers.grouping.vo.KeywordVo;
 import com.covengers.grouping.vo.SearchHistoryListResultVo;
 import com.covengers.grouping.vo.SearchTrendsListResultVo;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -25,7 +30,7 @@ public class KeywordService {
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
-        if(!groupingUserOptional.isPresent()) {
+        if (!groupingUserOptional.isPresent()) {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
         }
 
@@ -35,7 +40,15 @@ public class KeywordService {
     }
 
     public SearchTrendsListResultVo getSearchTrendsList() {
-        return null;
+        final LocalDateTime startPoint = LocalDateTime.now().minusDays(1);
+        final List<String> searchTrendsList = keywordRepository.findKeywordByCreatedAtAfter(startPoint);
+        return SearchTrendsListResultVo.builder()
+                .searchTrendsList(searchTrendsList.stream().map(keyword -> KeywordVo.builder()
+                        .keyword(keyword)
+                        .build())
+                        .collect(Collectors.toList())
+                )
+                .build();
     }
 
     @Transactional
