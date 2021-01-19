@@ -46,6 +46,7 @@ dependencies {
     implementation "org.nd4j:nd4j-native-platform:1.0.0-beta7"
     implementation "org.slf4j:slf4j-api:1.7.25"
     implementation "org.deeplearning4j:deeplearning4j-cuda-9.2:1.0.0-beta6"
+    implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.3"
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

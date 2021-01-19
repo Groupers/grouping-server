@@ -23,7 +23,7 @@ public class GroupingUserDto {
     private final String name;
     private final String userId;
     private final Gender gender;
-    private final LocalDate birthDay;
+    private final LocalDate birthday;
     private final String representProfileImage;
 
     public static GroupingUserDto of(GroupingUserVo vo) {
@@ -36,7 +36,7 @@ public class GroupingUserDto {
                 .name(vo.getName())
                 .userId(vo.getUserId())
                 .gender(vo.getGender())
-                .birthDay(vo.getBirthDay())
+                .birthday(vo.getBirthday())
                 .representProfileImage(vo.getRepresentProfileImage())
                 .build();
     }
