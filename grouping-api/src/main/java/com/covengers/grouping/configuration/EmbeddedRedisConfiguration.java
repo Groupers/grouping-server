@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 @Configuration
 public class EmbeddedRedisConfiguration {
@@ -21,12 +22,6 @@ public class EmbeddedRedisConfiguration {
     @PostConstruct
     public void redisServer() throws IOException {
 
-        String arch = System.getProperty("os.arch");
-        System.out.println("arch = " + arch);
-        String name = System.getProperty("os.name");
-
-        System.out.println("name = " + name);
-
         if (isArmMac()) {
             redisServer = new RedisServer(getRedisFileForArmMac(), redisPort);
         } else {
@@ -34,6 +29,7 @@ public class EmbeddedRedisConfiguration {
         }
 
         redisServer.start();
+
     }
 
     @PreDestroy
@@ -44,8 +40,8 @@ public class EmbeddedRedisConfiguration {
     }
 
     private boolean isArmMac() {
-        return (System.getProperty("os.arch") == "aarch64") &&
-                (System.getProperty("os.name") == "Mac OS X");
+        return (System.getProperty("os.arch").equals("aarch64")) &&
+                (System.getProperty("os.name").equals("Mac OS X"));
     }
 
     private File getRedisFileForArmMac() throws IOException {
