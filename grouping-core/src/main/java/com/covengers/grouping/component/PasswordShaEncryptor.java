@@ -10,7 +10,7 @@ public class PasswordShaEncryptor {
 
     private String encryptedPassword;
 
-    public String encrytPassword(String password) {
+    public String encryptPassword(String password) {
 
         try {
             final MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
