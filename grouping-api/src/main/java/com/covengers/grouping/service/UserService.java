@@ -5,10 +5,8 @@ import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
-import com.covengers.grouping.domain.Keyword;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
-import com.covengers.grouping.repository.KeywordRepository;
 import com.covengers.grouping.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -172,7 +170,7 @@ public class UserService {
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
-        final String encryptPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+        final String encryptPassword = passwordShaEncryptor.encryptPassword(requestVo.getPassword());
 
         final boolean isValidPhoneNumber = !groupingUserRepository.findTopByPhoneNumberAndNationCode(
                         phoneNationCodeSeparationVo.getPurePhoneNumber(),
@@ -203,7 +201,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+        final String encryptedPassword = passwordShaEncryptor.encryptPassword(requestVo.getPassword());
 
         if (!groupingUser.getPassword().equals(encryptedPassword)) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
@@ -226,7 +224,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+        final String encryptedPassword = passwordShaEncryptor.encryptPassword(requestVo.getPassword());
 
         if (!groupingUser.getPassword().equals(encryptedPassword)) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
@@ -244,7 +242,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptedPassword = passwordShaEncryptor.encrytPassword(requestVo.getPassword());
+        final String encryptedPassword = passwordShaEncryptor.encryptPassword(requestVo.getPassword());
 
         groupingUser.setPassword(encryptedPassword);
 
