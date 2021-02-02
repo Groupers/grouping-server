@@ -11,12 +11,10 @@ import lombok.ToString;
 @ToString
 public class JwtTokenDto {
     private final String accessToken;
-    private final String tokenType;
 
     public static JwtTokenDto of(JwtTokenVo vo) {
         return builder()
-                .accessToken(vo.getAccessToken())
-                .tokenType(vo.getTokenType())
+                .accessToken(vo.getTokenType() + ' ' + vo.getAccessToken())
                 .build();
 
     }

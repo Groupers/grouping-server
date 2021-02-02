@@ -1,7 +1,5 @@
 package com.covengers.grouping.dto;
 
-import java.time.LocalDate;
-
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.vo.SignUpRequestVo;
 
