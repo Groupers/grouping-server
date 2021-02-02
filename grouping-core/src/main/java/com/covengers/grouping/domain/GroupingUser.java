@@ -1,22 +1,33 @@
 package com.covengers.grouping.domain;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.constant.NationCode;
 import com.covengers.grouping.constant.UserStatus;
 import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.GroupingUserVo;
 import com.covengers.grouping.vo.KeywordVo;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,10 +40,9 @@ public class GroupingUser extends AbstractAuditingEntity {
     private static final long serialVersionUID = -4671344448115493529L;
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "grouping_user_id")
-    private String id;
+    private Long id;
 
     @Column(name = "user_status")
     @Enumerated(EnumType.STRING)
@@ -101,28 +111,27 @@ public class GroupingUser extends AbstractAuditingEntity {
         userStatus = UserStatus.NORMAL;
     }
 
-    public List<GroupVo> toGroupList(){
+    public List<GroupVo> toGroupList() {
         return userGroupMappingList.stream()
-                .map(userGroupMapping ->
-                        userGroupMapping.getGroup()
-                                        .toVoForGroupingUser())
-                .collect(Collectors.toList());
+                                   .map(userGroupMapping ->
+                                                userGroupMapping.getGroup()
+                                                                .toVoForGroupingUser())
+                                   .collect(Collectors.toList());
     }
 
-    public List<GroupingUserVo> toFriendList(){
+    public List<GroupingUserVo> toFriendList() {
         return userFriendMappingList.stream()
-                .map(userFriendMapping ->
-                        userFriendMapping.getFriendUser()
-                                .toVo())
-                .collect(Collectors.toList());
+                                    .map(userFriendMapping ->
+                                                 userFriendMapping.getFriendUser()
+                                                                  .toVo())
+                                    .collect(Collectors.toList());
     }
 
     public List<KeywordVo> toSearchHistoryList() {
         return searchHistory.stream()
-                .map(keyword ->
-                        keyword.toVo()
-                )
-                .collect(Collectors.toList());
+                            .map(Keyword::toVo
+                            )
+                            .collect(Collectors.toList());
     }
 
     public GroupingUserVo toVo() {
@@ -137,6 +146,7 @@ public class GroupingUser extends AbstractAuditingEntity {
                              .gender(gender)
                              .birthday(birthday)
                              .representProfileImage(representProfileImage)
+                             .password(password)
                              .build();
     }
 }

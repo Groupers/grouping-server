@@ -70,7 +70,7 @@ public class UserService {
                                        .build();
     }
 
-    public GroupListResponseVo getGroupList(String groupingUserId) {
+    public GroupListResponseVo getGroupList(Long groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -84,7 +84,7 @@ public class UserService {
                 .build();
     }
 
-    public FriendListResultVo getFriendList(String groupingUserId) {
+    public FriendListResultVo getFriendList(Long groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -234,7 +234,7 @@ public class UserService {
     }
 
     @Transactional
-    public void resetPassword(String groupingUserId, ResetPasswordRequestVo requestVo) {
+    public void resetPassword(Long groupingUserId, ResetPasswordRequestVo requestVo) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);

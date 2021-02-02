@@ -24,7 +24,7 @@ public class KeywordService {
     private final GroupingUserRepository groupingUserRepository;
     private final KeywordRepository keywordRepository;
 
-    public SearchHistoryListResultVo getSearchHistoryList(String groupingUserId) {
+    public SearchHistoryListResultVo getSearchHistoryList(Long groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -67,7 +67,7 @@ public class KeywordService {
     }
 
     @Transactional
-    public void addSearchHistory(String groupingUserId, String keyword) {
+    public void addSearchHistory(Long groupingUserId, String keyword) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
