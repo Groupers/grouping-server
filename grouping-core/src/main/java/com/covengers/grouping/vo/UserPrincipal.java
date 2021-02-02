@@ -1,6 +1,7 @@
 package com.covengers.grouping.vo;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,17 +17,13 @@ public class UserPrincipal implements UserDetails {
 
     private final String name;
 
-    private final String userId;
-
     private final String password;
 
-
-    public static UserPrincipal createBy(GroupingUserVo groupingUser){
-       return new UserPrincipal(
-               groupingUser.getGroupingUserId(),
-               groupingUser.getName(),
-               groupingUser.getUserId(),
-               groupingUser.getPassword());
+    public static UserPrincipal createBy(GroupingUserVo groupingUser) {
+        return new UserPrincipal(
+                groupingUser.getGroupingUserId(),
+                groupingUser.getName(),
+                groupingUser.getPassword());
     }
 
     @Override
@@ -34,14 +31,8 @@ public class UserPrincipal implements UserDetails {
         return null;
     }
 
-
-    public Long getGroupingUserId(){
+    public Long getGroupingUserId() {
         return groupingUserId;
-    }
-
-
-    public String getUserId(){
-        return userId;
     }
 
     @Override
@@ -72,5 +63,23 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final UserPrincipal that = (UserPrincipal) o;
+        return Objects.equals(groupingUserId, that.groupingUserId);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(groupingUserId);
     }
 }

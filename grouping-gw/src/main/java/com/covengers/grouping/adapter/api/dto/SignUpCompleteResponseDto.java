@@ -1,4 +1,4 @@
-package com.covengers.grouping.dto;
+package com.covengers.grouping.adapter.api.dto;
 
 import java.time.LocalDate;
 
@@ -10,10 +10,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-@Getter
 @Builder
+@Getter
 @ToString
-public class GroupingUserDto {
+public class SignUpCompleteResponseDto {
     private final Long groupingUserId;
     private final UserStatus userStatus;
     private final String email;

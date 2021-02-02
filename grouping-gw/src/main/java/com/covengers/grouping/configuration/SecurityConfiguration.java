@@ -68,7 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg",
                          "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js")
             .permitAll()
-            .antMatchers("/v1/sign/**")
+            .antMatchers("/v1/sign/complete")
             .permitAll()
             .antMatchers("/api/user/checkUsernameAvailability",
                          "/api/user/checkEmailAvailability")

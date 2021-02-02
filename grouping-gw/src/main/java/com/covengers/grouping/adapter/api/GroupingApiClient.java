@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.covengers.grouping.adapter.api.dto.SignUpCompleteRequestDto;
 import com.covengers.grouping.configuration.FeignConfiguration;
-import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.dto.GroupingUserDto;
-import com.covengers.grouping.dto.SignUpRequestDto;
 
 @FeignClient(value = "grouping-api",
         url = "${grouping.url.api}",
@@ -23,5 +22,5 @@ import com.covengers.grouping.dto.SignUpRequestDto;
 public interface GroupingApiClient {
 
     @PostMapping(path = "/sign/complete")
-    CommonResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpRequestDto dto);
+    GroupingApiAdapterResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpCompleteRequestDto dto);
 }

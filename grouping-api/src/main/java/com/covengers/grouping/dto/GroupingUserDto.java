@@ -25,6 +25,7 @@ public class GroupingUserDto {
     private final Gender gender;
     private final LocalDate birthday;
     private final String representProfileImage;
+    private final String password;
 
     public static GroupingUserDto of(GroupingUserVo vo) {
         return builder()
@@ -38,6 +39,7 @@ public class GroupingUserDto {
                 .gender(vo.getGender())
                 .birthday(vo.getBirthday())
                 .representProfileImage(vo.getRepresentProfileImage())
+                .password(vo.getPassword())
                 .build();
     }
 }

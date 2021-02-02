@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-import com.covengers.grouping.adapter.AdapterResponseDto;
+import com.covengers.grouping.adapter.AdapterResponse;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.exception.CommonException;
 
@@ -30,7 +30,7 @@ public class ResponseValidateDecoder implements Decoder {
     }
 
     private void isFailResponse(Object responseData) {
-        final AdapterResponseDto responseDto = (AdapterResponseDto) responseData;
+        final AdapterResponse responseDto = (AdapterResponse) responseData;
 
         if (!responseDto.isSuccess()) {
             throw new CommonException(ResponseCode.INVALID_API_RESPONSE);
@@ -38,7 +38,7 @@ public class ResponseValidateDecoder implements Decoder {
     }
 
     private void isValidResponse(Object responseData) {
-        if (Objects.isNull(responseData) || !(responseData instanceof AdapterResponseDto)) {
+        if (Objects.isNull(responseData) || !(responseData instanceof AdapterResponse)) {
             throw new CommonException(ResponseCode.INVALID_API_RESPONSE);
         }
     }

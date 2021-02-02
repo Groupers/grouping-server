@@ -61,7 +61,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "password", length = 64)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "user_id")
@@ -71,7 +71,7 @@ public class GroupingUser extends AbstractAuditingEntity {
     @Column(name = "gender")
     private Gender gender;
 
-    @Column(name = "birthday", columnDefinition = "timestamp")
+    @Column(name = "birthday")
     private LocalDate birthday;
 
     @Column(name = "represent_profile_image")

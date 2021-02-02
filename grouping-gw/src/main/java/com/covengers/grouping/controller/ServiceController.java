@@ -1,18 +1,19 @@
 package com.covengers.grouping.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.GroupingUserDto;
+import com.covengers.grouping.dto.JwtTokenDto;
 import com.covengers.grouping.dto.SignUpRequestDto;
 import com.covengers.grouping.service.AuthService;
+import com.covengers.grouping.vo.JwtTokenVo;
 
 import lombok.RequiredArgsConstructor;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ServiceController extends AppGwV1Controller {
 
@@ -20,11 +21,11 @@ public class ServiceController extends AppGwV1Controller {
     private final CommonResponseMaker commonResponseMaker;
 
     @PostMapping("/sign/complete")
-    public CommonResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
+    public CommonResponse<JwtTokenDto> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = authService.completeSignUp(requestDto);
+        final JwtTokenVo jwtTokenVo = authService.completeSignUp(requestDto.toVo());
 
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+        return commonResponseMaker.makeSucceedCommonResponse(JwtTokenDto.of(jwtTokenVo));
     }
 
 }
