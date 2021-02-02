@@ -22,7 +22,7 @@ public class CreateGroupRequestDto {
     private final Long pointX;
     private final Long pointY;
     private final String pointDescription;
-    private final String representGroupingUserId;
+    private final Long representGroupingUserId;
     private final List<String> hashtagList;
 
     public CreateGroupRequestVo toVo() {

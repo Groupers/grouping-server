@@ -10,6 +10,12 @@ version '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR9'
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -38,6 +44,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    implementation "io.github.openfeign:feign-jackson"
+    implementation "io.github.openfeign:feign-httpclient"
+    implementation "io.github.openfeign:feign-okhttp"
 
 //    implementation "org.deeplearning4j:deeplearning4j-ui:1.0.0-beta7"
 //    implementation "org.deeplearning4j:deeplearning4j-nlp:1.0.0-beta7"

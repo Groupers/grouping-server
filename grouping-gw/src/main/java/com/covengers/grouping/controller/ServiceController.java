@@ -22,7 +22,7 @@ public class ServiceController extends AppGwV1Controller {
     @PostMapping("/sign/complete")
     public CommonResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = GroupingUserDto.of(authService.completeSignUp(requestDto.toVo()));
+        final GroupingUserDto responseDto = authService.completeSignUp(requestDto);
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
