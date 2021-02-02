@@ -58,30 +58,24 @@ public class GroupService {
                 requestVo.getPointX(),
                 requestVo.getPointY(),
                 requestVo.getPointDescription(),
-                requestVo.getRepresentGroupImage());
+                "url");
 
         groupRepository.save(group);
 
-        Optional<GroupingUser> groupingUserOptional =
+        final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(requestVo.getRepresentGroupingUserId());
 
-        GroupingUser groupingUser =
+        final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        UserGroupMapping userGroupMapping = new UserGroupMapping(groupingUser, group, GroupUserType.MASTER);
+        final UserGroupMapping userGroupMapping = new UserGroupMapping(groupingUser, group, GroupUserType.MASTER);
 
         userGroupMappingRepository.save(userGroupMapping);
 
         for (String hashtagString : requestVo.getHashtagList()) {
             final Optional<Hashtag> hashtagOptional = hashtagRepository.findByHashtag(hashtagString);
 
-            Hashtag hashtag = null;
-
-            if (hashtagOptional.isPresent()) {
-                hashtag = hashtagOptional.get();
-            } else {
-                hashtag = new Hashtag(hashtagString);
-            }
+            final Hashtag hashtag = hashtagOptional.orElse(new Hashtag(hashtagString));
 
             hashtagRepository.save(hashtag);
 

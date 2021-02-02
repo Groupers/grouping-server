@@ -22,6 +22,5 @@ public class CreateGroupRequestVo {
     private final Long pointY;
     private final String pointDescription;
     private final String representGroupingUserId;
-    private final String representGroupImage;
     private final List<String> hashtagList;
 }
