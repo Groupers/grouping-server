@@ -30,6 +30,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
+    private static final String[] EXCLUDE_GET_REQUEST_PATH = {
+            "/v1/sign/email",
+            "/v1/sign/phone-number",
+            };
+
+    private static final String[] EXCLUDE_POST_REQUEST_PATH = {
+            "/v1/sign/complete",
+            "/v1/sign/login/email",
+            "/v1/sign/login/phone-number",
+            };
+
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
@@ -38,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(groupingUserRepository)
-                .passwordEncoder(passwordEncoder());
+                                    .passwordEncoder(passwordEncoder());
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -55,30 +66,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
-                .and()
-                .csrf()
-                .disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg",
-                        "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js")
-                .permitAll()
-                .antMatchers("/v1/sign/complete")
-                .permitAll()
-                .antMatchers("/api/user/checkUsernameAvailability",
-                        "/api/user/checkEmailAvailability")
-                .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
-                .permitAll()
-                .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated(); // Add our custom JWT security filter
+            .and()
+            .csrf()
+            .disable()
+            .exceptionHandling()
+            .authenticationEntryPoint(unauthorizedHandler)
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
+            .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg",
+                         "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js")
+            .permitAll()
+            .antMatchers(EXCLUDE_POST_REQUEST_PATH)
+            .permitAll()
+            .antMatchers(HttpMethod.GET, EXCLUDE_GET_REQUEST_PATH)
+            .permitAll()
+            .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources",
+                         "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated(); // Add our custom JWT security filter
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
