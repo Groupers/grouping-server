@@ -1,7 +1,5 @@
 package com.covengers.grouping.controller;
 
-import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +8,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.dto.CancelEmailRequestDto;
+import com.covengers.grouping.dto.CancelPhoneNumberRequestDto;
+import com.covengers.grouping.dto.CancelSignUpRequestDto;
+import com.covengers.grouping.dto.CheckEmailResponseDto;
+import com.covengers.grouping.dto.CheckPhoneNumberResponseDto;
+import com.covengers.grouping.dto.CheckUserIdResponseDto;
+import com.covengers.grouping.dto.CommonResponse;
+import com.covengers.grouping.dto.EnrollEmailRequestDto;
+import com.covengers.grouping.dto.EnrollPhoneNumberRequestDto;
+import com.covengers.grouping.dto.GroupingUserDto;
+import com.covengers.grouping.dto.SignInWithEmailRequestDto;
+import com.covengers.grouping.dto.SignInWithPhoneNumberRequestDto;
+import com.covengers.grouping.dto.SignUpRequestDto;
 import com.covengers.grouping.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -103,11 +114,11 @@ public class SignController extends AppApiV1Controller {
     }
 
     @PostMapping("/sign/complete")
-    public CommonResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
+    public CommonResponse<Void> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = GroupingUserDto.of(userService.completeSignUp(requestDto.toVo()));
+        userService.completeSignUp(requestDto.toVo());
 
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
     @PostMapping("/sign/login/email")
@@ -119,9 +130,11 @@ public class SignController extends AppApiV1Controller {
     }
 
     @PostMapping("/sign/login/phone-number")
-    public CommonResponse<GroupingUserDto> signInWithPhoneNumber(@RequestBody SignInWithPhoneNumberRequestDto requestDto) {
+    public CommonResponse<GroupingUserDto> signInWithPhoneNumber(
+            @RequestBody SignInWithPhoneNumberRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInWithPhoneNumber(requestDto.toVo()));
+        final GroupingUserDto responseDto = GroupingUserDto.of(
+                userService.signInWithPhoneNumber(requestDto.toVo()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

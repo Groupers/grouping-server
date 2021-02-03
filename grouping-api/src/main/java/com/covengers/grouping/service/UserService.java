@@ -178,7 +178,7 @@ public class UserService {
     }
 
     @Transactional
-    public GroupingUserVo completeSignUp(SignUpRequestVo requestVo) {
+    public void completeSignUp(SignUpRequestVo requestVo) {
 
         final boolean isValidEmail = !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
 
@@ -201,8 +201,6 @@ public class UserService {
                                                            phoneNationCodeSeparationVo.getPurePhoneNumber(),
                                                            phoneNationCodeSeparationVo.getNationCode());
         groupingUserRepository.save(groupingUser);
-
-        return groupingUser.toVo();
     }
 
     @Transactional(readOnly = true)
