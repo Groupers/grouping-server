@@ -1,9 +1,11 @@
 package com.covengers.grouping.service;
 
 import com.covengers.grouping.adapter.chat.GroupingChatClient;
+import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.dto.CreateGroupCompleteRequestDto;
 import com.covengers.grouping.dto.CreateGroupRequestDto;
 import com.covengers.grouping.dto.GroupDto;
+import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.vo.CreateGroupRequestVo;
 import com.covengers.grouping.vo.GroupVo;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +54,7 @@ public class AuthService {
 
         final UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(requestVo.getEmail(),
-                                                        requestVo.getPassword());
+                        requestVo.getPassword());
 
         final Authentication authentication = authenticationManager.authenticate(token);
 
@@ -59,13 +63,17 @@ public class AuthService {
         final String jwtToken = tokenProvider.generateToken(authentication);
 
         return JwtTokenVo.builder()
-                         .accessToken(jwtToken)
-                         .build();
+                .accessToken(jwtToken)
+                .build();
 
     }
 
     @Transactional
     public GroupVo createGroup(CreateGroupRequestVo requestVo) {
+
+        if (tokenProvider.validateToken(requestVo.getAccessToken()) == false) {
+            throw new CommonException(ResponseCode.UNAUTHORIZED_ERROR);
+        }
 
         final GroupDto groupDto = groupingChatClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo)).getData();
 
