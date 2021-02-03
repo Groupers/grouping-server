@@ -1,0 +1,125 @@
+spring:
+  profiles:
+    active: local
+
+app:
+  jwtSecret: groupingGauza!
+  jwtExpirationInMilliSecond: 86400000
+
+grouping:
+  url:
+    api: http://127.0.0.1:10754/v1
+
+---
+
+spring:
+  profiles: local
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    dbcp2:
+      validation-query: "select 1"
+      test-while-idle: true
+    username: covengers
+    password: Covengers2020@
+    initialization-mode: always
+    sql-script-encoding: UTF-8
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      medium-jjeaby-group-id: medium-jjeaby-group
+      company-jjeaby-group-id: company-jjeaby-group
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 1000
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    template:
+      company-jjeaby-topic: company-jjeaby-topic
+      medium-jjeaby-topic: medium-jjeaby-topic
+
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+  #      location: C:/Temp
+  #      max-file-size: 100MB
+  #      max-request-size: 100MB
+
+server:
+  address: localhost
+  port: 10753
+
+---
+
+spring:
+  profiles: dev
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://0.0.0.0:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    dbcp2:
+      validation-query: "select 1"
+      test-while-idle: true
+    username: covengers
+    password: Covengers2020@
+    initialization-mode: always
+    sql-script-encoding: UTF-8
+
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  redis:
+    host: localhost
+    port: 6379
+
+  kafka:
+    bootstrap-servers: 0.0.0.0:9092
+    consumer:
+      medium-jjeaby-group-id: medium-jjeaby-group
+      company-jjeaby-group-id: company-jjeaby-group
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 1000
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    template:
+      company-jjeaby-topic: company-jjeaby-topic
+      medium-jjeaby-topic: medium-jjeaby-topic
+
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+  #      location: C:/Temp
+  #      max-file-size: 100MB
+  #      max-request-size: 100MB
+
+server:
+  address: 0.0.0.0
+  port: 10753
+

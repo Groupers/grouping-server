@@ -13,7 +13,7 @@ INSERT INTO `groupings`.`grouping_user`
 `created_at`,
 `updated_at`)
 VALUES
-('34a416b2-b2c4-11ea-93c1-1a2157508cce',
+(1,
 '1992-01-02',
 'test@naver.com',
 'MALE',
@@ -40,7 +40,7 @@ INSERT INTO `groupings`.`grouping_user`
 `created_at`,
 `updated_at`)
 VALUES
-('34a416b2-b2c4-11ea-93c1-1a2157509cca',
+(2,
 '1992-03-02',
 'test2@naver.com',
 'FEMALE',
@@ -67,7 +67,7 @@ INSERT INTO `groupings`.`grouping_user`
 `created_at`,
 `updated_at`)
 VALUES
-('34a416b2-b2c4-11ea-93c1-1a2157a08c99',
+(3,
 '1993-03-03',
 'ljh0940@naver.com',
 'MALE',
@@ -94,7 +94,7 @@ INSERT INTO `groupings`.`grouping_user`
 `created_at`,
 `updated_at`)
 VALUES
-('34a416b2-b2c4-11ea-93c1-1a21b75081c3',
+(4,
 '1993-03-04',
 'ljh3037@naver.com',
 'FEMALE',
@@ -121,7 +121,7 @@ INSERT INTO `groupings`.`grouping_user`
 `created_at`,
 `updated_at`)
 VALUES
-('34a416b2-b2c4-11ea-93c2-1ad1575083c4',
+(5,
 '1993-03-05',
 'ljh5033@naver.com',
 'MALE',
@@ -469,7 +469,7 @@ VALUES
 now(),
 now(),
 1,
-'34a416b2-b2c4-11ea-93c1-1a2157508cce');
+1);
 
 INSERT INTO `groupings`.`hashtag`
 (`hashtag_id`,
@@ -1321,8 +1321,8 @@ INSERT INTO `groupings`.`user_friend_mapping`
 `updated_at`)
 VALUES
 (1,
-'34a416b2-b2c4-11ea-93c1-1a2157509cca',
-'34a416b2-b2c4-11ea-93c1-1a2157a08c99',
+2,
+3,
 now(),
 now());
 
@@ -1334,8 +1334,8 @@ INSERT INTO `groupings`.`user_friend_mapping`
 `updated_at`)
 VALUES
 (2,
-'34a416b2-b2c4-11ea-93c1-1a2157509cca',
-'34a416b2-b2c4-11ea-93c1-1a21b75081c3',
+2,
+4,
 now(),
 now());
 
@@ -1347,8 +1347,8 @@ INSERT INTO `groupings`.`user_friend_mapping`
 `updated_at`)
 VALUES
 (3,
-'34a416b2-b2c4-11ea-93c1-1a2157509cca',
-'34a416b2-b2c4-11ea-93c2-1ad1575083c4',
+2,
+5,
 now(),
 now());
 
@@ -1360,8 +1360,8 @@ INSERT INTO `groupings`.`user_friend_mapping`
 `updated_at`)
 VALUES
 (4,
-'34a416b2-b2c4-11ea-93c2-1ad1575083c4',
-'34a416b2-b2c4-11ea-93c1-1a2157509cca',
+5,
+2,
 now(),
 now());
 
@@ -1373,8 +1373,8 @@ INSERT INTO `groupings`.`user_friend_mapping`
 `updated_at`)
 VALUES
 (5,
-'34a416b2-b2c4-11ea-93c2-1ad1575083c4',
-'34a416b2-b2c4-11ea-93c1-1a21b75081c3',
+5,
+4,
 now(),
 now());
 
@@ -1386,8 +1386,8 @@ INSERT INTO `groupings`.`user_friend_mapping`
 `updated_at`)
 VALUES
 (6,
-'34a416b2-b2c4-11ea-93c1-1a2157508cce',
-'34a416b2-b2c4-11ea-93c1-1a2157509cca',
+1,
+2,
 now(),
 now());
 
@@ -1399,7 +1399,7 @@ INSERT INTO `groupings`.`user_friend_mapping`
 `updated_at`)
 VALUES
 (7,
-'34a416b2-b2c4-11ea-93c1-1a2157508cce',
-'34a416b2-b2c4-11ea-93c1-1a2157a08c99',
+1,
+3,
 now(),
 now());

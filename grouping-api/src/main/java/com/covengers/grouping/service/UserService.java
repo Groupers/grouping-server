@@ -1,21 +1,37 @@
 package com.covengers.grouping.service;
 
-import com.covengers.grouping.component.PasswordShaEncryptor;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.RedisCacheTime;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
-import com.covengers.grouping.vo.*;
+import com.covengers.grouping.vo.CancelEmailRequestVo;
+import com.covengers.grouping.vo.CancelPhoneNumberRequestVo;
+import com.covengers.grouping.vo.CancelSignUpRequestVo;
+import com.covengers.grouping.vo.CheckEmailResultVo;
+import com.covengers.grouping.vo.CheckPhoneNumberResultVo;
+import com.covengers.grouping.vo.CheckUserIdResultVo;
+import com.covengers.grouping.vo.EnrollEmailRequestVo;
+import com.covengers.grouping.vo.EnrollPhoneNumberRequestVo;
+import com.covengers.grouping.vo.FriendListResultVo;
+import com.covengers.grouping.vo.GroupListResponseVo;
+import com.covengers.grouping.vo.GroupingUserVo;
+import com.covengers.grouping.vo.PhoneNationCodeSeparationVo;
+import com.covengers.grouping.vo.ResetPasswordRequestVo;
+import com.covengers.grouping.vo.SignInWithEmailRequestVo;
+import com.covengers.grouping.vo.SignInWithPhoneNumberRequestVo;
+import com.covengers.grouping.vo.SignUpRequestVo;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -23,7 +39,6 @@ import java.util.concurrent.TimeUnit;
 public class UserService {
     private final GroupingUserRepository groupingUserRepository;
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
-    private final PasswordShaEncryptor passwordShaEncryptor;
     private final StringRedisTemplate stringRedisTemplate;
 
     public CheckEmailResultVo checkEmail(String email) {
@@ -70,7 +85,7 @@ public class UserService {
                                        .build();
     }
 
-    public GroupListResponseVo getGroupList(String groupingUserId) {
+    public GroupListResponseVo getGroupList(Long groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -80,22 +95,22 @@ public class UserService {
         }
 
         return GroupListResponseVo.builder()
-                .groupList(groupingUserOptional.get().toGroupList())
-                .build();
+                                  .groupList(groupingUserOptional.get().toGroupList())
+                                  .build();
     }
 
-    public FriendListResultVo getFriendList(String groupingUserId) {
+    public FriendListResultVo getFriendList(Long groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
-        if(!groupingUserOptional.isPresent()) {
+        if (!groupingUserOptional.isPresent()) {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
         }
 
         return FriendListResultVo.builder()
-                .friendList(groupingUserOptional.get().toFriendList())
-                .build();
+                                 .friendList(groupingUserOptional.get().toFriendList())
+                                 .build();
     }
 
     public GroupingUserVo checkUserWithEmailAndPhoneNumber(String email, String phoneNumber) {
@@ -126,8 +141,8 @@ public class UserService {
 
         stringRedisTemplate.opsForValue().set(requestVo.getEmail(), requestVo.getEmail());
         stringRedisTemplate.expire(requestVo.getEmail(),
-                             RedisCacheTime.SIGN_UP_EMAIL.getCacheTime(),
-                             TimeUnit.MINUTES);
+                                   RedisCacheTime.SIGN_UP_EMAIL.getCacheTime(),
+                                   TimeUnit.MINUTES);
     }
 
     @Transactional
@@ -142,8 +157,8 @@ public class UserService {
 
         stringRedisTemplate.opsForValue().set(requestVo.getPhoneNumber(), requestVo.getPhoneNumber());
         stringRedisTemplate.expire(requestVo.getPhoneNumber(),
-                             RedisCacheTime.SIGN_UP_PHONE_NUMBER.getCacheTime(),
-                             TimeUnit.MINUTES);
+                                   RedisCacheTime.SIGN_UP_PHONE_NUMBER.getCacheTime(),
+                                   TimeUnit.MINUTES);
     }
 
     @Transactional
@@ -170,18 +185,16 @@ public class UserService {
         final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
                 phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
-        final String encryptPassword = passwordShaEncryptor.encryptPassword(requestVo.getPassword());
-
         final boolean isValidPhoneNumber = !groupingUserRepository.findTopByPhoneNumberAndNationCode(
-                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
-                        phoneNationCodeSeparationVo.getNationCode()).isPresent();
+                phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                phoneNationCodeSeparationVo.getNationCode()).isPresent();
 
         if (!isValidEmail || !isValidPhoneNumber) {
             throw new CommonException(ResponseCode.SIGN_UP_FAILED_FOR_INVALID_INFO);
         }
 
         final GroupingUser groupingUser = new GroupingUser(requestVo.getEmail(),
-                                                           encryptPassword,
+                                                           requestVo.getPassword(),
                                                            requestVo.getName(),
                                                            requestVo.getGender(),
                                                            requestVo.getBirthday(),
@@ -201,9 +214,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptedPassword = passwordShaEncryptor.encryptPassword(requestVo.getPassword());
-
-        if (!groupingUser.getPassword().equals(encryptedPassword)) {
+        if (!groupingUser.getPassword().equals(requestVo.getPassword())) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
         }
 
@@ -224,9 +235,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptedPassword = passwordShaEncryptor.encryptPassword(requestVo.getPassword());
-
-        if (!groupingUser.getPassword().equals(encryptedPassword)) {
+        if (!groupingUser.getPassword().equals(requestVo.getPassword())) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
         }
 
@@ -234,7 +243,7 @@ public class UserService {
     }
 
     @Transactional
-    public void resetPassword(String groupingUserId, ResetPasswordRequestVo requestVo) {
+    public void resetPassword(Long groupingUserId, ResetPasswordRequestVo requestVo) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -242,9 +251,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        final String encryptedPassword = passwordShaEncryptor.encryptPassword(requestVo.getPassword());
-
-        groupingUser.setPassword(encryptedPassword);
+        groupingUser.setPassword(requestVo.getPassword());
 
         groupingUserRepository.save(groupingUser);
     }

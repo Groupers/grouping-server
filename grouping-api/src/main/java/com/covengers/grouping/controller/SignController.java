@@ -1,5 +1,6 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.dto.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -24,7 +24,7 @@ public class KeywordService {
     private final GroupingUserRepository groupingUserRepository;
     private final KeywordRepository keywordRepository;
 
-    public SearchHistoryListResultVo getSearchHistoryList(String groupingUserId) {
+    public SearchHistoryListResultVo getSearchHistoryList(Long groupingUserId) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
@@ -44,14 +44,14 @@ public class KeywordService {
 
         final List<String> keywordList = keywordRepository.findKeywordByCreatedAtAfter(startPoint);
 
-        HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
+        final HashMap<String, Integer> keywordMap = new HashMap<>();
 
         for (String key : keywordList) {
             keywordMap.put(key, keywordMap.getOrDefault(key, 0) + 1);
         }
 
         List<String> searchTrendsList = new ArrayList(keywordMap.keySet());
-        Collections.sort(searchTrendsList, (o1, o2) -> (keywordMap.get(o2).compareTo(keywordMap.get(o1))));
+        searchTrendsList.sort((o1, o2) -> keywordMap.get(o2).compareTo(keywordMap.get(o1)));
 
         if (searchTrendsList.size() > keywordCount) {
             searchTrendsList = searchTrendsList.subList(0, keywordCount);
@@ -67,12 +67,12 @@ public class KeywordService {
     }
 
     @Transactional
-    public void addSearchHistory(String groupingUserId, String keyword) {
+    public void addSearchHistory(Long groupingUserId, String keyword) {
 
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
-        GroupingUser groupingUser =
+        final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
         final Keyword keywordEntity = new Keyword(keyword);
@@ -81,7 +81,6 @@ public class KeywordService {
 
         groupingUser.getSearchHistory().add(keywordEntity);
 
-        return;
     }
 
 }
