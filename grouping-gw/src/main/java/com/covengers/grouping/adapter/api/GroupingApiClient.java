@@ -1,22 +1,37 @@
 package com.covengers.grouping.adapter.api;
 
-import com.covengers.grouping.adapter.api.dto.*;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.covengers.grouping.adapter.api.dto.CreateGroupCompleteRequestDto;
+import com.covengers.grouping.adapter.api.dto.FriendListResponseDto;
+import com.covengers.grouping.adapter.api.dto.GroupListResponseDto;
 import com.covengers.grouping.adapter.api.dto.GroupResponseDto;
+import com.covengers.grouping.adapter.api.dto.GroupingUserResponseDto;
+import com.covengers.grouping.adapter.api.dto.RecommendGroupResponseDto;
+import com.covengers.grouping.adapter.api.dto.ResetPasswordCompleteRequestDto;
+import com.covengers.grouping.adapter.api.dto.SearchHistoryListResponseDto;
+import com.covengers.grouping.adapter.api.dto.SearchTrendsListResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
+import com.covengers.grouping.adapter.api.dto.SignUpCompleteRequestDto;
 import com.covengers.grouping.configuration.FeignConfiguration;
-import org.springframework.web.multipart.MultipartFile;
 
 @FeignClient(value = "grouping-api",
         url = "${grouping.url.api}",
         configuration = {
                 FeignConfiguration.class,
+                GroupingApiRequestInterceptor.class,
         })
 @RequestMapping(
         consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -25,7 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 public interface GroupingApiClient {
 
     @GetMapping(path = "/sign/email")
-    GroupingApiAdapterResponse<SignUpCheckEmailResponseDto> checkSignUpEmail(@RequestParam("email") String email);
+    GroupingApiAdapterResponse<SignUpCheckEmailResponseDto> checkSignUpEmail(
+            @RequestParam("email") String email);
 
     @GetMapping(path = "/sign/phone-number")
     GroupingApiAdapterResponse<SignUpCheckPhoneNumberResponseDto> checkSignUpPhoneNumber(
@@ -49,14 +65,16 @@ public interface GroupingApiClient {
     @PostMapping(path = "/group/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     GroupingApiAdapterResponse<GroupResponseDto> uploadGroupImage(
             @RequestPart MultipartFile imageFile,
-            @RequestParam final Long groupId
+            @RequestParam Long groupId
     );
 
     @GetMapping(path = "/group/keyword")
-    GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword);
+    GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId,
+                                                                         @RequestParam String keyword);
 
     @GetMapping("/keywords/search/history")
-    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(@RequestParam Long groupingUserId);
+    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(
+            @RequestParam Long groupingUserId);
 
     @GetMapping("/keywords/search/trends")
     GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();
@@ -74,5 +92,4 @@ public interface GroupingApiClient {
     @PutMapping("/users/password")
     GroupingApiAdapterResponse<Void> resetPassword(
             @RequestParam Long groupingUserId, @RequestBody ResetPasswordCompleteRequestDto requestDto);
-
 }
