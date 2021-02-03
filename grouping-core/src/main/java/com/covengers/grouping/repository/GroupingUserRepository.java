@@ -13,7 +13,7 @@ public interface GroupingUserRepository extends JpaRepository<GroupingUser, Stri
 
     Optional<GroupingUser> findTopByUserId(String userId);
 
-    Optional<GroupingUser> findTopById(String id);
+    Optional<GroupingUser> findTopById(Long id);
 
     Optional<GroupingUser> findTopByPhoneNumberAndNationCode(String phoneNumber, NationCode nationCode);
 

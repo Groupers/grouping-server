@@ -3,7 +3,7 @@ package com.covengers.grouping.controller;
 import java.io.IOException;
 
 import com.covengers.grouping.service.KeywordService;
-import com.covengers.grouping.vo.KeywordVo;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +44,7 @@ public class GroupController extends AppApiV1Controller {
     }
 
     @GetMapping("/group/keyword")
-    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam String groupingUserId, @RequestParam String keyword) {
+    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword) {
 
         keywordService.addSearchHistory(groupingUserId, keyword);
 

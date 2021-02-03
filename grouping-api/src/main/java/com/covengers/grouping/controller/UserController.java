@@ -1,5 +1,6 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.dto.*;
@@ -16,7 +17,7 @@ public class UserController extends AppApiV1Controller {
     private final CommonResponseMaker commonResponseMaker;
 
     @GetMapping("/users/{groupingUserId}/groups")
-    public CommonResponse<GroupListResponseDto> getGroupList(@PathVariable("groupingUserId") String groupingUserId) {
+    public CommonResponse<GroupListResponseDto> getGroupList(@PathVariable("groupingUserId") Long groupingUserId) {
 
         final GroupListResponseDto responseDto =
                 GroupListResponseDto.of(userService.getGroupList(groupingUserId));
@@ -25,7 +26,7 @@ public class UserController extends AppApiV1Controller {
     }
 
     @GetMapping("/users/{groupingUserId}/friends")
-    public CommonResponse<FriendListResultDto> getFriendList(@PathVariable("groupingUserId") String groupingUserId) {
+    public CommonResponse<FriendListResultDto> getFriendList(@PathVariable("groupingUserId") Long groupingUserId) {
 
         final FriendListResultDto responseDto =
                 FriendListResultDto.of(userService.getFriendList(groupingUserId));
@@ -45,7 +46,7 @@ public class UserController extends AppApiV1Controller {
 
     @PutMapping("/users/{groupingUserId}/password")
     public CommonResponse<Void> resetPassword(
-            @PathVariable String groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
+            @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
 
         userService.resetPassword(groupingUserId, requestDto.toVo());
 

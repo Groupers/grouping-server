@@ -16,9 +16,10 @@ import lombok.ToString;
 @ToString
 public class GroupingUserVo {
 
-    private final String groupingUserId;
+    private final Long groupingUserId;
     private final UserStatus userStatus;
     private final String email;
+    private final String password;
     private final NationCode nationCode;
     private final String phoneNumber;
     private final String name;

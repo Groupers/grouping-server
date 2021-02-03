@@ -1,6 +1,5 @@
 package com.covengers.grouping.controller;
 
-import com.covengers.grouping.dto.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,9 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.dto.CheckEmailResponseDto;
+import com.covengers.grouping.dto.CheckPhoneNumberResponseDto;
+import com.covengers.grouping.dto.CommonResponse;
+import com.covengers.grouping.dto.GroupingUserDto;
+import com.covengers.grouping.dto.SignInWithEmailRequestDto;
+import com.covengers.grouping.dto.SignInWithPhoneNumberRequestDto;
+import com.covengers.grouping.dto.SignUpRequestDto;
 import com.covengers.grouping.service.UserService;
 
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,71 +47,12 @@ public class SignController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @GetMapping("/sign/user-id")
-    public CommonResponse<CheckUserIdResponseDto> checkUserId(@RequestParam("user-id") String userId) {
-
-        final CheckUserIdResponseDto responseDto =
-                CheckUserIdResponseDto.of(userService.checkUserId(userId.toLowerCase()));
-
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-    }
-
-    @ApiOperation(
-            value = "enroll email",
-            notes = "[ 응답코드별 상태 ]" +
-                    "\n1000 : 이미 존재하는 이메일입니다.." +
-                    "\n9999 : 서비스 점검 중"
-    )
-
-    @Deprecated
-    @PostMapping("/sign/email")
-    public CommonResponse<Void> enrollEmail(@RequestBody EnrollEmailRequestDto requestDto) {
-
-        userService.enrollEmail(requestDto.toVo());
-
-        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
-    }
-
-    @Deprecated
-    @PostMapping("/sign/phone-number")
-    public CommonResponse<Void> enrollPhoneNumber(@RequestBody EnrollPhoneNumberRequestDto requestDto) {
-
-        userService.enrollPhoneNumber(requestDto.toVo());
-
-        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
-    }
-
-    @Deprecated
-    @PostMapping("/sign/cancel/email")
-    public CommonResponse<Void> cancelSignUpEmail(@RequestBody CancelEmailRequestDto requestDto) {
-
-        userService.cancelSignUpEmail(requestDto.toVo());
-        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
-    }
-
-    @Deprecated
-    @PostMapping("/sign/cancel/phone-number")
-    public CommonResponse<Void> cancelSignUpPhoneNumber(@RequestBody CancelPhoneNumberRequestDto requestDto) {
-
-        userService.cancelSignUpPhoneNumber(requestDto.toVo());
-        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
-    }
-
-    @Deprecated
-    @PostMapping("/sign/cancel")
-    public CommonResponse<Void> cancelSignUp(@RequestBody CancelSignUpRequestDto requestDto) {
-
-        userService.cancelSignUp(requestDto.toVo());
-
-        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
-    }
-
     @PostMapping("/sign/complete")
-    public CommonResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
+    public CommonResponse<Void> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = GroupingUserDto.of(userService.completeSignUp(requestDto.toVo()));
+        userService.completeSignUp(requestDto.toVo());
 
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
     @PostMapping("/sign/login/email")
@@ -118,9 +64,11 @@ public class SignController extends AppApiV1Controller {
     }
 
     @PostMapping("/sign/login/phone-number")
-    public CommonResponse<GroupingUserDto> signInWithPhoneNumber(@RequestBody SignInWithPhoneNumberRequestDto requestDto) {
+    public CommonResponse<GroupingUserDto> signInWithPhoneNumber(
+            @RequestBody SignInWithPhoneNumberRequestDto requestDto) {
 
-        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInWithPhoneNumber(requestDto.toVo()));
+        final GroupingUserDto responseDto = GroupingUserDto.of(
+                userService.signInWithPhoneNumber(requestDto.toVo()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

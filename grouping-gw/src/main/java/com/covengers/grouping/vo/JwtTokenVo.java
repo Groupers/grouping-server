@@ -7,6 +7,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class CancelEmailRequestVo {
-    private final String email;
+public class JwtTokenVo {
+    private final String accessToken;
+    private final String tokenType = "Bearer";
 }

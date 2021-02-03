@@ -2,6 +2,7 @@ package com.covengers.grouping.component;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -33,9 +34,7 @@ public class HashtagRecommender {
                     GET_MODEL_FILE_PATH_SUPPLIER.get().toString());
 
             final List<String> hashtagList =
-                    word2Vec.wordsNearest(keyword, RECOMMEND_WORD_COUNT)
-                            .stream()
-                            .collect(Collectors.toList());
+                    new ArrayList<>(word2Vec.wordsNearest(keyword, RECOMMEND_WORD_COUNT));
 
             return RecommendHashtagVo
                     .builder()

@@ -4,9 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-@Getter
 @Builder
+@Getter
 @ToString
-public class CancelPhoneNumberRequestVo {
-    private final String phoneNumber;
+public class GroupingUserInfoVo {
+    private final String groupingUserId;
 }
