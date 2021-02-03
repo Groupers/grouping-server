@@ -1,5 +1,11 @@
 package com.covengers.grouping.service;
 
+import com.covengers.grouping.adapter.chat.GroupingChatClient;
+import com.covengers.grouping.dto.CreateGroupCompleteRequestDto;
+import com.covengers.grouping.dto.CreateGroupRequestDto;
+import com.covengers.grouping.dto.GroupDto;
+import com.covengers.grouping.vo.CreateGroupRequestVo;
+import com.covengers.grouping.vo.GroupVo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthService {
 
     private final GroupingApiClient groupingApiClient;
+
+    private final GroupingChatClient groupingChatClient;
 
     private final AuthenticationManager authenticationManager;
 
@@ -54,5 +62,13 @@ public class AuthService {
                          .accessToken(jwtToken)
                          .build();
 
+    }
+
+    @Transactional
+    public GroupVo createGroup(CreateGroupRequestVo requestVo) {
+
+        final GroupDto groupDto = groupingChatClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo)).getData();
+
+        return groupDto.toVo();
     }
 }
