@@ -1,5 +1,7 @@
 package com.covengers.grouping.service;
 
+import com.covengers.grouping.dto.RecommendGroupDto;
+import com.covengers.grouping.vo.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,17 +18,10 @@ import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCompleteRequestDto;
 import com.covengers.grouping.component.JwtTokenProvider;
 import com.covengers.grouping.dto.GroupDto;
-import com.covengers.grouping.vo.CreateGroupRequestVo;
-import com.covengers.grouping.vo.GroupVo;
-import com.covengers.grouping.vo.JwtTokenVo;
-import com.covengers.grouping.vo.SignInWithEmailRequestVo;
-import com.covengers.grouping.vo.SignInWithPhoneNumberRequestVo;
-import com.covengers.grouping.vo.SignUpCheckEmailResponseVo;
-import com.covengers.grouping.vo.SignUpCheckPhoneNumberResponseVo;
-import com.covengers.grouping.vo.SignUpRequestVo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +42,8 @@ public class AuthService {
                 groupingApiClient.checkSignUpEmail(email).getData();
 
         return SignUpCheckEmailResponseVo.builder()
-                                         .isEmailAvailable(signUpCheckEmailResponseDto.isEmailAvailable())
-                                         .build();
+                .isEmailAvailable(signUpCheckEmailResponseDto.isEmailAvailable())
+                .build();
 
     }
 
@@ -58,17 +53,17 @@ public class AuthService {
                 groupingApiClient.checkSignUpPhoneNumber(phoneNumber).getData();
 
         return SignUpCheckPhoneNumberResponseVo.builder()
-                                               .isPhoneNumberAvailable(
-                                                       signUpCheckPhoneNumberResponseDto
-                                                               .isPhoneNumberAvailable())
-                                               .build();
+                .isPhoneNumberAvailable(
+                        signUpCheckPhoneNumberResponseDto
+                                .isPhoneNumberAvailable())
+                .build();
     }
 
     public JwtTokenVo completeSignUp(SignUpRequestVo signUpRequestVo) {
 
         final SignUpCompleteRequestDto signUpCompleteRequestDto =
                 SignUpCompleteRequestDto.of(signUpRequestVo,
-                                            passwordEncoder.encode(signUpRequestVo.getPassword()));
+                        passwordEncoder.encode(signUpRequestVo.getPassword()));
 
         groupingApiClient.completeSignUp(signUpCompleteRequestDto);
 
@@ -94,7 +89,7 @@ public class AuthService {
         groupingApiClient.signInWithPhoneNumber(signInWithPhoneNumberRequestDto);
 
         return generateToken(signInWithPhoneNumberRequestVo.getPhoneNumber(),
-                             signInWithPhoneNumberRequestVo.getPassword());
+                signInWithPhoneNumberRequestVo.getPassword());
     }
 
     private JwtTokenVo generateToken(String phoneOrEmail, String password) {
@@ -109,15 +104,29 @@ public class AuthService {
         final String jwtToken = tokenProvider.generateToken(authentication);
 
         return JwtTokenVo.builder()
-                         .accessToken(jwtToken)
-                         .build();
+                .accessToken(jwtToken)
+                .build();
     }
 
     public GroupVo createGroup(CreateGroupRequestVo requestVo) {
 
         final GroupDto groupDto = groupingApiClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo))
-                                                   .getData();
+                .getData();
 
         return groupDto.toVo();
+    }
+
+    public GroupVo uploadGroupImage(MultipartFile imageFile,
+                                    final Long groupId) {
+        final GroupDto groupDto = groupingApiClient.uploadGroupImage(imageFile, groupId).getData();
+
+        return groupDto.toVo();
+    }
+
+    public RecommendGroupVo recommendGroup(Long groupingUserId, String keyword) {
+
+        final RecommendGroupDto recommendGroupDto = groupingApiClient.recommendGroup(groupingUserId, keyword).getData();
+
+        return recommendGroupDto.toVo();
     }
 }

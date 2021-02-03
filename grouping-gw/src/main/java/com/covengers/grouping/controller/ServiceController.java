@@ -1,26 +1,17 @@
 package com.covengers.grouping.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.covengers.grouping.dto.*;
+import org.springframework.web.bind.annotation.*;
 
 import com.covengers.grouping.component.CommonResponseMaker;
-import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.CreateGroupRequestDto;
-import com.covengers.grouping.dto.GroupDto;
-import com.covengers.grouping.dto.JwtTokenDto;
-import com.covengers.grouping.dto.SignInWithEmailRequestDto;
-import com.covengers.grouping.dto.SignInWithPhoneNumberRequestDto;
-import com.covengers.grouping.dto.SignUpCheckEmailResponseDto;
-import com.covengers.grouping.dto.SignUpCheckPhoneNumberResponseDto;
-import com.covengers.grouping.dto.SignUpRequestDto;
 import com.covengers.grouping.service.AuthService;
 import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.JwtTokenVo;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,15 +47,6 @@ public class ServiceController extends AppGwV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(JwtTokenDto.of(jwtTokenVo));
     }
 
-    @PostMapping("/group")
-    public CommonResponse<GroupDto> createGroup(@RequestBody CreateGroupRequestDto requestDto) {
-
-        final GroupVo groupVo = authService.createGroup(requestDto.toVo());
-
-        return commonResponseMaker.makeSucceedCommonResponse(GroupDto.of(groupVo));
-
-    }
-
     @PostMapping("/sign/login/email")
     public CommonResponse<JwtTokenDto> signInWithEmail(@RequestBody SignInWithEmailRequestDto requestDto) {
 
@@ -80,6 +62,34 @@ public class ServiceController extends AppGwV1Controller {
         final JwtTokenVo jwtTokenVo = authService.signInWithPhoneNumber(requestDto.toVo());
 
         return commonResponseMaker.makeSucceedCommonResponse(JwtTokenDto.of(jwtTokenVo));
+    }
+
+    @PostMapping("/group")
+    public CommonResponse<GroupDto> createGroup(@RequestBody CreateGroupRequestDto requestDto) {
+
+        final GroupVo groupVo = authService.createGroup(requestDto.toVo());
+
+        return commonResponseMaker.makeSucceedCommonResponse(GroupDto.of(groupVo));
+
+    }
+
+    @PostMapping("/group/image")
+    public CommonResponse<GroupDto> uploadGroupImage(
+            @RequestPart("imageFile") MultipartFile imageFile,
+            @RequestParam final Long groupId
+    ) {
+
+        final GroupDto responseDto = GroupDto.of(authService.uploadGroupImage(imageFile, groupId));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+    @GetMapping("/group/keyword")
+    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword) {
+
+        final RecommendGroupDto responseDto = RecommendGroupDto.of(authService.recommendGroup(groupingUserId, keyword));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
 }
