@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 @ToString
 public class CreateGroupRequestVo {
-    private final String accessToken;
     private final String title;
     private final Boolean isHidden;
     private final Integer minUserAge;

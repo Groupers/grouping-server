@@ -13,7 +13,6 @@ import java.util.List;
 @Builder
 @ToString
 public class CreateGroupCompleteRequestDto {
-    private final String accessToken;
     private final String title;
     private final Boolean isHidden;
     private final Integer minUserAge;
@@ -28,7 +27,6 @@ public class CreateGroupCompleteRequestDto {
 
     public static CreateGroupCompleteRequestDto of(CreateGroupRequestVo vo) {
         return builder()
-                .accessToken(vo.getAccessToken())
                 .title(vo.getTitle())
                 .isHidden(vo.getIsHidden())
                 .minUserAge(vo.getMinUserAge())

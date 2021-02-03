@@ -32,8 +32,6 @@ public class AuthService {
 
     private final GroupingApiClient groupingApiClient;
 
-    private final GroupingChatClient groupingChatClient;
-
     private final AuthenticationManager authenticationManager;
 
     private final JwtTokenProvider tokenProvider;
@@ -67,10 +65,6 @@ public class AuthService {
 
     @Transactional
     public GroupVo createGroup(CreateGroupRequestVo requestVo) {
-
-//        if (tokenProvider.validateToken(requestVo.getAccessToken()) == false) {
-//            throw new CommonException(ResponseCode.UNAUTHORIZED_ERROR);
-//        }
 
         final GroupDto groupDto = groupingApiClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo)).getData();
 
