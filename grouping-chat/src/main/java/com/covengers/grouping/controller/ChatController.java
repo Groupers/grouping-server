@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class ChatController extends AppApiV1Controller {
+public class ChatController extends AppChatV1Controller {
 
     private final ChatService chatService;
     private final CommonResponseMaker commonResponseMaker;
