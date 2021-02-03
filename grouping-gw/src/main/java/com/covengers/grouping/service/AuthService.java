@@ -2,8 +2,7 @@ package com.covengers.grouping.service;
 
 import com.covengers.grouping.adapter.chat.GroupingChatClient;
 import com.covengers.grouping.constant.ResponseCode;
-import com.covengers.grouping.dto.CreateGroupCompleteRequestDto;
-import com.covengers.grouping.dto.CreateGroupRequestDto;
+import com.covengers.grouping.adapter.api.dto.CreateGroupCompleteRequestDto;
 import com.covengers.grouping.dto.GroupDto;
 import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.vo.CreateGroupRequestVo;
@@ -13,8 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,11 +68,11 @@ public class AuthService {
     @Transactional
     public GroupVo createGroup(CreateGroupRequestVo requestVo) {
 
-        if (tokenProvider.validateToken(requestVo.getAccessToken()) == false) {
-            throw new CommonException(ResponseCode.UNAUTHORIZED_ERROR);
-        }
+//        if (tokenProvider.validateToken(requestVo.getAccessToken()) == false) {
+//            throw new CommonException(ResponseCode.UNAUTHORIZED_ERROR);
+//        }
 
-        final GroupDto groupDto = groupingChatClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo)).getData();
+        final GroupDto groupDto = groupingApiClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo)).getData();
 
         return groupDto.toVo();
     }

@@ -1,4 +1,4 @@
-package com.covengers.grouping.dto;
+package com.covengers.grouping.adapter.api.dto;
 
 import com.covengers.grouping.constant.Gender;
 import com.covengers.grouping.vo.CreateGroupRequestVo;

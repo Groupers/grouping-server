@@ -1,5 +1,8 @@
 package com.covengers.grouping.adapter.api;
 
+import com.covengers.grouping.adapter.chat.GroupingChatAdapterResponse;
+import com.covengers.grouping.adapter.api.dto.CreateGroupCompleteRequestDto;
+import com.covengers.grouping.dto.GroupDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,4 +26,7 @@ public interface GroupingApiClient {
 
     @PostMapping(path = "/sign/complete")
     GroupingApiAdapterResponse<GroupingUserDto> completeSignUp(@RequestBody SignUpCompleteRequestDto dto);
+
+    @PostMapping(path = "/group")
+    GroupingChatAdapterResponse<GroupDto> createGroup(@RequestBody CreateGroupCompleteRequestDto dto);
 }

@@ -1,7 +1,6 @@
 package com.covengers.grouping.controller;
 
 import com.covengers.grouping.dto.*;
-import com.covengers.grouping.dto.CreateGroupCompleteRequestDto;
 import com.covengers.grouping.vo.GroupVo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
