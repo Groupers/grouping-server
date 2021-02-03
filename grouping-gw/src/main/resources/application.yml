@@ -9,6 +9,7 @@ app:
 grouping:
   url:
     api: http://127.0.0.1:10754/v1
+    chat: http://127.0.0.1:10756/v1
 
 ---
 
@@ -18,9 +19,6 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    dbcp2:
-      validation-query: "select 1"
-      test-while-idle: true
     username: covengers
     password: Covengers2020@
     initialization-mode: always
@@ -74,9 +72,6 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://0.0.0.0:3306/groupings?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    dbcp2:
-      validation-query: "select 1"
-      test-while-idle: true
     username: covengers
     password: Covengers2020@
     initialization-mode: always

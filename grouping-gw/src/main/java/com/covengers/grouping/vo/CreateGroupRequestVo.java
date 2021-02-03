@@ -1,18 +1,16 @@
 package com.covengers.grouping.vo;
 
 import com.covengers.grouping.constant.Gender;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
 
-@Getter
 @Builder
+@Getter
 @ToString
 public class CreateGroupRequestVo {
-    private final String accessToken;
     private final String title;
     private final Boolean isHidden;
     private final Integer minUserAge;
