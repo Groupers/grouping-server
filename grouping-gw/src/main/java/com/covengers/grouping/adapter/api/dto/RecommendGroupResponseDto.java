@@ -1,4 +1,4 @@
-package com.covengers.grouping.dto;
+package com.covengers.grouping.adapter.api.dto;
 
 import com.covengers.grouping.vo.RecommendGroupResponseVo;
 import lombok.Builder;

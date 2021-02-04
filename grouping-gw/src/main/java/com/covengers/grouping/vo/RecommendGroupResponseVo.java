@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
-public class RecommendGroupVo {
+public class RecommendGroupResponseVo {
     private final List<GroupResponseVo> groupList;
 }

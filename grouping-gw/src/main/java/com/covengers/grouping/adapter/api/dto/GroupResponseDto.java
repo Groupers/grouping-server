@@ -39,4 +39,20 @@ public class GroupResponseDto {
                 .representGroupImage(representGroupImage)
                 .build();
     }
+
+    public static GroupResponseDto of(GroupResponseVo vo) {
+        return builder()
+                .id(vo.getId())
+                .title(vo.getTitle())
+                .isHidden(vo.getIsHidden())
+                .maxUserAge(vo.getMaxUserAge())
+                .minUserAge(vo.getMinUserAge())
+                .availableGender(vo.getAvailableGender())
+                .description(vo.getDescription())
+                .pointX(vo.getPointX())
+                .pointY(vo.getPointY())
+                .pointDescription(vo.getPointDescription())
+                .representGroupImage(vo.getRepresentGroupImage())
+                .build();
+    }
 }

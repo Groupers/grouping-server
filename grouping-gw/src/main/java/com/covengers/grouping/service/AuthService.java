@@ -6,7 +6,6 @@ import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
-import com.covengers.grouping.dto.*;
 import com.covengers.grouping.vo.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -122,7 +121,7 @@ public class AuthService {
         return groupResponseDto.toVo();
     }
 
-    public RecommendGroupVo recommendGroup(Long groupingUserId, String keyword) {
+    public RecommendGroupResponseVo recommendGroup(Long groupingUserId, String keyword) {
 
         final RecommendGroupResponseDto recommendGroupResponseDto = groupingApiClient.recommendGroup(groupingUserId, keyword).getData();
 

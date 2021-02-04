@@ -1,7 +1,5 @@
 package com.covengers.grouping.controller;
 
-import com.covengers.grouping.adapter.api.dto.SearchHistoryListResponseDto;
-import com.covengers.grouping.adapter.api.dto.SearchTrendsListResponseDto;
 import com.covengers.grouping.dto.*;
 import org.springframework.web.bind.annotation.*;
 
