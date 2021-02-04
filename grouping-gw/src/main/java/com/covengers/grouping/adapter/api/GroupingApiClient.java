@@ -1,9 +1,12 @@
 package com.covengers.grouping.adapter.api;
 
 import com.covengers.grouping.adapter.api.dto.*;
-import com.covengers.grouping.dto.GroupResponseDto;
-import com.covengers.grouping.dto.RecommendGroupResponseDto;
-import com.covengers.grouping.dto.SearchHistoryListResponseDto;
+import com.covengers.grouping.adapter.api.dto.GroupResponseDto;
+import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
+import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
+import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
+import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
+import com.covengers.grouping.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,14 @@ public interface GroupingApiClient {
     GroupingApiAdapterResponse<Void> completeSignUp(
             @RequestBody SignUpCompleteRequestDto signUpCompleteRequestDto);
 
+    @PostMapping(path = "/sign/login/email")
+    GroupingApiAdapterResponse<Void> signInWithEmail(
+            @RequestBody SignInWithEmailRequestDto signInWithEmailRequestDto);
+
+    @PostMapping(path = "/sign/login/phone-number")
+    GroupingApiAdapterResponse<Void> signInWithPhoneNumber(
+            @RequestBody SignInWithPhoneNumberRequestDto signInWithPhoneNumberRequestDto);
+
     @PostMapping(path = "/group")
     GroupingApiAdapterResponse<com.covengers.grouping.adapter.api.dto.GroupResponseDto> createGroup(@RequestBody CreateGroupCompleteRequestDto dto);
 
@@ -48,11 +59,6 @@ public interface GroupingApiClient {
     @GetMapping("/keywords/{groupingUserId}/search/history")
     GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId);
 
-    @PostMapping(path = "/sign/login/email")
-    GroupingApiAdapterResponse<Void> signInWithEmail(
-            @RequestBody SignInWithEmailRequestDto signInWithEmailRequestDto);
-
-    @PostMapping(path = "/sign/login/phone-number")
-    GroupingApiAdapterResponse<Void> signInWithPhoneNumber(
-            @RequestBody SignInWithPhoneNumberRequestDto signInWithPhoneNumberRequestDto);
+    @GetMapping("/keywords/search/trends")
+    GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();
 }

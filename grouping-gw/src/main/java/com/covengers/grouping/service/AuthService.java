@@ -1,8 +1,12 @@
 package com.covengers.grouping.service;
 
 import com.covengers.grouping.adapter.api.dto.*;
-import com.covengers.grouping.dto.RecommendGroupResponseDto;
-import com.covengers.grouping.dto.SearchHistoryListResponseDto;
+import com.covengers.grouping.adapter.api.dto.GroupResponseDto;
+import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
+import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
+import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
+import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
+import com.covengers.grouping.dto.*;
 import com.covengers.grouping.vo.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.covengers.grouping.adapter.api.GroupingApiClient;
 import com.covengers.grouping.component.JwtTokenProvider;
-import com.covengers.grouping.dto.GroupResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -131,5 +134,12 @@ public class AuthService {
         final SearchHistoryListResponseDto searchHistoryListResponseDto = groupingApiClient.getSearchHistoryList(groupingUserId).getData();
 
         return searchHistoryListResponseDto.toVo();
+    }
+
+    public SearchTrendsListResponseVo getSearchTrendsList() {
+
+        final SearchTrendsListResponseDto searchTrendsListResponseDto = groupingApiClient.getSearchTrendsList().getData();
+
+        return searchTrendsListResponseDto.toVo();
     }
 }

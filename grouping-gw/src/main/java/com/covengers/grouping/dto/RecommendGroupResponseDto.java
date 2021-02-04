@@ -19,7 +19,7 @@ public class RecommendGroupResponseDto {
                 .groupList(
                         vo.getGroupList()
                                 .stream()
-                                .map(groupVo -> GroupResponseDto.of(groupVo))
+                                .map(groupResponseVo -> GroupResponseDto.of(groupResponseVo))
                                 .collect(Collectors.toList())
                 )
                 .build();
@@ -30,7 +30,7 @@ public class RecommendGroupResponseDto {
                 .groupList(
                         groupList
                                 .stream()
-                                .map(groupDto -> groupDto.toVo())
+                                .map(groupResponseDto -> groupResponseDto.toVo())
                                 .collect(Collectors.toList()))
                 .build();
     }

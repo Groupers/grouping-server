@@ -1,5 +1,6 @@
 package com.covengers.grouping.dto;
 
+import com.covengers.grouping.vo.SearchHistoryListResponseVo;
 import com.covengers.grouping.vo.SearchTrendsListResponseVo;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,16 @@ public class SearchTrendsListResponseDto {
                                 .map(keywordVo -> KeywordResponseDto.of(keywordVo))
                                 .collect(Collectors.toList())
                 )
+                .build();
+    }
+
+    public SearchTrendsListResponseVo toVo() {
+        return SearchTrendsListResponseVo.builder()
+                .searchTrendsList(
+                        searchTrendsList
+                                .stream()
+                                .map(keywordResponseDto -> keywordResponseDto.toVo())
+                                .collect(Collectors.toList()))
                 .build();
     }
 }

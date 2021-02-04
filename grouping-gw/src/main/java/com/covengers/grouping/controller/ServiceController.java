@@ -98,4 +98,13 @@ public class ServiceController extends AppGwV1Controller {
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
+
+    @GetMapping("/keywords/search/trends")
+    public CommonResponse<SearchTrendsListResponseDto> getSearchTrendsList() {
+
+        final SearchTrendsListResponseDto responseDto =
+                SearchTrendsListResponseDto.of(authService.getSearchTrendsList());
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
 }
