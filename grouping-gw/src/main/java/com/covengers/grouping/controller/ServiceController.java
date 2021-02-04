@@ -109,8 +109,8 @@ public class ServiceController extends AppGwV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @GetMapping("/users/{groupingUserId}/groups")
-    public CommonResponse<GroupListResponseDto> getGroupList(@PathVariable("groupingUserId") Long groupingUserId) {
+    @GetMapping("/users/groups")
+    public CommonResponse<GroupListResponseDto> getGroupList(@RequestParam Long groupingUserId) {
 
         final GroupListResponseDto responseDto =
                 GroupListResponseDto.of(authService.getGroupList(groupingUserId));
@@ -118,8 +118,8 @@ public class ServiceController extends AppGwV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @GetMapping("/users/{groupingUserId}/friends")
-    public CommonResponse<FriendListResponseDto> getFriendList(@PathVariable("groupingUserId") Long groupingUserId) {
+    @GetMapping("/users/friends")
+    public CommonResponse<FriendListResponseDto> getFriendList(@RequestParam Long groupingUserId) {
 
         final FriendListResponseDto responseDto =
                 FriendListResponseDto.of(authService.getFriendList(groupingUserId));

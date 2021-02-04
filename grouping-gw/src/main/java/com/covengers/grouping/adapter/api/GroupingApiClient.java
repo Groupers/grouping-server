@@ -63,11 +63,12 @@ public interface GroupingApiClient {
     @GetMapping("/keywords/search/trends")
     GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();
 
-    @GetMapping("/users/{groupingUserId}/groups")
-    GroupingApiAdapterResponse<GroupListResponseDto> getGroupList(@PathVariable("groupingUserId") Long groupingUserId);
+    @GetMapping("/users/groups")
+    GroupingApiAdapterResponse<GroupListResponseDto> getGroupList(@RequestParam Long groupingUserId);
 
-    @GetMapping("/users/{groupingUserId}/friends")
-    GroupingApiAdapterResponse<FriendListResponseDto> getFriendList(@PathVariable("groupingUserId") Long groupingUserId);
+    @GetMapping("/users/friends")
+    GroupingApiAdapterResponse<FriendListResponseDto> getFriendList(@RequestParam Long groupingUserId);
+
 /*
     @GetMapping("/users")
     GroupingApiAdapterResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
@@ -77,4 +78,5 @@ public interface GroupingApiClient {
     GroupingApiAdapterResponse<Void> resetPassword(
             @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto);
 */
+
 }
