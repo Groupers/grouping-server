@@ -8,5 +8,5 @@ import lombok.ToString;
 @Getter
 @ToString
 public class GroupingUserInfoVo {
-    private final String groupingUserId;
+    private final Long groupingUserId;
 }

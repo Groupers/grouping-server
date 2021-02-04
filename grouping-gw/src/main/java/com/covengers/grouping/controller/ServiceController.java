@@ -1,15 +1,43 @@
 package com.covengers.grouping.controller;
 
-import com.covengers.grouping.constant.ResponseCode;
-import com.covengers.grouping.dto.*;
-import com.covengers.grouping.vo.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.covengers.grouping.component.CommonResponseMaker;
+import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.dto.CommonResponse;
+import com.covengers.grouping.dto.CreateGroupRequestDto;
+import com.covengers.grouping.dto.FriendListResponseDto;
+import com.covengers.grouping.dto.GroupListResponseDto;
+import com.covengers.grouping.dto.GroupResponseDto;
+import com.covengers.grouping.dto.GroupingUserResponseDto;
+import com.covengers.grouping.dto.JwtTokenDto;
+import com.covengers.grouping.dto.RecommendGroupResponseDto;
+import com.covengers.grouping.dto.ResetPasswordRequestDto;
+import com.covengers.grouping.dto.SearchHistoryListResponseDto;
+import com.covengers.grouping.dto.SearchTrendsListResponseDto;
+import com.covengers.grouping.dto.SignInWithEmailRequestDto;
+import com.covengers.grouping.dto.SignInWithPhoneNumberRequestDto;
+import com.covengers.grouping.dto.SignUpCheckEmailResponseDto;
+import com.covengers.grouping.dto.SignUpCheckPhoneNumberResponseDto;
+import com.covengers.grouping.dto.SignUpRequestDto;
 import com.covengers.grouping.service.AuthService;
+import com.covengers.grouping.vo.FriendListResponseVo;
+import com.covengers.grouping.vo.GroupListResponseVo;
+import com.covengers.grouping.vo.GroupResponseVo;
+import com.covengers.grouping.vo.GroupingUserResponseVo;
+import com.covengers.grouping.vo.JwtTokenVo;
+import com.covengers.grouping.vo.RecommendGroupResponseVo;
+import com.covengers.grouping.vo.SearchHistoryListResponseVo;
+import com.covengers.grouping.vo.SearchTrendsListResponseVo;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -83,20 +111,25 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @GetMapping("/group/keyword")
-    public CommonResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword) {
+    public CommonResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId,
+                                                                    @RequestParam String keyword) {
 
-        final RecommendGroupResponseVo recommendGroupResponseVo = authService.recommendGroup(groupingUserId, keyword);
+        final RecommendGroupResponseVo recommendGroupResponseVo = authService.recommendGroup(groupingUserId,
+                                                                                             keyword);
 
-        return commonResponseMaker.makeSucceedCommonResponse(RecommendGroupResponseDto.of(recommendGroupResponseVo));
+        return commonResponseMaker.makeSucceedCommonResponse(
+                RecommendGroupResponseDto.of(recommendGroupResponseVo));
     }
 
     @GetMapping("/keywords/search/history")
-    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList(@RequestParam Long groupingUserId) {
+    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList(
+            @RequestParam Long groupingUserId) {
 
         final SearchHistoryListResponseVo searchHistoryListResponseVo =
                 authService.getSearchHistoryList(groupingUserId);
 
-        return commonResponseMaker.makeSucceedCommonResponse(SearchHistoryListResponseDto.of(searchHistoryListResponseVo));
+        return commonResponseMaker.makeSucceedCommonResponse(
+                SearchHistoryListResponseDto.of(searchHistoryListResponseVo));
     }
 
     @GetMapping("/keywords/search/trends")
@@ -105,7 +138,8 @@ public class ServiceController extends AppGwV1Controller {
         final SearchTrendsListResponseVo searchTrendsListResponseVo =
                 authService.getSearchTrendsList();
 
-        return commonResponseMaker.makeSucceedCommonResponse(SearchTrendsListResponseDto.of(searchTrendsListResponseVo));
+        return commonResponseMaker.makeSucceedCommonResponse(
+                SearchTrendsListResponseDto.of(searchTrendsListResponseVo));
     }
 
     @GetMapping("/users/groups")
@@ -133,7 +167,8 @@ public class ServiceController extends AppGwV1Controller {
         final GroupingUserResponseVo groupingUserResponseVo =
                 authService.checkUserWithEmailAndPhoneNumber(email, phoneNumber);
 
-        return commonResponseMaker.makeSucceedCommonResponse(GroupingUserResponseDto.of(groupingUserResponseVo));
+        return commonResponseMaker.makeSucceedCommonResponse(
+                GroupingUserResponseDto.of(groupingUserResponseVo));
     }
 
     @PutMapping("/users/password")
@@ -144,5 +179,4 @@ public class ServiceController extends AppGwV1Controller {
 
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
-
 }

@@ -19,7 +19,8 @@ public class RequestContextHelper {
 
     public GroupingUserInfoVo getGroupingUserVo() {
         return GroupingUserInfoVo.builder()
-                                 .groupingUserId(getValueFromHeaders(RequestHeaders.GROUPING_USER_ID))
+                                 .groupingUserId(
+                                         Long.parseLong(getValueFromHeaders(RequestHeaders.GROUPING_USER_ID)))
                                  .build();
     }
 
