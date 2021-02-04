@@ -26,7 +26,4 @@ public interface GroupingChatClient {
         @PostMapping("/room/enter")
         GroupingChatAdapterResponse<ChatRoomResponseDto> enterChatRoom(@RequestParam Long chatRoomId);
 
-//        @MessageMapping("/chat/message")
-//        GroupingChatAdapterResponse<Void> sendMessage(ChatMessage chatMessage);
-
 }

@@ -33,9 +33,4 @@ public class ChatController {
         return commonResponseMaker.makeSucceedCommonResponse(ChatRoomResponseDto.of(chatRoomResponseVo));
     }
 
-//    @MessageMapping("/chat/message")
-//    public void sendMessage(ChatMessage chatMessage) {
-//
-//        authService.sendMessage(chatMessage);
-//    }
 }

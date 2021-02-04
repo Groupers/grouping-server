@@ -7,11 +7,8 @@ import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
 import com.covengers.grouping.adapter.chat.GroupingChatClient;
-import com.covengers.grouping.adapter.chat.domain.ChatMessage;
 import com.covengers.grouping.adapter.chat.dto.ChatRoomResponseDto;
-import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.vo.*;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -157,6 +154,7 @@ public class AuthService {
 
         return groupListResponseDto.toVo();
     }
+
     public FriendListResponseVo getFriendList(Long groupingUserId) {
 
         final FriendListResponseDto friendListResponseDto = groupingApiClient.getFriendList(groupingUserId).getData();
@@ -182,6 +180,7 @@ public class AuthService {
 
         return generateToken("temp", resetPasswordRequestVo.getPassword());
     }
+
     public ChatRoomResponseVo createChatRoom(@RequestParam String title) {
         final ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.createChatRoom(title).getData();
         return chatRoomResponseDto.toVo();
@@ -192,10 +191,5 @@ public class AuthService {
         ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.enterChatRoom(chatRoomId).getData();
         return chatRoomResponseDto.toVo();
     }
-
-//    @MessageMapping("/chat/message")
-//    public void sendMessage(ChatMessage chatMessage) {
-//        groupingChatClient.sendMessage(chatMessage);
-//    }
 
 }
