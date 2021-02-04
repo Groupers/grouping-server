@@ -6,7 +6,12 @@ import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
+import com.covengers.grouping.adapter.chat.GroupingChatClient;
+import com.covengers.grouping.adapter.chat.domain.ChatMessage;
+import com.covengers.grouping.adapter.chat.dto.ChatRoomResponseDto;
+import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.vo.*;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +24,8 @@ import com.covengers.grouping.component.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -28,11 +35,29 @@ public class AuthService {
 
     private final GroupingApiClient groupingApiClient;
 
+    private final GroupingChatClient groupingChatClient;
+
     private final AuthenticationManager authenticationManager;
 
     private final JwtTokenProvider tokenProvider;
 
     private final PasswordEncoder passwordEncoder;
+
+    private JwtTokenVo generateToken(String phoneOrEmail, String password) {
+
+        final UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(phoneOrEmail, password);
+
+        final Authentication authentication = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        final String jwtToken = tokenProvider.generateToken(authentication);
+
+        return JwtTokenVo.builder()
+                .accessToken(jwtToken)
+                .build();
+    }
 
     public SignUpCheckEmailResponseVo checkSignUpEmail(String email) {
 
@@ -155,22 +180,22 @@ public class AuthService {
 
         Void data = groupingApiClient.resetPassword(groupingUserId, resetPasswordCompleteRequestDto).getData();
 
-        return generateToken( , resetPasswordRequestVo.getPassword());
+        return generateToken("temp", resetPasswordRequestVo.getPassword());
+    }
+    public ChatRoomResponseVo createChatRoom(@RequestParam String title) {
+        final ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.createChatRoom(title).getData();
+        return chatRoomResponseDto.toVo();
     }
 
-    private JwtTokenVo generateToken(String phoneOrEmail, String password) {
-
-        final UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(phoneOrEmail, password);
-
-        final Authentication authentication = authenticationManager.authenticate(token);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        final String jwtToken = tokenProvider.generateToken(authentication);
-
-        return JwtTokenVo.builder()
-                .accessToken(jwtToken)
-                .build();
+    @PostMapping("/room/enter")
+    public ChatRoomResponseVo enterChatRoom(@RequestParam Long chatRoomId) {
+        ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.enterChatRoom(chatRoomId).getData();
+        return chatRoomResponseDto.toVo();
     }
+
+    @MessageMapping("/chat/message")
+    public void sendMessage(ChatMessage chatMessage) {
+        groupingChatClient.sendMessage(chatMessage);
+    }
+
 }
