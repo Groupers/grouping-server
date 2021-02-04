@@ -27,8 +27,8 @@ public class ChatController extends AppChatV1Controller {
     }
 
     @PostMapping("/room/enter")
-    public CommonResponse<ChatRoomDto> enterChatRoom(@RequestParam Long id) {
-        final ChatRoomDto responseDto = ChatRoomDto.of(chatService.enterChatRoom(id));
+    public CommonResponse<ChatRoomDto> enterChatRoom(@RequestParam Long chatRoomId) {
+        final ChatRoomDto responseDto = ChatRoomDto.of(chatService.enterChatRoom(chatRoomId));
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 

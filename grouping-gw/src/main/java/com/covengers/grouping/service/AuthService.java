@@ -155,7 +155,7 @@ public class AuthService {
 
         Void data = groupingApiClient.resetPassword(groupingUserId, resetPasswordCompleteRequestDto).getData();
 
-        return generateToken(signUpRequestVo.getEmail(), resetPasswordRequestVo.getPassword());
+        return generateToken( , resetPasswordRequestVo.getPassword());
     }
 
     private JwtTokenVo generateToken(String phoneOrEmail, String password) {
