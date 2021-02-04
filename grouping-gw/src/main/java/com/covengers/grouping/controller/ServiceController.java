@@ -1,5 +1,6 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.dto.*;
 import com.covengers.grouping.vo.*;
 import org.springframework.web.bind.annotation.*;
@@ -135,14 +136,13 @@ public class ServiceController extends AppGwV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(GroupingUserResponseDto.of(groupingUserResponseVo));
     }
 
-//    Not completed yet
     @PutMapping("/users/password")
-    public CommonResponse<JwtTokenDto> resetPassword(
+    public CommonResponse<Void> resetPassword(
             @RequestParam Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
 
-        final JwtTokenVo jwtTokenVo = authService.resetPassword(groupingUserId, requestDto.toVo());
+        authService.resetPassword(groupingUserId, requestDto.toVo());
 
-        return commonResponseMaker.makeSucceedCommonResponse(JwtTokenDto.of(jwtTokenVo));
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
 
 }
