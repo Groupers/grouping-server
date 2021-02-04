@@ -1,9 +1,7 @@
 package com.covengers.grouping.adapter.api.dto;
 
 import com.covengers.grouping.vo.RecommendGroupResponseVo;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,8 +9,10 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RecommendGroupResponseDto {
-    private final List<GroupResponseDto> groupList;
+    private List<GroupResponseDto> groupList;
 
     public static RecommendGroupResponseDto of(RecommendGroupResponseVo vo) {
         return builder()
