@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 @Builder
-public class RecommendGroupDto {
+public class RecommendGroupResponseDto {
     private final List<GroupResponseDto> groupList;
 
-    public static RecommendGroupDto of(RecommendGroupVo vo) {
+    public static RecommendGroupResponseDto of(RecommendGroupVo vo) {
         return builder()
                 .groupList(
                         vo.getGroupList()

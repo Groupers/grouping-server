@@ -83,18 +83,18 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @GetMapping("/group/keyword")
-    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword) {
+    public CommonResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword) {
 
-        final RecommendGroupDto responseDto = RecommendGroupDto.of(authService.recommendGroup(groupingUserId, keyword));
+        final RecommendGroupResponseDto responseDto = RecommendGroupResponseDto.of(authService.recommendGroup(groupingUserId, keyword));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
     @GetMapping("/keywords/{groupingUserId}/search/history")
-    public CommonResponse<SearchHistoryListResultDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId) {
+    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId) {
 
-        final SearchHistoryListResultDto responseDto =
-                SearchHistoryListResultDto.of(authService.getSearchHistoryList(groupingUserId));
+        final SearchHistoryListResponseDto responseDto =
+                SearchHistoryListResponseDto.of(authService.getSearchHistoryList(groupingUserId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

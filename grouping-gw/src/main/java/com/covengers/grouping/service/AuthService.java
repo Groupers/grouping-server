@@ -1,8 +1,8 @@
 package com.covengers.grouping.service;
 
 import com.covengers.grouping.adapter.api.dto.*;
-import com.covengers.grouping.dto.RecommendGroupDto;
-import com.covengers.grouping.dto.SearchHistoryListResultDto;
+import com.covengers.grouping.dto.RecommendGroupResponseDto;
+import com.covengers.grouping.dto.SearchHistoryListResponseDto;
 import com.covengers.grouping.vo.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -121,15 +121,15 @@ public class AuthService {
 
     public RecommendGroupVo recommendGroup(Long groupingUserId, String keyword) {
 
-        final RecommendGroupDto recommendGroupDto = groupingApiClient.recommendGroup(groupingUserId, keyword).getData();
+        final RecommendGroupResponseDto recommendGroupResponseDto = groupingApiClient.recommendGroup(groupingUserId, keyword).getData();
 
-        return recommendGroupDto.toVo();
+        return recommendGroupResponseDto.toVo();
     }
 
-    public SearchHistoryListResultVo getSearchHistoryList(Long groupingUserId) {
+    public SearchHistoryListResponseVo getSearchHistoryList(Long groupingUserId) {
 
-        final SearchHistoryListResultDto searchHistoryListResultDto = groupingApiClient.getSearchHistoryList(groupingUserId).getData();
+        final SearchHistoryListResponseDto searchHistoryListResponseDto = groupingApiClient.getSearchHistoryList(groupingUserId).getData();
 
-        return searchHistoryListResultDto.toVo();
+        return searchHistoryListResponseDto.toVo();
     }
 }

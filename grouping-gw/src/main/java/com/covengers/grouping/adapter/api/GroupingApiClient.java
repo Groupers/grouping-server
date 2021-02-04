@@ -2,8 +2,8 @@ package com.covengers.grouping.adapter.api;
 
 import com.covengers.grouping.adapter.api.dto.*;
 import com.covengers.grouping.dto.GroupResponseDto;
-import com.covengers.grouping.dto.RecommendGroupDto;
-import com.covengers.grouping.dto.SearchHistoryListResultDto;
+import com.covengers.grouping.dto.RecommendGroupResponseDto;
+import com.covengers.grouping.dto.SearchHistoryListResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -43,10 +43,10 @@ public interface GroupingApiClient {
     );
 
     @GetMapping(path = "/group/keyword")
-    GroupingApiAdapterResponse<RecommendGroupDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword);
+    GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword);
 
     @GetMapping("/keywords/{groupingUserId}/search/history")
-    GroupingApiAdapterResponse<SearchHistoryListResultDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId);
+    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId);
 
     @PostMapping(path = "/sign/login/email")
     GroupingApiAdapterResponse<Void> signInWithEmail(

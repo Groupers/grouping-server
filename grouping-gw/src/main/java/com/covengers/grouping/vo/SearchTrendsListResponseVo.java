@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
-public class SearchTrendsListResultVo {
-    private final List<KeywordVo> searchTrendsList;
+public class SearchTrendsListResponseVo {
+    private final List<KeywordResponseVo> searchTrendsList;
 }
