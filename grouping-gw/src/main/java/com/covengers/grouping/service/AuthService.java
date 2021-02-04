@@ -170,6 +170,7 @@ public class AuthService {
         return groupingUserResponseDto.toVo();
     }
 
+//    Not completed yet
     public JwtTokenVo resetPassword(
             Long groupingUserId, ResetPasswordRequestVo resetPasswordRequestVo) {
 
@@ -181,13 +182,12 @@ public class AuthService {
         return generateToken("temp", resetPasswordRequestVo.getPassword());
     }
 
-    public ChatRoomResponseVo createChatRoom(@RequestParam String title) {
+    public ChatRoomResponseVo createChatRoom(String title) {
         final ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.createChatRoom(title).getData();
         return chatRoomResponseDto.toVo();
     }
 
-    @PostMapping("/room/enter")
-    public ChatRoomResponseVo enterChatRoom(@RequestParam Long chatRoomId) {
+    public ChatRoomResponseVo enterChatRoom(Long chatRoomId) {
         ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.enterChatRoom(chatRoomId).getData();
         return chatRoomResponseDto.toVo();
     }
