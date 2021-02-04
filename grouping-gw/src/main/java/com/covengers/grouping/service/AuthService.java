@@ -170,16 +170,14 @@ public class AuthService {
         return groupingUserResponseDto.toVo();
     }
 
-//    Not completed yet
-    public JwtTokenVo resetPassword(
+    public void resetPassword(
             Long groupingUserId, ResetPasswordRequestVo resetPasswordRequestVo) {
 
         final ResetPasswordCompleteRequestDto resetPasswordCompleteRequestDto =
                 ResetPasswordCompleteRequestDto.of(passwordEncoder.encode(resetPasswordRequestVo.getPassword()));
 
-        Void data = groupingApiClient.resetPassword(groupingUserId, resetPasswordCompleteRequestDto).getData();
+        groupingApiClient.resetPassword(groupingUserId, resetPasswordCompleteRequestDto);
 
-        return generateToken("temp", resetPasswordRequestVo.getPassword());
     }
 
     public ChatRoomResponseVo createChatRoom(String title) {
