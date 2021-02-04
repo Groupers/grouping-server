@@ -193,9 +193,9 @@ public class AuthService {
         return chatRoomResponseDto.toVo();
     }
 
-    @MessageMapping("/chat/message")
-    public void sendMessage(ChatMessage chatMessage) {
-        groupingChatClient.sendMessage(chatMessage);
-    }
+//    @MessageMapping("/chat/message")
+//    public void sendMessage(ChatMessage chatMessage) {
+//        groupingChatClient.sendMessage(chatMessage);
+//    }
 
 }

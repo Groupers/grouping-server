@@ -6,8 +6,6 @@ import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
-import com.covengers.grouping.constant.ResponseCode;
-import com.covengers.grouping.dto.CommonResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -76,6 +74,5 @@ public interface GroupingApiClient {
     @PutMapping("/users/password")
     GroupingApiAdapterResponse<Void> resetPassword(
             @RequestParam Long groupingUserId, @RequestBody ResetPasswordCompleteRequestDto requestDto);
-
 
 }

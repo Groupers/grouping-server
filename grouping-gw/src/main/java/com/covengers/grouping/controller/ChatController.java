@@ -1,13 +1,11 @@
 package com.covengers.grouping.controller;
 
-import com.covengers.grouping.adapter.chat.domain.ChatMessage;
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.dto.ChatRoomResponseDto;
 import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.service.AuthService;
 import com.covengers.grouping.vo.ChatRoomResponseVo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,9 +33,9 @@ public class ChatController {
         return commonResponseMaker.makeSucceedCommonResponse(ChatRoomResponseDto.of(chatRoomResponseVo));
     }
 
-    @MessageMapping("/chat/message")
-    public void sendMessage(ChatMessage chatMessage) {
-
-        authService.sendMessage(chatMessage);
-    }
+//    @MessageMapping("/chat/message")
+//    public void sendMessage(ChatMessage chatMessage) {
+//
+//        authService.sendMessage(chatMessage);
+//    }
 }
