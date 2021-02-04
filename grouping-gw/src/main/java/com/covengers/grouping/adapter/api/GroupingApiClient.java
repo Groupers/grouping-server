@@ -69,11 +69,10 @@ public interface GroupingApiClient {
     @GetMapping("/users/friends")
     GroupingApiAdapterResponse<FriendListResponseDto> getFriendList(@RequestParam Long groupingUserId);
 
-/*
     @GetMapping("/users")
-    GroupingApiAdapterResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
+    GroupingApiAdapterResponse<GroupingUserResponseDto> checkUserWithEmailAndPhoneNumber(
             @RequestParam String email, @RequestParam String phoneNumber);
-
+/*
     @PutMapping("/users/{groupingUserId}/password")
     GroupingApiAdapterResponse<Void> resetPassword(
             @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto);

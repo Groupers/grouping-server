@@ -127,17 +127,16 @@ public class ServiceController extends AppGwV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-/*
     @GetMapping("/users")
-    public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
+    public CommonResponse<GroupingUserResponseDto> checkUserWithEmailAndPhoneNumber(
             @RequestParam String email, @RequestParam String phoneNumber) {
 
-        final GroupingUserDto groupingUserDto =
-                GroupingUserDto.of(authService.checkUserWithEmailAndPhoneNumber(email, phoneNumber));
+        final GroupingUserResponseDto groupingUserResponseDto =
+                GroupingUserResponseDto.of(authService.checkUserWithEmailAndPhoneNumber(email, phoneNumber));
 
-        return commonResponseMaker.makeSucceedCommonResponse(groupingUserDto);
+        return commonResponseMaker.makeSucceedCommonResponse(groupingUserResponseDto);
     }
-
+/*
     @PutMapping("/users/{groupingUserId}/password")
     public CommonResponse<Void> resetPassword(
             @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {

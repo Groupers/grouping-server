@@ -154,17 +154,15 @@ public class AuthService {
 
         return friendListResponseDto.toVo();
     }
-/*
-    @GetMapping("/users")
-    public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
-            @RequestParam String email, @RequestParam String phoneNumber) {
 
-        final GroupingUserDto groupingUserDto =
-                GroupingUserDto.of(userService.checkUserWithEmailAndPhoneNumber(email, phoneNumber));
+    public GroupingUserResponseVo checkUserWithEmailAndPhoneNumber(
+            String email, String phoneNumber) {
 
-        return commonResponseMaker.makeSucceedCommonResponse(groupingUserDto);
+        final GroupingUserResponseDto groupingUserResponseDto = groupingApiClient.checkUserWithEmailAndPhoneNumber(email, phoneNumber).getData();
+
+        return groupingUserResponseDto.toVo();
     }
-
+/*
     @PutMapping("/users/{groupingUserId}/password")
     public CommonResponse<Void> resetPassword(
             @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
