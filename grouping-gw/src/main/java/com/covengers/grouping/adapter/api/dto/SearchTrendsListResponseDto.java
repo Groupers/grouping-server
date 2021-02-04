@@ -1,10 +1,8 @@
-package com.covengers.grouping.dto;
+package com.covengers.grouping.adapter.api.dto;
 
-import com.covengers.grouping.vo.SearchHistoryListResponseVo;
+import com.covengers.grouping.dto.KeywordResponseDto;
 import com.covengers.grouping.vo.SearchTrendsListResponseVo;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,8 +10,10 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchTrendsListResponseDto {
-    private final List<KeywordResponseDto> searchTrendsList;
+    private List<KeywordResponseDto> searchTrendsList;
 
     public static SearchTrendsListResponseDto of(SearchTrendsListResponseVo vo) {
         return builder()

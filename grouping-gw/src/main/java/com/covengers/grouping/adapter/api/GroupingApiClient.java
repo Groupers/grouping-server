@@ -45,7 +45,7 @@ public interface GroupingApiClient {
             @RequestBody SignInWithPhoneNumberRequestDto signInWithPhoneNumberRequestDto);
 
     @PostMapping(path = "/group")
-    GroupingApiAdapterResponse<com.covengers.grouping.adapter.api.dto.GroupResponseDto> createGroup(@RequestBody CreateGroupCompleteRequestDto dto);
+    GroupingApiAdapterResponse<GroupResponseDto> createGroup(@RequestBody CreateGroupCompleteRequestDto dto);
 
     @PostMapping(path = "/group/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     GroupingApiAdapterResponse<GroupResponseDto> uploadGroupImage(
@@ -56,8 +56,8 @@ public interface GroupingApiClient {
     @GetMapping(path = "/group/keyword")
     GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword);
 
-    @GetMapping("/keywords/{groupingUserId}/search/history")
-    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId);
+    @GetMapping("/keywords/search/history")
+    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(@RequestParam Long groupingUserId);
 
     @GetMapping("/keywords/search/trends")
     GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();

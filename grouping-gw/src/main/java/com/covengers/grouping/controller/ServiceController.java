@@ -1,5 +1,7 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.adapter.api.dto.SearchHistoryListResponseDto;
+import com.covengers.grouping.adapter.api.dto.SearchTrendsListResponseDto;
 import com.covengers.grouping.dto.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,8 +92,8 @@ public class ServiceController extends AppGwV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @GetMapping("/keywords/{groupingUserId}/search/history")
-    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId) {
+    @GetMapping("/keywords/search/history")
+    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList(@RequestParam Long groupingUserId) {
 
         final SearchHistoryListResponseDto responseDto =
                 SearchHistoryListResponseDto.of(authService.getSearchHistoryList(groupingUserId));
