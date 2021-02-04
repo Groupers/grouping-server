@@ -6,6 +6,8 @@ import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
+import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.dto.CommonResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -60,4 +62,19 @@ public interface GroupingApiClient {
 
     @GetMapping("/keywords/search/trends")
     GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();
+
+    @GetMapping("/users/{groupingUserId}/groups")
+    GroupingApiAdapterResponse<GroupListResponseDto> getGroupList(@PathVariable("groupingUserId") Long groupingUserId);
+
+    @GetMapping("/users/{groupingUserId}/friends")
+    GroupingApiAdapterResponse<FriendListResponseDto> getFriendList(@PathVariable("groupingUserId") Long groupingUserId);
+/*
+    @GetMapping("/users")
+    GroupingApiAdapterResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
+            @RequestParam String email, @RequestParam String phoneNumber);
+
+    @PutMapping("/users/{groupingUserId}/password")
+    GroupingApiAdapterResponse<Void> resetPassword(
+            @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto);
+*/
 }

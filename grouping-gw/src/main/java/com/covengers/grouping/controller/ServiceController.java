@@ -1,5 +1,6 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.dto.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,4 +108,43 @@ public class ServiceController extends AppGwV1Controller {
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
+
+    @GetMapping("/users/{groupingUserId}/groups")
+    public CommonResponse<GroupListResponseDto> getGroupList(@PathVariable("groupingUserId") Long groupingUserId) {
+
+        final GroupListResponseDto responseDto =
+                GroupListResponseDto.of(authService.getGroupList(groupingUserId));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+    @GetMapping("/users/{groupingUserId}/friends")
+    public CommonResponse<FriendListResponseDto> getFriendList(@PathVariable("groupingUserId") Long groupingUserId) {
+
+        final FriendListResponseDto responseDto =
+                FriendListResponseDto.of(authService.getFriendList(groupingUserId));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+/*
+    @GetMapping("/users")
+    public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
+            @RequestParam String email, @RequestParam String phoneNumber) {
+
+        final GroupingUserDto groupingUserDto =
+                GroupingUserDto.of(authService.checkUserWithEmailAndPhoneNumber(email, phoneNumber));
+
+        return commonResponseMaker.makeSucceedCommonResponse(groupingUserDto);
+    }
+
+    @PutMapping("/users/{groupingUserId}/password")
+    public CommonResponse<Void> resetPassword(
+            @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
+
+        userService.resetPassword(groupingUserId, requestDto.toVo());
+
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
+    }
+ */
 }

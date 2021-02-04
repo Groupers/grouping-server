@@ -141,4 +141,36 @@ public class AuthService {
 
         return searchTrendsListResponseDto.toVo();
     }
+
+    public GroupListResponseVo getGroupList(Long groupingUserId) {
+
+        final GroupListResponseDto groupListResponseDto = groupingApiClient.getGroupList(groupingUserId).getData();
+
+        return groupListResponseDto.toVo();
+    }
+    public FriendListResponseVo getFriendList(Long groupingUserId) {
+
+        final FriendListResponseDto friendListResponseDto = groupingApiClient.getFriendList(groupingUserId).getData();
+
+        return friendListResponseDto.toVo();
+    }
+/*
+    @GetMapping("/users")
+    public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
+            @RequestParam String email, @RequestParam String phoneNumber) {
+
+        final GroupingUserDto groupingUserDto =
+                GroupingUserDto.of(userService.checkUserWithEmailAndPhoneNumber(email, phoneNumber));
+
+        return commonResponseMaker.makeSucceedCommonResponse(groupingUserDto);
+    }
+
+    @PutMapping("/users/{groupingUserId}/password")
+    public CommonResponse<Void> resetPassword(
+            @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
+
+        userService.resetPassword(groupingUserId, requestDto.toVo());
+
+        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
+    }*/
 }

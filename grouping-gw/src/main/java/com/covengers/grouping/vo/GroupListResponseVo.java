@@ -7,8 +7,8 @@ import lombok.ToString;
 import java.util.List;
 
 @Getter
-@ToString
 @Builder
-public class SearchTrendsListResponseVo {
-    private final List<KeywordResponseVo> searchTrendsList;
+@ToString
+public class GroupListResponseVo {
+    private final List<GroupResponseVo> groupList;
 }
