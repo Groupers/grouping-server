@@ -2,15 +2,15 @@ package com.covengers.grouping.dto;
 
 import com.covengers.grouping.vo.KeywordResponseVo;
 import com.covengers.grouping.vo.KeywordVo;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Builder
 @Getter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class KeywordResponseDto {
-    private final String keyword;
+    private String keyword;
 
     public static KeywordResponseDto of(KeywordResponseVo vo) {
         return builder()

@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
-public class SearchTrendsListResponseVo {
-    private final List<KeywordResponseVo> searchTrendsList;
+public class FriendListResponseVo {
+    private final List<GroupingUserResponseVo> friendList;
 }

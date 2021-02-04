@@ -6,6 +6,8 @@ import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
 import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
+import com.covengers.grouping.adapter.chat.GroupingChatClient;
+import com.covengers.grouping.adapter.chat.dto.ChatRoomResponseDto;
 import com.covengers.grouping.vo.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +21,8 @@ import com.covengers.grouping.component.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -28,11 +32,29 @@ public class AuthService {
 
     private final GroupingApiClient groupingApiClient;
 
+    private final GroupingChatClient groupingChatClient;
+
     private final AuthenticationManager authenticationManager;
 
     private final JwtTokenProvider tokenProvider;
 
     private final PasswordEncoder passwordEncoder;
+
+    private JwtTokenVo generateToken(String phoneOrEmail, String password) {
+
+        final UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(phoneOrEmail, password);
+
+        final Authentication authentication = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        final String jwtToken = tokenProvider.generateToken(authentication);
+
+        return JwtTokenVo.builder()
+                .accessToken(jwtToken)
+                .build();
+    }
 
     public SignUpCheckEmailResponseVo checkSignUpEmail(String email) {
 
@@ -90,22 +112,6 @@ public class AuthService {
                 signInWithPhoneNumberRequestVo.getPassword());
     }
 
-    private JwtTokenVo generateToken(String phoneOrEmail, String password) {
-
-        final UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(phoneOrEmail, password);
-
-        final Authentication authentication = authenticationManager.authenticate(token);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        final String jwtToken = tokenProvider.generateToken(authentication);
-
-        return JwtTokenVo.builder()
-                .accessToken(jwtToken)
-                .build();
-    }
-
     public GroupResponseVo createGroup(CreateGroupRequestVo requestVo) {
 
         final com.covengers.grouping.adapter.api.dto.GroupResponseDto groupResponseDto = groupingApiClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo))
@@ -141,4 +147,49 @@ public class AuthService {
 
         return searchTrendsListResponseDto.toVo();
     }
+
+    public GroupListResponseVo getGroupList(Long groupingUserId) {
+
+        final GroupListResponseDto groupListResponseDto = groupingApiClient.getGroupList(groupingUserId).getData();
+
+        return groupListResponseDto.toVo();
+    }
+
+    public FriendListResponseVo getFriendList(Long groupingUserId) {
+
+        final FriendListResponseDto friendListResponseDto = groupingApiClient.getFriendList(groupingUserId).getData();
+
+        return friendListResponseDto.toVo();
+    }
+
+    public GroupingUserResponseVo checkUserWithEmailAndPhoneNumber(
+            String email, String phoneNumber) {
+
+        final GroupingUserResponseDto groupingUserResponseDto = groupingApiClient.checkUserWithEmailAndPhoneNumber(email, phoneNumber).getData();
+
+        return groupingUserResponseDto.toVo();
+    }
+
+//    Not completed yet
+    public JwtTokenVo resetPassword(
+            Long groupingUserId, ResetPasswordRequestVo resetPasswordRequestVo) {
+
+        final ResetPasswordCompleteRequestDto resetPasswordCompleteRequestDto =
+                ResetPasswordCompleteRequestDto.of(passwordEncoder.encode(resetPasswordRequestVo.getPassword()));
+
+        Void data = groupingApiClient.resetPassword(groupingUserId, resetPasswordCompleteRequestDto).getData();
+
+        return generateToken("temp", resetPasswordRequestVo.getPassword());
+    }
+
+    public ChatRoomResponseVo createChatRoom(String title) {
+        final ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.createChatRoom(title).getData();
+        return chatRoomResponseDto.toVo();
+    }
+
+    public ChatRoomResponseVo enterChatRoom(Long chatRoomId) {
+        ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.enterChatRoom(chatRoomId).getData();
+        return chatRoomResponseDto.toVo();
+    }
+
 }

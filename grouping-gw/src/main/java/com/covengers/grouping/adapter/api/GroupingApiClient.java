@@ -60,4 +60,20 @@ public interface GroupingApiClient {
 
     @GetMapping("/keywords/search/trends")
     GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();
+
+    @GetMapping("/users/groups")
+    GroupingApiAdapterResponse<GroupListResponseDto> getGroupList(@RequestParam Long groupingUserId);
+
+    @GetMapping("/users/friends")
+    GroupingApiAdapterResponse<FriendListResponseDto> getFriendList(@RequestParam Long groupingUserId);
+
+    @GetMapping("/users")
+    GroupingApiAdapterResponse<GroupingUserResponseDto> checkUserWithEmailAndPhoneNumber(
+            @RequestParam String email, @RequestParam String phoneNumber);
+
+//    Not completed yet
+    @PutMapping("/users/password")
+    GroupingApiAdapterResponse<Void> resetPassword(
+            @RequestParam Long groupingUserId, @RequestBody ResetPasswordCompleteRequestDto requestDto);
+
 }
