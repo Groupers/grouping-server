@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
-public class RecommendGroupVo {
-    private final List<GroupResponseVo> groupList;
+public class SearchHistoryListResultVo {
+    private final List<KeywordVo> searchHistoryList;
 }

@@ -1,18 +1,13 @@
 package com.covengers.grouping.adapter.api;
 
-import com.covengers.grouping.adapter.api.dto.CreateGroupCompleteRequestDto;
-import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.GroupDto;
+import com.covengers.grouping.adapter.api.dto.*;
+import com.covengers.grouping.dto.GroupResponseDto;
 import com.covengers.grouping.dto.RecommendGroupDto;
+import com.covengers.grouping.dto.SearchHistoryListResultDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
-import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCompleteRequestDto;
 import com.covengers.grouping.configuration.FeignConfiguration;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,16 +34,19 @@ public interface GroupingApiClient {
             @RequestBody SignUpCompleteRequestDto signUpCompleteRequestDto);
 
     @PostMapping(path = "/group")
-    GroupingApiAdapterResponse<GroupDto> createGroup(@RequestBody CreateGroupCompleteRequestDto dto);
+    GroupingApiAdapterResponse<com.covengers.grouping.adapter.api.dto.GroupResponseDto> createGroup(@RequestBody CreateGroupCompleteRequestDto dto);
 
     @PostMapping(path = "/group/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    GroupingApiAdapterResponse<GroupDto> uploadGroupImage(
+    GroupingApiAdapterResponse<GroupResponseDto> uploadGroupImage(
             @RequestPart MultipartFile imageFile,
             @RequestParam final Long groupId
     );
 
     @GetMapping(path = "/group/keyword")
     GroupingApiAdapterResponse<RecommendGroupDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword);
+
+    @GetMapping("/keywords/{groupingUserId}/search/history")
+    GroupingApiAdapterResponse<SearchHistoryListResultDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId);
 
     @PostMapping(path = "/sign/login/email")
     GroupingApiAdapterResponse<Void> signInWithEmail(

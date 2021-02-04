@@ -10,7 +10,7 @@ import java.util.Optional;
 @Builder
 @Getter
 @ToString
-public class GroupVo {
+public class GroupResponseVo {
     private final Long id;
 
     private final String title;

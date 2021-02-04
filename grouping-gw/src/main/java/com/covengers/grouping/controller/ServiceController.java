@@ -5,13 +5,11 @@ import org.springframework.web.bind.annotation.*;
 
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.service.AuthService;
-import com.covengers.grouping.vo.GroupVo;
+import com.covengers.grouping.vo.GroupResponseVo;
 import com.covengers.grouping.vo.JwtTokenVo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -65,21 +63,21 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @PostMapping("/group")
-    public CommonResponse<GroupDto> createGroup(@RequestBody CreateGroupRequestDto requestDto) {
+    public CommonResponse<GroupResponseDto> createGroup(@RequestBody CreateGroupRequestDto requestDto) {
 
-        final GroupVo groupVo = authService.createGroup(requestDto.toVo());
+        final GroupResponseVo groupResponseVo = authService.createGroup(requestDto.toVo());
 
-        return commonResponseMaker.makeSucceedCommonResponse(GroupDto.of(groupVo));
+        return commonResponseMaker.makeSucceedCommonResponse(GroupResponseDto.of(groupResponseVo));
 
     }
 
     @PostMapping("/group/image")
-    public CommonResponse<GroupDto> uploadGroupImage(
+    public CommonResponse<GroupResponseDto> uploadGroupImage(
             @RequestPart("imageFile") MultipartFile imageFile,
             @RequestParam final Long groupId
     ) {
 
-        final GroupDto responseDto = GroupDto.of(authService.uploadGroupImage(imageFile, groupId));
+        final GroupResponseDto responseDto = GroupResponseDto.of(authService.uploadGroupImage(imageFile, groupId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
@@ -92,4 +90,12 @@ public class ServiceController extends AppGwV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
+    @GetMapping("/keywords/{groupingUserId}/search/history")
+    public CommonResponse<SearchHistoryListResultDto> getSearchHistoryList(@PathVariable("groupingUserId") Long groupingUserId) {
+
+        final SearchHistoryListResultDto responseDto =
+                SearchHistoryListResultDto.of(authService.getSearchHistoryList(groupingUserId));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
 }

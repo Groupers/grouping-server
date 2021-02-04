@@ -1,19 +1,17 @@
-package com.covengers.grouping.dto;
-
-import java.util.List;
-import java.util.Optional;
+package com.covengers.grouping.adapter.api.dto;
 
 import com.covengers.grouping.constant.Gender;
-import com.covengers.grouping.vo.GroupVo;
-
+import com.covengers.grouping.vo.GroupResponseVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Optional;
+
 @Getter
 @Builder
 @ToString
-public class GroupDto {
+public class GroupResponseDto {
     private final Long id;
     private final String title;
     private final Boolean isHidden;
@@ -26,24 +24,8 @@ public class GroupDto {
     private final String pointDescription;
     private final Optional<String> representGroupImage;
 
-    public static GroupDto of(GroupVo vo) {
-        return builder()
-                .id(vo.getId())
-                .title(vo.getTitle())
-                .isHidden(vo.getIsHidden())
-                .maxUserAge(vo.getMaxUserAge())
-                .minUserAge(vo.getMinUserAge())
-                .availableGender(vo.getAvailableGender())
-                .description(vo.getDescription())
-                .pointX(vo.getPointX())
-                .pointY(vo.getPointY())
-                .pointDescription(vo.getPointDescription())
-                .representGroupImage(vo.getRepresentGroupImage())
-                .build();
-    }
-
-    public GroupVo toVo() {
-        return GroupVo.builder()
+    public GroupResponseVo toVo() {
+        return GroupResponseVo.builder()
                 .id(id)
                 .title(title)
                 .isHidden(getIsHidden())
@@ -57,5 +39,4 @@ public class GroupDto {
                 .representGroupImage(representGroupImage)
                 .build();
     }
-
 }

@@ -1,6 +1,5 @@
 package com.covengers.grouping.dto;
 
-import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.RecommendGroupVo;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,14 +12,14 @@ import java.util.stream.Collectors;
 @ToString
 @Builder
 public class RecommendGroupDto {
-    private final List<GroupDto> groupList;
+    private final List<GroupResponseDto> groupList;
 
     public static RecommendGroupDto of(RecommendGroupVo vo) {
         return builder()
                 .groupList(
                         vo.getGroupList()
                                 .stream()
-                                .map(groupVo -> GroupDto.of(groupVo))
+                                .map(groupVo -> GroupResponseDto.of(groupVo))
                                 .collect(Collectors.toList())
                 )
                 .build();

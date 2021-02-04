@@ -1,6 +1,8 @@
 package com.covengers.grouping.service;
 
+import com.covengers.grouping.adapter.api.dto.*;
 import com.covengers.grouping.dto.RecommendGroupDto;
+import com.covengers.grouping.dto.SearchHistoryListResultDto;
 import com.covengers.grouping.vo.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,14 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.covengers.grouping.adapter.api.GroupingApiClient;
-import com.covengers.grouping.adapter.api.dto.CreateGroupCompleteRequestDto;
-import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
-import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCompleteRequestDto;
 import com.covengers.grouping.component.JwtTokenProvider;
-import com.covengers.grouping.dto.GroupDto;
+import com.covengers.grouping.dto.GroupResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -108,19 +104,19 @@ public class AuthService {
                 .build();
     }
 
-    public GroupVo createGroup(CreateGroupRequestVo requestVo) {
+    public GroupResponseVo createGroup(CreateGroupRequestVo requestVo) {
 
-        final GroupDto groupDto = groupingApiClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo))
+        final com.covengers.grouping.adapter.api.dto.GroupResponseDto groupResponseDto = groupingApiClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo))
                 .getData();
 
-        return groupDto.toVo();
+        return groupResponseDto.toVo();
     }
 
-    public GroupVo uploadGroupImage(MultipartFile imageFile,
-                                    final Long groupId) {
-        final GroupDto groupDto = groupingApiClient.uploadGroupImage(imageFile, groupId).getData();
+    public GroupResponseVo uploadGroupImage(MultipartFile imageFile,
+                                            final Long groupId) {
+        final GroupResponseDto groupResponseDto = groupingApiClient.uploadGroupImage(imageFile, groupId).getData();
 
-        return groupDto.toVo();
+        return groupResponseDto.toVo();
     }
 
     public RecommendGroupVo recommendGroup(Long groupingUserId, String keyword) {
@@ -128,5 +124,12 @@ public class AuthService {
         final RecommendGroupDto recommendGroupDto = groupingApiClient.recommendGroup(groupingUserId, keyword).getData();
 
         return recommendGroupDto.toVo();
+    }
+
+    public SearchHistoryListResultVo getSearchHistoryList(Long groupingUserId) {
+
+        final SearchHistoryListResultDto searchHistoryListResultDto = groupingApiClient.getSearchHistoryList(groupingUserId).getData();
+
+        return searchHistoryListResultDto.toVo();
     }
 }
