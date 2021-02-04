@@ -136,14 +136,14 @@ public class ServiceController extends AppGwV1Controller {
 
         return commonResponseMaker.makeSucceedCommonResponse(groupingUserResponseDto);
     }
-/*
-    @PutMapping("/users/{groupingUserId}/password")
-    public CommonResponse<Void> resetPassword(
-            @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
 
-        userService.resetPassword(groupingUserId, requestDto.toVo());
+    @PutMapping("/users/password")
+    public CommonResponse<JwtTokenDto> resetPassword(
+            @RequestParam Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
 
-        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
+        final JwtTokenVo jwtTokenVo = authService.resetPassword(groupingUserId, requestDto.toVo());
+
+        return commonResponseMaker.makeSucceedCommonResponse(JwtTokenDto.of(jwtTokenVo));
     }
- */
+
 }

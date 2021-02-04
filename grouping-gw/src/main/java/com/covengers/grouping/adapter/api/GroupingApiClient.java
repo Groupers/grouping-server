@@ -72,10 +72,10 @@ public interface GroupingApiClient {
     @GetMapping("/users")
     GroupingApiAdapterResponse<GroupingUserResponseDto> checkUserWithEmailAndPhoneNumber(
             @RequestParam String email, @RequestParam String phoneNumber);
-/*
-    @PutMapping("/users/{groupingUserId}/password")
+
+    @PutMapping("/users/password")
     GroupingApiAdapterResponse<Void> resetPassword(
-            @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto);
-*/
+            @RequestParam Long groupingUserId, @RequestBody ResetPasswordCompleteRequestDto requestDto);
+
 
 }

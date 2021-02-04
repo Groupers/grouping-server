@@ -90,22 +90,6 @@ public class AuthService {
                 signInWithPhoneNumberRequestVo.getPassword());
     }
 
-    private JwtTokenVo generateToken(String phoneOrEmail, String password) {
-
-        final UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(phoneOrEmail, password);
-
-        final Authentication authentication = authenticationManager.authenticate(token);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        final String jwtToken = tokenProvider.generateToken(authentication);
-
-        return JwtTokenVo.builder()
-                .accessToken(jwtToken)
-                .build();
-    }
-
     public GroupResponseVo createGroup(CreateGroupRequestVo requestVo) {
 
         final com.covengers.grouping.adapter.api.dto.GroupResponseDto groupResponseDto = groupingApiClient.createGroup(CreateGroupCompleteRequestDto.of(requestVo))
@@ -162,13 +146,31 @@ public class AuthService {
 
         return groupingUserResponseDto.toVo();
     }
-/*
-    @PutMapping("/users/{groupingUserId}/password")
-    public CommonResponse<Void> resetPassword(
-            @PathVariable Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
 
-        userService.resetPassword(groupingUserId, requestDto.toVo());
+    public JwtTokenVo resetPassword(
+            Long groupingUserId, ResetPasswordRequestVo resetPasswordRequestVo) {
 
-        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
-    }*/
+        final ResetPasswordCompleteRequestDto resetPasswordCompleteRequestDto =
+                ResetPasswordCompleteRequestDto.of(passwordEncoder.encode(resetPasswordRequestVo.getPassword()));
+
+        Void data = groupingApiClient.resetPassword(groupingUserId, resetPasswordCompleteRequestDto).getData();
+
+        return generateToken(signUpRequestVo.getEmail(), resetPasswordRequestVo.getPassword());
+    }
+
+    private JwtTokenVo generateToken(String phoneOrEmail, String password) {
+
+        final UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(phoneOrEmail, password);
+
+        final Authentication authentication = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        final String jwtToken = tokenProvider.generateToken(authentication);
+
+        return JwtTokenVo.builder()
+                .accessToken(jwtToken)
+                .build();
+    }
 }
