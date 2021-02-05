@@ -120,11 +120,10 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @GetMapping("/keywords/search/history")
-    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList(
-            @RequestParam Long groupingUserId) {
+    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList() {
 
         final SearchHistoryListResponseVo searchHistoryListResponseVo =
-                authService.getSearchHistoryList(groupingUserId);
+                authService.getSearchHistoryList();
 
         return commonResponseMaker.makeSucceedCommonResponse(
                 SearchHistoryListResponseDto.of(searchHistoryListResponseVo));

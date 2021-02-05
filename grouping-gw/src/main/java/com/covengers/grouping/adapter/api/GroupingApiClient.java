@@ -72,8 +72,7 @@ public interface GroupingApiClient {
     GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam String keyword);
 
     @GetMapping("/keywords/search/history")
-    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(
-            @RequestParam Long groupingUserId);
+    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList();
 
     @GetMapping("/keywords/search/trends")
     GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();

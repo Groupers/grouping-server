@@ -158,10 +158,10 @@ public class AuthService {
         return recommendGroupResponseDto.toVo();
     }
 
-    public SearchHistoryListResponseVo getSearchHistoryList(Long groupingUserId) {
+    public SearchHistoryListResponseVo getSearchHistoryList() {
 
         final SearchHistoryListResponseDto searchHistoryListResponseDto =
-                groupingApiClient.getSearchHistoryList(groupingUserId).getData();
+                groupingApiClient.getSearchHistoryList().getData();
 
         return searchHistoryListResponseDto.toVo();
     }
