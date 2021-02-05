@@ -2,6 +2,9 @@ package com.covengers.grouping.adapter.api;
 
 import java.util.Objects;
 
+import com.covengers.grouping.vo.UserPrincipal;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -19,11 +22,16 @@ public class GroupingApiRequestInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate template) {
 
         final SecurityContext securityContext = SecurityContextHolder.getContext();
-        if (Objects.isNull(securityContext) || !securityContext.getAuthentication().isAuthenticated()) {
+        if (Objects.isNull(securityContext)
+                || !securityContext.getAuthentication().isAuthenticated()
+                || securityContext.getAuthentication() instanceof AnonymousAuthenticationToken) {
             return;
         }
 
+        final UserPrincipal principal = (UserPrincipal) securityContext.getAuthentication().getPrincipal();
+
         template.header(RequestHeaders.GROUPING_USER_ID,
-                        securityContext.getAuthentication().getCredentials().toString());
+                principal.getGroupingUserId().toString());
+
     }
 }

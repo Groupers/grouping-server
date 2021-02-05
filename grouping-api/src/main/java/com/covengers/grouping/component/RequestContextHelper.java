@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RequestContextHelper {
 
-    public GroupingUserInfoVo getGroupingUserVo() {
+    public GroupingUserInfoVo getGroupingUserInfoVo() {
         return GroupingUserInfoVo.builder()
                                  .groupingUserId(
                                          Long.parseLong(getValueFromHeaders(RequestHeaders.GROUPING_USER_ID)))
