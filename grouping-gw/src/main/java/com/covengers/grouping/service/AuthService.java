@@ -174,17 +174,17 @@ public class AuthService {
         return searchTrendsListResponseDto.toVo();
     }
 
-    public GroupListResponseVo getGroupList(Long groupingUserId) {
+    public GroupListResponseVo getGroupList() {
 
-        final GroupListResponseDto groupListResponseDto = groupingApiClient.getGroupList(groupingUserId)
+        final GroupListResponseDto groupListResponseDto = groupingApiClient.getGroupList()
                                                                            .getData();
 
         return groupListResponseDto.toVo();
     }
 
-    public FriendListResponseVo getFriendList(Long groupingUserId) {
+    public FriendListResponseVo getFriendList() {
 
-        final FriendListResponseDto friendListResponseDto = groupingApiClient.getFriendList(groupingUserId)
+        final FriendListResponseDto friendListResponseDto = groupingApiClient.getFriendList()
                                                                              .getData();
         return friendListResponseDto.toVo();
     }

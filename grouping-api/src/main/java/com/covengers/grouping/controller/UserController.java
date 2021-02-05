@@ -1,10 +1,12 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.component.RequestContextHelper;
 import com.covengers.grouping.dto.CommonResponse;
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.dto.*;
 import com.covengers.grouping.service.UserService;
+import com.covengers.grouping.vo.GroupingUserInfoVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,21 +17,26 @@ import org.springframework.web.bind.annotation.*;
 public class UserController extends AppApiV1Controller {
     private final UserService userService;
     private final CommonResponseMaker commonResponseMaker;
+    private final RequestContextHelper requestContextHelper;
 
     @GetMapping("/users/groups")
-    public CommonResponse<GroupListResponseDto> getGroupList(@RequestParam Long groupingUserId) {
+    public CommonResponse<GroupListResponseDto> getGroupList() {
+
+        final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
 
         final GroupListResponseDto responseDto =
-                GroupListResponseDto.of(userService.getGroupList(groupingUserId));
+                GroupListResponseDto.of(userService.getGroupList(groupingUserInfoVo.getGroupingUserId()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
     @GetMapping("/users/friends")
-    public CommonResponse<FriendListResultDto> getFriendList(@RequestParam Long groupingUserId) {
+    public CommonResponse<FriendListResultDto> getFriendList() {
+
+        final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
 
         final FriendListResultDto responseDto =
-                FriendListResultDto.of(userService.getFriendList(groupingUserId));
+                FriendListResultDto.of(userService.getFriendList(groupingUserInfoVo.getGroupingUserId()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

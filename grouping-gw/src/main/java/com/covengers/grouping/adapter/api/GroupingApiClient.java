@@ -78,10 +78,10 @@ public interface GroupingApiClient {
     GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();
 
     @GetMapping("/users/groups")
-    GroupingApiAdapterResponse<GroupListResponseDto> getGroupList(@RequestParam Long groupingUserId);
+    GroupingApiAdapterResponse<GroupListResponseDto> getGroupList();
 
     @GetMapping("/users/friends")
-    GroupingApiAdapterResponse<FriendListResponseDto> getFriendList(@RequestParam Long groupingUserId);
+    GroupingApiAdapterResponse<FriendListResponseDto> getFriendList();
 
     @GetMapping("/users")
     GroupingApiAdapterResponse<GroupingUserResponseDto> checkUserWithEmailAndPhoneNumber(
