@@ -2,6 +2,7 @@ package com.covengers.grouping.service;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
     private final GroupingUserRepository groupingUserRepository;
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
+    private final PasswordEncoder passwordEncoder;
 
     public CheckEmailResultVo checkEmail(String email) {
 
@@ -148,7 +150,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        if (!groupingUser.getPassword().equals(requestVo.getPassword())) {
+        if (!passwordEncoder.matches(requestVo.getPassword(), groupingUser.getPassword())) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
         }
 
@@ -169,7 +171,7 @@ public class UserService {
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        if (!groupingUser.getPassword().equals(requestVo.getPassword())) {
+        if (!passwordEncoder.matches(requestVo.getPassword(), groupingUser.getPassword())) {
             throw new CommonException(ResponseCode.INVALID_PASSWORD);
         }
 
