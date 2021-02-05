@@ -111,11 +111,9 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @GetMapping("/group/keyword")
-    public CommonResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId,
-                                                                    @RequestParam String keyword) {
+    public CommonResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam String keyword) {
 
-        final RecommendGroupResponseVo recommendGroupResponseVo = authService.recommendGroup(groupingUserId,
-                                                                                             keyword);
+        final RecommendGroupResponseVo recommendGroupResponseVo = authService.recommendGroup(keyword);
 
         return commonResponseMaker.makeSucceedCommonResponse(
                 RecommendGroupResponseDto.of(recommendGroupResponseVo));

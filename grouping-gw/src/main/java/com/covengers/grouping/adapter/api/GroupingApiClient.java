@@ -69,8 +69,7 @@ public interface GroupingApiClient {
     );
 
     @GetMapping(path = "/group/keyword")
-    GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId,
-                                                                         @RequestParam String keyword);
+    GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam String keyword);
 
     @GetMapping("/keywords/search/history")
     GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(

@@ -150,10 +150,10 @@ public class AuthService {
         return groupResponseDto.toVo();
     }
 
-    public RecommendGroupResponseVo recommendGroup(Long groupingUserId, String keyword) {
+    public RecommendGroupResponseVo recommendGroup(String keyword) {
 
-        final RecommendGroupResponseDto recommendGroupResponseDto = groupingApiClient.recommendGroup(
-                groupingUserId, keyword).getData();
+        final RecommendGroupResponseDto recommendGroupResponseDto =
+                groupingApiClient.recommendGroup(keyword).getData();
 
         return recommendGroupResponseDto.toVo();
     }
