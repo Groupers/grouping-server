@@ -88,6 +88,5 @@ public interface GroupingApiClient {
             @RequestParam String email, @RequestParam String phoneNumber);
 
     @PutMapping("/users/password")
-    GroupingApiAdapterResponse<Void> resetPassword(
-            @RequestParam Long groupingUserId, @RequestBody ResetPasswordCompleteRequestDto requestDto);
+    GroupingApiAdapterResponse<Void> resetPassword(@RequestBody ResetPasswordCompleteRequestDto requestDto);
 }

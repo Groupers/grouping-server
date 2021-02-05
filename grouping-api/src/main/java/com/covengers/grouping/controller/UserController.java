@@ -52,10 +52,11 @@ public class UserController extends AppApiV1Controller {
     }
 
     @PutMapping("/users/password")
-    public CommonResponse<Void> resetPassword(
-            @RequestParam Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
+    public CommonResponse<Void> resetPassword(@RequestBody ResetPasswordRequestDto requestDto) {
 
-        userService.resetPassword(groupingUserId, requestDto.toVo());
+        final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
+
+        userService.resetPassword(groupingUserInfoVo.getGroupingUserId(), requestDto.toVo());
 
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }

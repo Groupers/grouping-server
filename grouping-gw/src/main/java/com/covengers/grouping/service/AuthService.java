@@ -198,14 +198,13 @@ public class AuthService {
         return groupingUserResponseDto.toVo();
     }
 
-    public void resetPassword(
-            Long groupingUserId, ResetPasswordRequestVo resetPasswordRequestVo) {
+    public void resetPassword(ResetPasswordRequestVo resetPasswordRequestVo) {
 
         final ResetPasswordCompleteRequestDto resetPasswordCompleteRequestDto =
                 ResetPasswordCompleteRequestDto.of(
                         passwordEncoder.encode(resetPasswordRequestVo.getPassword()));
 
-        groupingApiClient.resetPassword(groupingUserId, resetPasswordCompleteRequestDto);
+        groupingApiClient.resetPassword(resetPasswordCompleteRequestDto);
 
     }
 

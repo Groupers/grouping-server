@@ -169,10 +169,9 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @PutMapping("/users/password")
-    public CommonResponse<Void> resetPassword(
-            @RequestParam Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
+    public CommonResponse<Void> resetPassword(@RequestBody ResetPasswordRequestDto requestDto) {
 
-        authService.resetPassword(groupingUserId, requestDto.toVo());
+        authService.resetPassword(requestDto.toVo());
 
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }
