@@ -34,7 +34,8 @@ public class GroupController extends AppApiV1Controller {
 
         final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
 
-        final GroupDto responseDto = GroupDto.of(groupService.createGroup(requestDto.toVo(groupingUserInfoVo.getGroupingUserId())));
+        final GroupDto responseDto = GroupDto.of(
+                groupService.createGroup(requestDto.toVo(groupingUserInfoVo.getGroupingUserId())));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
@@ -51,9 +52,11 @@ public class GroupController extends AppApiV1Controller {
     }
 
     @GetMapping("/group/keyword")
-    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword) {
+    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam String keyword) {
 
-        keywordService.addSearchHistory(groupingUserId, keyword);
+        final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
+
+        keywordService.addSearchHistory(groupingUserInfoVo.getGroupingUserId(), keyword);
 
         final RecommendGroupDto responseDto = RecommendGroupDto.of(groupService.recommendGroup(keyword));
 
