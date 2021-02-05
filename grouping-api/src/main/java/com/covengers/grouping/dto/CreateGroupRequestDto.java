@@ -22,22 +22,21 @@ public class CreateGroupRequestDto {
     private final Long pointX;
     private final Long pointY;
     private final String pointDescription;
-    private final Long representGroupingUserId;
     private final List<String> hashtagList;
 
-    public CreateGroupRequestVo toVo() {
+    public CreateGroupRequestVo toVo(Long representGroupingUserId) {
         return CreateGroupRequestVo.builder()
-                                   .title(title)
-                                   .isHidden(isHidden)
-                                   .minUserAge(minUserAge)
-                                   .maxUserAge(maxUserAge)
-                                   .availableGender(availableGender)
-                                   .description(description)
-                                   .pointX(pointX)
-                                   .pointY(pointY)
-                                   .pointDescription(pointDescription)
-                                   .representGroupingUserId(representGroupingUserId)
-                                   .hashtagList(hashtagList)
-                                   .build();
+                .title(title)
+                .isHidden(isHidden)
+                .minUserAge(minUserAge)
+                .maxUserAge(maxUserAge)
+                .availableGender(availableGender)
+                .description(description)
+                .pointX(pointX)
+                .pointY(pointY)
+                .pointDescription(pointDescription)
+                .representGroupingUserId(representGroupingUserId)
+                .hashtagList(hashtagList)
+                .build();
     }
 }

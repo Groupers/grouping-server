@@ -22,7 +22,6 @@ public class CreateGroupCompleteRequestDto {
     private final Long pointX;
     private final Long pointY;
     private final String pointDescription;
-    private final Long representGroupingUserId;
     private final List<String> hashtagList;
 
     public static CreateGroupCompleteRequestDto of(CreateGroupRequestVo vo) {
@@ -36,7 +35,6 @@ public class CreateGroupCompleteRequestDto {
                 .pointX(vo.getPointX())
                 .pointY(vo.getPointY())
                 .pointDescription(vo.getPointDescription())
-                .representGroupingUserId(vo.getRepresentGroupingUserId())
                 .hashtagList(vo.getHashtagList())
                 .build();
     }
