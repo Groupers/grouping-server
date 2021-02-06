@@ -50,6 +50,9 @@ dependencies {
     implementation "io.github.openfeign:feign-httpclient"
     implementation "io.github.openfeign:feign-okhttp"
 
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.3.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.3.RELEASE'
+
 //    implementation "org.deeplearning4j:deeplearning4j-ui:1.0.0-beta7"
 //    implementation "org.deeplearning4j:deeplearning4j-nlp:1.0.0-beta7"
 //    implementation "org.nd4j:nd4j-native:1.0.0-beta7"

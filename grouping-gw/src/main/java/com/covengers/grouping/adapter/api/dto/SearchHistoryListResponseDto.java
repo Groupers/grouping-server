@@ -1,6 +1,5 @@
 package com.covengers.grouping.adapter.api.dto;
 
-import com.covengers.grouping.dto.KeywordResponseDto;
 import com.covengers.grouping.vo.SearchHistoryListResponseVo;
 import lombok.*;
 
