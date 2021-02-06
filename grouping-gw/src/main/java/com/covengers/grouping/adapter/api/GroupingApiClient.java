@@ -69,27 +69,24 @@ public interface GroupingApiClient {
     );
 
     @GetMapping(path = "/group/keyword")
-    GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId,
-                                                                         @RequestParam String keyword);
+    GroupingApiAdapterResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam String keyword);
 
     @GetMapping("/keywords/search/history")
-    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList(
-            @RequestParam Long groupingUserId);
+    GroupingApiAdapterResponse<SearchHistoryListResponseDto> getSearchHistoryList();
 
     @GetMapping("/keywords/search/trends")
     GroupingApiAdapterResponse<SearchTrendsListResponseDto> getSearchTrendsList();
 
     @GetMapping("/users/groups")
-    GroupingApiAdapterResponse<GroupListResponseDto> getGroupList(@RequestParam Long groupingUserId);
+    GroupingApiAdapterResponse<GroupListResponseDto> getGroupList();
 
     @GetMapping("/users/friends")
-    GroupingApiAdapterResponse<FriendListResponseDto> getFriendList(@RequestParam Long groupingUserId);
+    GroupingApiAdapterResponse<FriendListResponseDto> getFriendList();
 
     @GetMapping("/users")
     GroupingApiAdapterResponse<GroupingUserResponseDto> checkUserWithEmailAndPhoneNumber(
             @RequestParam String email, @RequestParam String phoneNumber);
 
     @PutMapping("/users/password")
-    GroupingApiAdapterResponse<Void> resetPassword(
-            @RequestParam Long groupingUserId, @RequestBody ResetPasswordCompleteRequestDto requestDto);
+    GroupingApiAdapterResponse<Void> resetPassword(@RequestBody ResetPasswordCompleteRequestDto requestDto);
 }

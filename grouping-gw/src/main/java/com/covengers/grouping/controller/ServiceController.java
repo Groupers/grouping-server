@@ -111,22 +111,19 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @GetMapping("/group/keyword")
-    public CommonResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam Long groupingUserId,
-                                                                    @RequestParam String keyword) {
+    public CommonResponse<RecommendGroupResponseDto> recommendGroup(@RequestParam String keyword) {
 
-        final RecommendGroupResponseVo recommendGroupResponseVo = authService.recommendGroup(groupingUserId,
-                                                                                             keyword);
+        final RecommendGroupResponseVo recommendGroupResponseVo = authService.recommendGroup(keyword);
 
         return commonResponseMaker.makeSucceedCommonResponse(
                 RecommendGroupResponseDto.of(recommendGroupResponseVo));
     }
 
     @GetMapping("/keywords/search/history")
-    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList(
-            @RequestParam Long groupingUserId) {
+    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList() {
 
         final SearchHistoryListResponseVo searchHistoryListResponseVo =
-                authService.getSearchHistoryList(groupingUserId);
+                authService.getSearchHistoryList();
 
         return commonResponseMaker.makeSucceedCommonResponse(
                 SearchHistoryListResponseDto.of(searchHistoryListResponseVo));
@@ -143,19 +140,19 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @GetMapping("/users/groups")
-    public CommonResponse<GroupListResponseDto> getGroupList(@RequestParam Long groupingUserId) {
+    public CommonResponse<GroupListResponseDto> getGroupList() {
 
         final GroupListResponseVo groupListResponseVo =
-                authService.getGroupList(groupingUserId);
+                authService.getGroupList();
 
         return commonResponseMaker.makeSucceedCommonResponse(GroupListResponseDto.of(groupListResponseVo));
     }
 
     @GetMapping("/users/friends")
-    public CommonResponse<FriendListResponseDto> getFriendList(@RequestParam Long groupingUserId) {
+    public CommonResponse<FriendListResponseDto> getFriendList() {
 
         final FriendListResponseVo friendListResponseVo =
-                authService.getFriendList(groupingUserId);
+                authService.getFriendList();
 
         return commonResponseMaker.makeSucceedCommonResponse(FriendListResponseDto.of(friendListResponseVo));
     }
@@ -172,10 +169,9 @@ public class ServiceController extends AppGwV1Controller {
     }
 
     @PutMapping("/users/password")
-    public CommonResponse<Void> resetPassword(
-            @RequestParam Long groupingUserId, @RequestBody ResetPasswordRequestDto requestDto) {
+    public CommonResponse<Void> resetPassword(@RequestBody ResetPasswordRequestDto requestDto) {
 
-        authService.resetPassword(groupingUserId, requestDto.toVo());
+        authService.resetPassword(requestDto.toVo());
 
         return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
     }

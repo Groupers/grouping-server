@@ -150,18 +150,18 @@ public class AuthService {
         return groupResponseDto.toVo();
     }
 
-    public RecommendGroupResponseVo recommendGroup(Long groupingUserId, String keyword) {
+    public RecommendGroupResponseVo recommendGroup(String keyword) {
 
-        final RecommendGroupResponseDto recommendGroupResponseDto = groupingApiClient.recommendGroup(
-                groupingUserId, keyword).getData();
+        final RecommendGroupResponseDto recommendGroupResponseDto =
+                groupingApiClient.recommendGroup(keyword).getData();
 
         return recommendGroupResponseDto.toVo();
     }
 
-    public SearchHistoryListResponseVo getSearchHistoryList(Long groupingUserId) {
+    public SearchHistoryListResponseVo getSearchHistoryList() {
 
         final SearchHistoryListResponseDto searchHistoryListResponseDto =
-                groupingApiClient.getSearchHistoryList(groupingUserId).getData();
+                groupingApiClient.getSearchHistoryList().getData();
 
         return searchHistoryListResponseDto.toVo();
     }
@@ -174,17 +174,17 @@ public class AuthService {
         return searchTrendsListResponseDto.toVo();
     }
 
-    public GroupListResponseVo getGroupList(Long groupingUserId) {
+    public GroupListResponseVo getGroupList() {
 
-        final GroupListResponseDto groupListResponseDto = groupingApiClient.getGroupList(groupingUserId)
+        final GroupListResponseDto groupListResponseDto = groupingApiClient.getGroupList()
                                                                            .getData();
 
         return groupListResponseDto.toVo();
     }
 
-    public FriendListResponseVo getFriendList(Long groupingUserId) {
+    public FriendListResponseVo getFriendList() {
 
-        final FriendListResponseDto friendListResponseDto = groupingApiClient.getFriendList(groupingUserId)
+        final FriendListResponseDto friendListResponseDto = groupingApiClient.getFriendList()
                                                                              .getData();
         return friendListResponseDto.toVo();
     }
@@ -198,14 +198,13 @@ public class AuthService {
         return groupingUserResponseDto.toVo();
     }
 
-    public void resetPassword(
-            Long groupingUserId, ResetPasswordRequestVo resetPasswordRequestVo) {
+    public void resetPassword(ResetPasswordRequestVo resetPasswordRequestVo) {
 
         final ResetPasswordCompleteRequestDto resetPasswordCompleteRequestDto =
                 ResetPasswordCompleteRequestDto.of(
                         passwordEncoder.encode(resetPasswordRequestVo.getPassword()));
 
-        groupingApiClient.resetPassword(groupingUserId, resetPasswordCompleteRequestDto);
+        groupingApiClient.resetPassword(resetPasswordCompleteRequestDto);
 
     }
 
