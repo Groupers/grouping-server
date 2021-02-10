@@ -15,8 +15,8 @@ public class SignInWithPhoneNumberRequestDto {
 
     public SignInWithPhoneNumberRequestVo toVo() {
         return SignInWithPhoneNumberRequestVo.builder()
-                                             .phoneNumber(phoneNumber)
-                                             .password(password)
-                                             .build();
+                .phoneNumber(phoneNumber)
+                .password(password)
+                .build();
     }
 }

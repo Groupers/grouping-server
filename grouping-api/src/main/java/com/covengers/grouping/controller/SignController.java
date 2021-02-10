@@ -46,30 +46,4 @@ public class SignController extends AppApiV1Controller {
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
-
-    @PostMapping("/sign/complete")
-    public CommonResponse<Void> completeSignUp(@RequestBody SignUpRequestDto requestDto) {
-
-        userService.completeSignUp(requestDto.toVo());
-
-        return commonResponseMaker.makeEmptyInfoCommonResponse(ResponseCode.SUCCESS);
-    }
-
-    @PostMapping("/sign/login/email")
-    public CommonResponse<GroupingUserDto> signInWithEmail(@RequestBody SignInWithEmailRequestDto requestDto) {
-
-        final GroupingUserDto responseDto = GroupingUserDto.of(userService.signInWithEmail(requestDto.toVo()));
-
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-    }
-
-    @PostMapping("/sign/login/phone-number")
-    public CommonResponse<GroupingUserDto> signInWithPhoneNumber(
-            @RequestBody SignInWithPhoneNumberRequestDto requestDto) {
-
-        final GroupingUserDto responseDto = GroupingUserDto.of(
-                userService.signInWithPhoneNumber(requestDto.toVo()));
-
-        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
-    }
 }

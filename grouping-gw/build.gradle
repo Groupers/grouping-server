@@ -8,11 +8,31 @@ plugins {
 group 'com.covengers.grouping'
 version '0.0.1-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
+
+ext {
+    set('springCloudVersion', "Hoxton.SR9")
+}
+
+dependencies {
+    implementation project(":grouping-core")
+    implementation 'io.jsonwebtoken:jjwt:0.9.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.3.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.3.RELEASE'
+    implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.3"
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
 
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR9'
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
@@ -25,50 +45,6 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
-
-dependencies {
-    implementation project(":grouping-core")
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'io.jsonwebtoken:jjwt:0.9.0'
-//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-//    implementation 'org.springframework.session:spring-session-core'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
-//    implementation 'org.springframework.kafka:spring-kafka'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
-    implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-
-    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
-    implementation "io.github.openfeign:feign-jackson"
-    implementation "io.github.openfeign:feign-httpclient"
-    implementation "io.github.openfeign:feign-okhttp"
-
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.3.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.3.RELEASE'
-
-//    implementation "org.deeplearning4j:deeplearning4j-ui:1.0.0-beta7"
-//    implementation "org.deeplearning4j:deeplearning4j-nlp:1.0.0-beta7"
-//    implementation "org.nd4j:nd4j-native:1.0.0-beta7"
-//    implementation "org.nd4j:nd4j-cuda-10.2-platform:1.0.0-beta7"
-//    implementation "org.deeplearning4j:deeplearning4j-core:1.0.0-beta7"
-//    implementation "org.nd4j:nd4j-native-platform:1.0.0-beta7"
-    implementation "org.slf4j:slf4j-api:1.7.25"
-//    implementation "org.deeplearning4j:deeplearning4j-cuda-9.2:1.0.0-beta6"
-    implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.3"
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-//    testImplementation 'org.springframework.kafka:spring-kafka-test'
-}
-
 
 test {
     useJUnitPlatform()

@@ -15,8 +15,8 @@ public class SignInWithEmailRequestDto {
 
     public SignInWithEmailRequestVo toVo() {
         return SignInWithEmailRequestVo.builder()
-                                       .email(email)
-                                       .password(password)
-                                       .build();
+                .email(email)
+                .password(password)
+                .build();
     }
 }
