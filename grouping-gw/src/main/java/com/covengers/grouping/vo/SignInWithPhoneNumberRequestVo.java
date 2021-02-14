@@ -1,3 +1,4 @@
+
 package com.covengers.grouping.vo;
 
 import lombok.Builder;

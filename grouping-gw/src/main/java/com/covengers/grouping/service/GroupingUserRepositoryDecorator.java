@@ -54,7 +54,7 @@ public class GroupingUserRepositoryDecorator implements UserDetailsService {
     }
 
     @Transactional
-    public UserDetails loadUserById(Long id) {
+    public UserPrincipal loadUserById(Long id) {
         final GroupingUser user =
                 groupingUserRepository.findTopById(id)
                                       .orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));

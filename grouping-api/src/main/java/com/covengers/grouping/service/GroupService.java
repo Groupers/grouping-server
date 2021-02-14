@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.covengers.grouping.component.RequestContextHelper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,6 +46,7 @@ public class GroupService {
     private final GroupHashtagMappingRepository groupHashtagMappingRepository;
     private final GroupingUserRepository groupingUserRepository;
     private final UserGroupMappingRepository userGroupMappingRepository;
+    private final RequestContextHelper requestContextHelper;
 
     @Transactional
     public GroupVo createGroup(CreateGroupRequestVo requestVo) {

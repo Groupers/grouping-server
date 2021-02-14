@@ -8,7 +8,7 @@ plugins {
 group 'com.covengers.grouping'
 version '0.0.1-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -37,6 +37,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.3.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.3.RELEASE'
 
     implementation "org.deeplearning4j:deeplearning4j-ui:1.0.0-beta7"
     implementation "org.deeplearning4j:deeplearning4j-nlp:1.0.0-beta7"

@@ -2,8 +2,10 @@ package com.covengers.grouping.controller;
 
 import java.io.IOException;
 
+import com.covengers.grouping.component.RequestContextHelper;
 import com.covengers.grouping.service.KeywordService;
 
+import com.covengers.grouping.vo.GroupingUserInfoVo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,11 +27,15 @@ public class GroupController extends AppApiV1Controller {
     private final GroupService groupService;
     private final KeywordService keywordService;
     private final CommonResponseMaker commonResponseMaker;
+    private final RequestContextHelper requestContextHelper;
 
     @PostMapping("/group")
     public CommonResponse<GroupDto> createGroup(@RequestBody CreateGroupRequestDto requestDto) {
 
-        final GroupDto responseDto = GroupDto.of(groupService.createGroup(requestDto.toVo()));
+        final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
+
+        final GroupDto responseDto = GroupDto.of(
+                groupService.createGroup(requestDto.toVo(groupingUserInfoVo.getGroupingUserId())));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
@@ -46,9 +52,11 @@ public class GroupController extends AppApiV1Controller {
     }
 
     @GetMapping("/group/keyword")
-    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam Long groupingUserId, @RequestParam String keyword) {
+    public CommonResponse<RecommendGroupDto> recommendGroup(@RequestParam String keyword) {
 
-        keywordService.addSearchHistory(groupingUserId, keyword);
+        final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
+
+        keywordService.addSearchHistory(groupingUserInfoVo.getGroupingUserId(), keyword);
 
         final RecommendGroupDto responseDto = RecommendGroupDto.of(groupService.recommendGroup(keyword));
 
