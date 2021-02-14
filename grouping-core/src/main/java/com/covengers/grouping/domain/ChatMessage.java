@@ -9,9 +9,9 @@ import lombok.Setter;
 public class ChatMessage {
     private String topicId;
 
-    private MessageType type;
-
     private String publisher;
 
-    private String content;
+    private MessageType messageType;
+
+    private String message;
 }
