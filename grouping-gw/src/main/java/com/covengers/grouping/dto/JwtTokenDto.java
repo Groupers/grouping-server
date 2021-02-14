@@ -1,7 +1,6 @@
 package com.covengers.grouping.dto;
 
 import com.covengers.grouping.vo.JwtTokenVo;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,95 +1,69 @@
 package com.covengers.grouping.configuration;
 
+import com.covengers.grouping.component.JwtAuthenticationEntryPoint;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.covengers.grouping.component.JwtAuthenticationEntryPoint;
-import com.covengers.grouping.service.GroupingUserRepositoryDecorator;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
+@EnableWebFluxSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
-    private final GroupingUserRepositoryDecorator groupingUserRepository;
+    private final AuthenticationManager authenticationManager;
+
+    private final SecurityContextRepository securityContextRepository;
 
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
     private static final String[] EXCLUDE_GET_REQUEST_PATH = {
             "/v1/sign/email",
             "/v1/sign/phone-number",
-            };
+    };
 
     private static final String[] EXCLUDE_POST_REQUEST_PATH = {
             "/v1/sign/complete",
             "/v1/sign/login/email",
             "/v1/sign/login/phone-number",
-            };
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
-
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(groupingUserRepository)
-                                    .passwordEncoder(passwordEncoder());
-    }
-
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors()
-            .and()
-            .csrf()
-            .disable()
-            .exceptionHandling()
-            .authenticationEntryPoint(unauthorizedHandler)
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeRequests()
-            .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg",
-                         "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js")
-            .permitAll()
-            .antMatchers(EXCLUDE_POST_REQUEST_PATH)
-            .permitAll()
-            .antMatchers(HttpMethod.GET, EXCLUDE_GET_REQUEST_PATH)
-            .permitAll()
-            .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources",
-                         "/swagger-resources/configuration/security", "/swagger-ui.html", "/webjars/**")
-            .permitAll()
-            .anyRequest()
-            .authenticated(); // Add our custom JWT security filter
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) throws Exception {
+        return http
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .authenticationManager(authenticationManager)
+                .securityContextRepository(securityContextRepository)
+                .authorizeExchange()
+                .pathMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg",
+                        "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js")
+                .permitAll()
+                .pathMatchers(EXCLUDE_POST_REQUEST_PATH)
+                .permitAll()
+                .pathMatchers(HttpMethod.GET, EXCLUDE_GET_REQUEST_PATH)
+                .permitAll()
+                .anyExchange()
+                .authenticated()
+                .and()
+                .addFilterAfter(new RequestInterceptFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
+                .build();
 
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
 }

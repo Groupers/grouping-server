@@ -32,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
     private final GroupingUserRepository groupingUserRepository;
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
-    private final PasswordEncoder passwordEncoder;
 
     public CheckEmailResultVo checkEmail(String email) {
 
@@ -111,69 +110,6 @@ public class UserService {
 
         final GroupingUser groupingUser =
                 groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
-
-        return groupingUser.toVo();
-    }
-
-    @Transactional
-    public void completeSignUp(SignUpRequestVo requestVo) {
-
-        final boolean isValidEmail = !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
-
-        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
-                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
-
-        final boolean isValidPhoneNumber = !groupingUserRepository.findTopByPhoneNumberAndNationCode(
-                phoneNationCodeSeparationVo.getPurePhoneNumber(),
-                phoneNationCodeSeparationVo.getNationCode()).isPresent();
-
-        if (!isValidEmail || !isValidPhoneNumber) {
-            throw new CommonException(ResponseCode.SIGN_UP_FAILED_FOR_INVALID_INFO);
-        }
-
-        final GroupingUser groupingUser = new GroupingUser(requestVo.getEmail(),
-                                                           requestVo.getPassword(),
-                                                           requestVo.getName(),
-                                                           requestVo.getGender(),
-                                                           requestVo.getBirthday(),
-                                                           phoneNationCodeSeparationVo.getPurePhoneNumber(),
-                                                           phoneNationCodeSeparationVo.getNationCode());
-        groupingUserRepository.save(groupingUser);
-    }
-
-    @Transactional(readOnly = true)
-    public GroupingUserVo signInWithEmail(SignInWithEmailRequestVo requestVo) {
-
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopByEmail(requestVo.getEmail());
-
-        final GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
-
-        if (!passwordEncoder.matches(requestVo.getPassword(), groupingUser.getPassword())) {
-            throw new CommonException(ResponseCode.INVALID_PASSWORD);
-        }
-
-        return groupingUser.toVo();
-    }
-
-    @Transactional(readOnly = true)
-    public GroupingUserVo signInWithPhoneNumber(SignInWithPhoneNumberRequestVo requestVo) {
-
-        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
-                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
-
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopByPhoneNumberAndNationCode(
-                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
-                        phoneNationCodeSeparationVo.getNationCode());
-
-        final GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
-
-        if (!passwordEncoder.matches(requestVo.getPassword(), groupingUser.getPassword())) {
-            throw new CommonException(ResponseCode.INVALID_PASSWORD);
-        }
 
         return groupingUser.toVo();
     }

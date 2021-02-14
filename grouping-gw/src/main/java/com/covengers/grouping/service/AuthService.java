@@ -1,128 +1,120 @@
 package com.covengers.grouping.service;
 
-import org.springframework.security.authentication.AuthenticationManager;
+import com.covengers.grouping.component.PhoneNationCodeClassifier;
+import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.domain.GroupingUser;
+import com.covengers.grouping.exception.CommonException;
+import com.covengers.grouping.repository.GroupingUserRepository;
+import com.covengers.grouping.vo.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.covengers.grouping.adapter.api.GroupingApiClient;
-import com.covengers.grouping.adapter.api.dto.CreateGroupCompleteRequestDto;
-import com.covengers.grouping.adapter.api.dto.FriendListResponseDto;
-import com.covengers.grouping.adapter.api.dto.GroupListResponseDto;
-import com.covengers.grouping.adapter.api.dto.GroupResponseDto;
-import com.covengers.grouping.adapter.api.dto.GroupingUserResponseDto;
-import com.covengers.grouping.adapter.api.dto.RecommendGroupResponseDto;
-import com.covengers.grouping.adapter.api.dto.ResetPasswordCompleteRequestDto;
-import com.covengers.grouping.adapter.api.dto.SearchHistoryListResponseDto;
-import com.covengers.grouping.adapter.api.dto.SearchTrendsListResponseDto;
-import com.covengers.grouping.adapter.api.dto.SignInWithEmailRequestDto;
-import com.covengers.grouping.adapter.api.dto.SignInWithPhoneNumberRequestDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCheckEmailResponseDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCheckPhoneNumberResponseDto;
-import com.covengers.grouping.adapter.api.dto.SignUpCompleteRequestDto;
-import com.covengers.grouping.adapter.chat.GroupingChatClient;
-import com.covengers.grouping.adapter.chat.dto.ChatRoomResponseDto;
 import com.covengers.grouping.component.JwtTokenProvider;
-import com.covengers.grouping.vo.ChatRoomResponseVo;
-import com.covengers.grouping.vo.CreateGroupRequestVo;
-import com.covengers.grouping.vo.FriendListResponseVo;
-import com.covengers.grouping.vo.GroupListResponseVo;
-import com.covengers.grouping.vo.GroupResponseVo;
-import com.covengers.grouping.vo.GroupingUserResponseVo;
-import com.covengers.grouping.vo.JwtTokenVo;
-import com.covengers.grouping.vo.RecommendGroupResponseVo;
-import com.covengers.grouping.vo.ResetPasswordRequestVo;
-import com.covengers.grouping.vo.SearchHistoryListResponseVo;
-import com.covengers.grouping.vo.SearchTrendsListResponseVo;
-import com.covengers.grouping.vo.SignInWithEmailRequestVo;
-import com.covengers.grouping.vo.SignInWithPhoneNumberRequestVo;
-import com.covengers.grouping.vo.SignUpCheckEmailResponseVo;
-import com.covengers.grouping.vo.SignUpCheckPhoneNumberResponseVo;
-import com.covengers.grouping.vo.SignUpRequestVo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
 
-    private final GroupingApiClient groupingApiClient;
+    private final GroupingUserRepository groupingUserRepository;
 
-    private final GroupingChatClient groupingChatClient;
+    private final GroupingUserRepositoryDecorator groupingUserRepositoryDecorator;
 
-    private final AuthenticationManager authenticationManager;
+    private final PhoneNationCodeClassifier phoneNationCodeClassifier;
 
     private final JwtTokenProvider tokenProvider;
 
     private final PasswordEncoder passwordEncoder;
 
-    public SignUpCheckEmailResponseVo checkSignUpEmail(String email) {
+    @Transactional
+    public JwtTokenVo completeSignUp(SignUpRequestVo requestVo) {
 
-        final SignUpCheckEmailResponseDto signUpCheckEmailResponseDto =
-                groupingApiClient.checkSignUpEmail(email).getData();
+        final boolean isValidEmail = !groupingUserRepository.findTopByEmail(requestVo.getEmail()).isPresent();
 
-        return SignUpCheckEmailResponseVo.builder()
-                                         .isEmailAvailable(signUpCheckEmailResponseDto.isEmailAvailable())
-                                         .build();
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
-    }
+        final boolean isValidPhoneNumber = !groupingUserRepository.findTopByPhoneNumberAndNationCode(
+                phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                phoneNationCodeSeparationVo.getNationCode()).isPresent();
 
-    public SignUpCheckPhoneNumberResponseVo checkSignUpPhoneNumber(String phoneNumber) {
+        if (!isValidEmail || !isValidPhoneNumber) {
+            throw new CommonException(ResponseCode.SIGN_UP_FAILED_FOR_INVALID_INFO);
+        }
 
-        final SignUpCheckPhoneNumberResponseDto signUpCheckPhoneNumberResponseDto =
-                groupingApiClient.checkSignUpPhoneNumber(phoneNumber).getData();
+        final GroupingUser groupingUser = new GroupingUser(requestVo.getEmail(),
+                passwordEncoder.encode(requestVo.getPassword()),
+                requestVo.getName(),
+                requestVo.getGender(),
+                requestVo.getBirthday(),
+                phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                phoneNationCodeSeparationVo.getNationCode());
+        groupingUserRepository.save(groupingUser);
 
-        return SignUpCheckPhoneNumberResponseVo.builder()
-                                               .isPhoneNumberAvailable(
-                                                       signUpCheckPhoneNumberResponseDto
-                                                               .isPhoneNumberAvailable())
-                                               .build();
-    }
-
-    public JwtTokenVo completeSignUp(SignUpRequestVo signUpRequestVo) {
-
-        final SignUpCompleteRequestDto signUpCompleteRequestDto =
-                SignUpCompleteRequestDto.of(signUpRequestVo,
-                                            passwordEncoder.encode(signUpRequestVo.getPassword()));
-
-        groupingApiClient.completeSignUp(signUpCompleteRequestDto);
-
-        return generateToken(signUpRequestVo.getEmail(), signUpRequestVo.getPassword());
+        return generateToken(requestVo.getEmail(), requestVo.getPassword());
 
     }
 
-    public JwtTokenVo signInWithEmail(SignInWithEmailRequestVo signInWithEmailRequestVo) {
+    @Transactional(readOnly = true)
+    public JwtTokenVo signInWithEmail(SignInWithEmailRequestVo requestVo) {
 
-        final SignInWithEmailRequestDto signInWithEmailRequestDto =
-                SignInWithEmailRequestDto.of(signInWithEmailRequestVo);
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByEmail(requestVo.getEmail());
 
-        groupingApiClient.signInWithEmail(signInWithEmailRequestDto);
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-        return generateToken(signInWithEmailRequestVo.getEmail(), signInWithEmailRequestVo.getPassword());
+        if (!passwordEncoder.matches(requestVo.getPassword(), groupingUser.getPassword())) {
+            throw new CommonException(ResponseCode.INVALID_PASSWORD);
+        }
+
+        return generateToken(requestVo.getEmail(), requestVo.getPassword());
     }
 
-    public JwtTokenVo signInWithPhoneNumber(SignInWithPhoneNumberRequestVo signInWithPhoneNumberRequestVo) {
+    @Transactional(readOnly = true)
+    public JwtTokenVo signInWithPhoneNumber(SignInWithPhoneNumberRequestVo requestVo) {
 
-        final SignInWithPhoneNumberRequestDto signInWithPhoneNumberRequestDto =
-                SignInWithPhoneNumberRequestDto.of(signInWithPhoneNumberRequestVo);
+        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
+                phoneNationCodeClassifier.separate(requestVo.getPhoneNumber());
 
-        groupingApiClient.signInWithPhoneNumber(signInWithPhoneNumberRequestDto);
+        final Optional<GroupingUser> groupingUserOptional =
+                groupingUserRepository.findTopByPhoneNumberAndNationCode(
+                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
+                        phoneNationCodeSeparationVo.getNationCode());
 
-        return generateToken(signInWithPhoneNumberRequestVo.getPhoneNumber(),
-                             signInWithPhoneNumberRequestVo.getPassword());
+        final GroupingUser groupingUser =
+                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+
+        if (!passwordEncoder.matches(requestVo.getPassword(), groupingUser.getPassword())) {
+            throw new CommonException(ResponseCode.INVALID_PASSWORD);
+        }
+
+        return generateToken(requestVo.getPhoneNumber(),
+                requestVo.getPassword());
     }
 
     private JwtTokenVo generateToken(String phoneOrEmail, String password) {
 
-        final UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(phoneOrEmail, password);
+        final List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-        final Authentication authentication = authenticationManager.authenticate(token);
+        final UserDetails userDetails = groupingUserRepositoryDecorator.loadUserByUsername(phoneOrEmail);
+
+        final Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -131,91 +123,6 @@ public class AuthService {
         return JwtTokenVo.builder()
                          .accessToken(jwtToken)
                          .build();
-    }
-
-    public GroupResponseVo createGroup(CreateGroupRequestVo requestVo) {
-
-        final GroupResponseDto groupResponseDto = groupingApiClient.createGroup(
-                CreateGroupCompleteRequestDto.of(requestVo))
-                                                                   .getData();
-
-        return groupResponseDto.toVo();
-    }
-
-    public GroupResponseVo uploadGroupImage(MultipartFile imageFile,
-                                            final Long groupId) {
-        final GroupResponseDto groupResponseDto = groupingApiClient.uploadGroupImage(imageFile, groupId)
-                                                                   .getData();
-
-        return groupResponseDto.toVo();
-    }
-
-    public RecommendGroupResponseVo recommendGroup(String keyword) {
-
-        final RecommendGroupResponseDto recommendGroupResponseDto =
-                groupingApiClient.recommendGroup(keyword).getData();
-
-        return recommendGroupResponseDto.toVo();
-    }
-
-    public SearchHistoryListResponseVo getSearchHistoryList() {
-
-        final SearchHistoryListResponseDto searchHistoryListResponseDto =
-                groupingApiClient.getSearchHistoryList().getData();
-
-        return searchHistoryListResponseDto.toVo();
-    }
-
-    public SearchTrendsListResponseVo getSearchTrendsList() {
-
-        final SearchTrendsListResponseDto searchTrendsListResponseDto =
-                groupingApiClient.getSearchTrendsList().getData();
-
-        return searchTrendsListResponseDto.toVo();
-    }
-
-    public GroupListResponseVo getGroupList() {
-
-        final GroupListResponseDto groupListResponseDto = groupingApiClient.getGroupList()
-                                                                           .getData();
-
-        return groupListResponseDto.toVo();
-    }
-
-    public FriendListResponseVo getFriendList() {
-
-        final FriendListResponseDto friendListResponseDto = groupingApiClient.getFriendList()
-                                                                             .getData();
-        return friendListResponseDto.toVo();
-    }
-
-    public GroupingUserResponseVo checkUserWithEmailAndPhoneNumber(
-            String email, String phoneNumber) {
-
-        final GroupingUserResponseDto groupingUserResponseDto =
-                groupingApiClient.checkUserWithEmailAndPhoneNumber(email, phoneNumber).getData();
-
-        return groupingUserResponseDto.toVo();
-    }
-
-    public void resetPassword(ResetPasswordRequestVo resetPasswordRequestVo) {
-
-        final ResetPasswordCompleteRequestDto resetPasswordCompleteRequestDto =
-                ResetPasswordCompleteRequestDto.of(
-                        passwordEncoder.encode(resetPasswordRequestVo.getPassword()));
-
-        groupingApiClient.resetPassword(resetPasswordCompleteRequestDto);
-
-    }
-
-    public ChatRoomResponseVo createChatRoom(String title) {
-        final ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.createChatRoom(title).getData();
-        return chatRoomResponseDto.toVo();
-    }
-
-    public ChatRoomResponseVo enterChatRoom(Long chatRoomId) {
-        final ChatRoomResponseDto chatRoomResponseDto = groupingChatClient.enterChatRoom(chatRoomId).getData();
-        return chatRoomResponseDto.toVo();
     }
 
 }
