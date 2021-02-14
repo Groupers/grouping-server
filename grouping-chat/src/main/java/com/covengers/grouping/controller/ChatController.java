@@ -8,6 +8,7 @@ import com.covengers.grouping.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,17 +21,20 @@ public class ChatController extends AppChatV1Controller {
     private final ChatService chatService;
     private final CommonResponseMaker commonResponseMaker;
 
-    @PostMapping("/room")
+    @PostMapping("/chat/room")
     public CommonResponse<ChatRoomDto> createChatRoom(@RequestParam String title) {
         final ChatRoomDto responseDto = ChatRoomDto.of(chatService.createChatRoom(title));
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @PostMapping("/room/enter")
+    /**
+     * Not Used Now
+    @PostMapping("/chat/room/enter")
     public CommonResponse<ChatRoomDto> enterChatRoom(@RequestParam Long chatRoomId) {
         final ChatRoomDto responseDto = ChatRoomDto.of(chatService.enterChatRoom(chatRoomId));
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
+    */
 
     @MessageMapping("/chat/message")
     public void sendMessage(ChatMessage chatMessage) {
