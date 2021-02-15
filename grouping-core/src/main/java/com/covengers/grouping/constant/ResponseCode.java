@@ -16,6 +16,7 @@ public enum ResponseCode {
     SIGN_UP_FAILED_FOR_INVALID_INFO("1010", "Sign up failed for invalid info"),
 
     USER_NOT_EXISTED("1100", "user not existed."),
+    GROUP_NOT_EXISTED("1101", "group not existed."),
 
     INVALID_PHONE_NUMBER("1200", "Invalid phone number"),
     INVALID_PASSWORD("1201", "Invalid password"),

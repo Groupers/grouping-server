@@ -2,7 +2,6 @@ package com.covengers.grouping.service;
 
 import java.util.Optional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,15 +12,11 @@ import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.vo.CheckEmailResultVo;
 import com.covengers.grouping.vo.CheckPhoneNumberResultVo;
-import com.covengers.grouping.vo.CheckUserIdResultVo;
 import com.covengers.grouping.vo.FriendListResultVo;
 import com.covengers.grouping.vo.GroupListResponseVo;
 import com.covengers.grouping.vo.GroupingUserVo;
 import com.covengers.grouping.vo.PhoneNationCodeSeparationVo;
 import com.covengers.grouping.vo.ResetPasswordRequestVo;
-import com.covengers.grouping.vo.SignInWithEmailRequestVo;
-import com.covengers.grouping.vo.SignInWithPhoneNumberRequestVo;
-import com.covengers.grouping.vo.SignUpRequestVo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

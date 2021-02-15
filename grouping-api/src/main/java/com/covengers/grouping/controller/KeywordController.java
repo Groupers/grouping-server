@@ -3,8 +3,8 @@ package com.covengers.grouping.controller;
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.component.RequestContextHelper;
 import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.SearchHistoryListResultDto;
-import com.covengers.grouping.dto.SearchTrendsListResultDto;
+import com.covengers.grouping.dto.SearchHistoryListResponseDto;
+import com.covengers.grouping.dto.SearchTrendsListResponseDto;
 import com.covengers.grouping.service.KeywordService;
 import com.covengers.grouping.vo.GroupingUserInfoVo;
 import lombok.RequiredArgsConstructor;
@@ -20,22 +20,22 @@ public class KeywordController extends AppApiV1Controller {
     private final RequestContextHelper requestContextHelper;
 
     @GetMapping("/keywords/search/history")
-    public CommonResponse<SearchHistoryListResultDto> getSearchHistoryList() {
+    public CommonResponse<SearchHistoryListResponseDto> getSearchHistoryList() {
 
         final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
 
-        final SearchHistoryListResultDto responseDto =
-                SearchHistoryListResultDto.of(
+        final SearchHistoryListResponseDto responseDto =
+                SearchHistoryListResponseDto.of(
                         keywordService.getSearchHistoryList(groupingUserInfoVo.getGroupingUserId()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
     @GetMapping("/keywords/search/trends")
-    public CommonResponse<SearchTrendsListResultDto> getSearchTrendsList() {
+    public CommonResponse<SearchTrendsListResponseDto> getSearchTrendsList() {
 
-        final SearchTrendsListResultDto responseDto =
-                SearchTrendsListResultDto.of(keywordService.getSearchTrendsList(1,5));
+        final SearchTrendsListResponseDto responseDto =
+                SearchTrendsListResponseDto.of(keywordService.getSearchTrendsList(1,5));
  
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

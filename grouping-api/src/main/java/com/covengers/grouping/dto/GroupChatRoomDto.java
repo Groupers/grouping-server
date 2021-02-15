@@ -1,6 +1,6 @@
 package com.covengers.grouping.dto;
 
-import com.covengers.grouping.vo.ChatRoomVo;
+import com.covengers.grouping.vo.GroupChatRoomVo;
 import lombok.*;
 
 @ToString
@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ChatRoomDto {
+public class GroupChatRoomDto {
 
     private Long id;
 
@@ -16,7 +16,7 @@ public class ChatRoomDto {
 
     private String title;
 
-    public static ChatRoomDto of(ChatRoomVo vo) {
+    public static GroupChatRoomDto of(GroupChatRoomVo vo) {
         return builder()
                 .id(vo.getId())
                 .topicId(vo.getTopicId())

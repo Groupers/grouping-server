@@ -1,7 +1,6 @@
 package com.covengers.grouping.dto;
 
 import com.covengers.grouping.vo.FriendListResultVo;
-import com.covengers.grouping.vo.GroupingUserVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,10 +11,10 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 @Builder
-public class FriendListResultDto {
+public class FriendListResponseDto {
     private final List<GroupingUserDto> friendList;
 
-    public static FriendListResultDto of(FriendListResultVo vo) {
+    public static FriendListResponseDto of(FriendListResultVo vo) {
         return builder()
                 .friendList(
                         vo.getFriendList()

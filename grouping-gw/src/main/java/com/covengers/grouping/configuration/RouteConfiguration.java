@@ -34,7 +34,7 @@ public class RouteConfiguration {
                 .route(r -> r.path("/" + groupingVersion + "/users/**")
                         .uri(groupingUrlApi)
                         .id("grouping-api:user"))
-                .route(r -> r.path("/" + groupingVersion + "/room/**")
+                .route(r -> r.path("/" + groupingVersion + "/chat/**")
                         .uri(groupingUrlChat)
                         .id("grouping-chat:chat"))
                 .build();
