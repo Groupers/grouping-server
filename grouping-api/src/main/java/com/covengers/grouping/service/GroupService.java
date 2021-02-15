@@ -7,11 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
-import com.covengers.grouping.component.RequestContextHelper;
-import org.springframework.data.redis.core.RedisTemplate;
+import com.covengers.grouping.vo.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.covengers.grouping.component.HashtagRecommender;
@@ -28,10 +26,6 @@ import com.covengers.grouping.repository.GroupRepository;
 import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.repository.HashtagRepository;
 import com.covengers.grouping.repository.UserGroupMappingRepository;
-import com.covengers.grouping.vo.CreateGroupRequestVo;
-import com.covengers.grouping.vo.GroupVo;
-import com.covengers.grouping.vo.RecommendGroupVo;
-import com.covengers.grouping.vo.RecommendHashtagVo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +40,6 @@ public class GroupService {
     private final GroupHashtagMappingRepository groupHashtagMappingRepository;
     private final GroupingUserRepository groupingUserRepository;
     private final UserGroupMappingRepository userGroupMappingRepository;
-    private final RequestContextHelper requestContextHelper;
 
     @Transactional
     public GroupVo createGroup(CreateGroupRequestVo requestVo) {
@@ -117,6 +110,20 @@ public class GroupService {
         return RecommendGroupVo
                 .builder()
                 .groupList(new ArrayList<>(groupHashSet))
+                .build();
+    }
+
+    public GroupChatRoomListResponseVo getGroupChatRoomList(Long groupId) {
+
+        final Optional<Group> groupOptional =
+                groupRepository.findById(groupId);
+
+        if (!groupOptional.isPresent()) {
+            throw new CommonException(ResponseCode.GROUP_NOT_EXISTED);
+        }
+
+        return GroupChatRoomListResponseVo.builder()
+                .groupChatRoomList(groupOptional.get().toGroupChatRoomList())
                 .build();
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.covengers.grouping.constant.NationCode;
 import com.covengers.grouping.domain.GroupingUser;
 
-public interface GroupingUserRepository extends JpaRepository<GroupingUser, String> {
+public interface GroupingUserRepository extends JpaRepository<GroupingUser, Long> {
 
     Optional<GroupingUser> findTopByEmail(String email);
 

@@ -3,6 +3,7 @@ package com.covengers.grouping.controller;
 import java.io.IOException;
 
 import com.covengers.grouping.component.RequestContextHelper;
+import com.covengers.grouping.dto.*;
 import com.covengers.grouping.service.KeywordService;
 
 import com.covengers.grouping.vo.GroupingUserInfoVo;
@@ -10,10 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.covengers.grouping.component.CommonResponseMaker;
-import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.CreateGroupRequestDto;
-import com.covengers.grouping.dto.GroupDto;
-import com.covengers.grouping.dto.RecommendGroupDto;
 import com.covengers.grouping.service.GroupService;
 
 import lombok.RequiredArgsConstructor;
@@ -59,6 +56,15 @@ public class GroupController extends AppApiV1Controller {
         keywordService.addSearchHistory(groupingUserInfoVo.getGroupingUserId(), keyword);
 
         final RecommendGroupDto responseDto = RecommendGroupDto.of(groupService.recommendGroup(keyword));
+
+        return commonResponseMaker.makeSucceedCommonResponse(responseDto);
+    }
+
+    @GetMapping("/group/chatrooms")
+    public CommonResponse<GroupChatRoomListResponseDto> getGroupChatRoomList(@RequestParam final Long groupId) {
+
+        final GroupChatRoomListResponseDto responseDto =
+                GroupChatRoomListResponseDto.of(groupService.getGroupChatRoomList(groupId));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }

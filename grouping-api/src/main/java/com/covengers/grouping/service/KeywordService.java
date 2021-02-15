@@ -10,7 +10,6 @@ import com.covengers.grouping.vo.KeywordVo;
 import com.covengers.grouping.vo.SearchHistoryListResultVo;
 import com.covengers.grouping.vo.SearchTrendsListResultVo;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

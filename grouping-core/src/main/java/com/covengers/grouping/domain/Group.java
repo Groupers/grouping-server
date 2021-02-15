@@ -5,17 +5,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.covengers.grouping.constant.Gender;
+import com.covengers.grouping.vo.GroupChatRoomVo;
 import com.covengers.grouping.vo.GroupVo;
 import com.covengers.grouping.vo.HashtagVo;
 
@@ -75,6 +68,10 @@ public class Group extends AbstractAuditingEntity {
 
     @OneToMany(mappedBy = "group")
     private List<UserGroupMapping> userGroupMappingList = new ArrayList<>();
+
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "group_id")
+    private List<GroupChatRoom> groupChatRoomList = new ArrayList<>();
 
     public Group(String title,
                  Integer maxUserAge,
@@ -152,5 +149,11 @@ public class Group extends AbstractAuditingEntity {
                                                    groupHashtagMapping.getHashtag()
                                                                       .toVoForGroup())
                                       .collect(Collectors.toList());
+    }
+
+    public List<GroupChatRoomVo> toGroupChatRoomList() {
+        return groupChatRoomList.stream()
+                .map(GroupChatRoom::toVo)
+                .collect(Collectors.toList());
     }
 }

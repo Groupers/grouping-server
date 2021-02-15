@@ -1,6 +1,6 @@
 package com.covengers.grouping.dto;
 
-import com.covengers.grouping.vo.SearchHistoryListResultVo;
+import com.covengers.grouping.vo.SearchTrendsListResultVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 @Builder
-public class SearchHistoryListResultDto {
-    private final List<KeywordDto> searchHistoryList;
+public class SearchTrendsListResponseDto {
+    private final List<KeywordDto> searchTrendsList;
 
-    public static SearchHistoryListResultDto of(SearchHistoryListResultVo vo) {
+    public static SearchTrendsListResponseDto of(SearchTrendsListResultVo vo) {
         return builder()
-                .searchHistoryList(
-                        vo.getSearchHistoryList()
+                .searchTrendsList(
+                        vo.getSearchTrendsList()
                                 .stream()
                                 .map(keywordVo -> KeywordDto.of(keywordVo))
                                 .collect(Collectors.toList())
