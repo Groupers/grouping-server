@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -115,8 +116,7 @@ public class AuthService {
 
         final Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        ReactiveSecurityContextHolder.withAuthentication(authentication);
 
         final String jwtToken = tokenProvider.generateToken(authentication);
 
