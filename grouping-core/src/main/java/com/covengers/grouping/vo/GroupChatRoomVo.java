@@ -7,11 +7,12 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class ChatRoomVo {
+public class GroupChatRoomVo {
 
     private final Long id;
 
     private final String topicId;
 
     private final String title;
+
 }

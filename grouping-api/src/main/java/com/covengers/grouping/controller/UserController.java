@@ -31,12 +31,12 @@ public class UserController extends AppApiV1Controller {
     }
 
     @GetMapping("/users/friends")
-    public CommonResponse<FriendListResultDto> getFriendList() {
+    public CommonResponse<FriendListResponseDto> getFriendList() {
 
         final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
 
-        final FriendListResultDto responseDto =
-                FriendListResultDto.of(userService.getFriendList(groupingUserInfoVo.getGroupingUserId()));
+        final FriendListResponseDto responseDto =
+                FriendListResponseDto.of(userService.getFriendList(groupingUserInfoVo.getGroupingUserId()));
 
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
