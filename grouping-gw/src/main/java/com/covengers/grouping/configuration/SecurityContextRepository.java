@@ -1,7 +1,5 @@
 package com.covengers.grouping.configuration;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -10,6 +8,9 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -21,7 +22,7 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
-        return null;
+        return Mono.empty();
     }
 
     @Override
@@ -35,8 +36,8 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
             final Authentication authentication = new UsernamePasswordAuthenticationToken(jwt, jwt);
 
-            return this.authenticationManager.authenticate(authentication)
-                    .map((auth) -> new SecurityContextImpl(auth));
+            return authenticationManager.authenticate(authentication)
+                                        .map(SecurityContextImpl::new);
         }
 
         return Mono.empty();

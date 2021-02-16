@@ -1,15 +1,23 @@
 package com.covengers.grouping.controller;
 
-import com.covengers.grouping.component.RequestContextHelper;
-import com.covengers.grouping.dto.CommonResponse;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.covengers.grouping.component.CommonResponseMaker;
+import com.covengers.grouping.component.RequestContextHelper;
 import com.covengers.grouping.constant.ResponseCode;
-import com.covengers.grouping.dto.*;
+import com.covengers.grouping.dto.CommonResponse;
+import com.covengers.grouping.dto.FriendListResultDto;
+import com.covengers.grouping.dto.GroupListResponseDto;
+import com.covengers.grouping.dto.GroupingUserDto;
+import com.covengers.grouping.dto.ResetPasswordRequestDto;
 import com.covengers.grouping.service.UserService;
 import com.covengers.grouping.vo.GroupingUserInfoVo;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,12 +49,13 @@ public class UserController extends AppApiV1Controller {
         return commonResponseMaker.makeSucceedCommonResponse(responseDto);
     }
 
-    @GetMapping("/users")
-    public CommonResponse<GroupingUserDto> checkUserWithEmailAndPhoneNumber(
-            @RequestParam String email, @RequestParam String phoneNumber) {
+    @GetMapping("/users/info")
+    public CommonResponse<GroupingUserDto> getUserInfo() {
+
+        final GroupingUserInfoVo groupingUserInfoVo = requestContextHelper.getGroupingUserInfoVo();
 
         final GroupingUserDto groupingUserDto =
-                GroupingUserDto.of(userService.checkUserWithEmailAndPhoneNumber(email, phoneNumber));
+                GroupingUserDto.of(userService.getUserInfo(groupingUserInfoVo));
 
         return commonResponseMaker.makeSucceedCommonResponse(groupingUserDto);
     }
