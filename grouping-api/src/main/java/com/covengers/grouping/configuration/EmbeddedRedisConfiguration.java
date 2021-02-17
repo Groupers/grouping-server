@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 @Configuration
 public class EmbeddedRedisConfiguration {
@@ -39,13 +38,13 @@ public class EmbeddedRedisConfiguration {
         }
     }
 
-    private boolean isArmMac() {
-        return (System.getProperty("os.arch").equals("aarch64")) &&
-                (System.getProperty("os.name").equals("Mac OS X"));
+    private static boolean isArmMac() {
+        return System.getProperty("os.arch").equals("aarch64") &&
+               System.getProperty("os.name").equals("Mac OS X");
     }
 
-    private File getRedisFileForArmMac() throws IOException {
-        ClassPathResource resource = new ClassPathResource("binary/redis/redis-server-6.0.10-mac-arm64");
+    private static File getRedisFileForArmMac() throws IOException {
+        final ClassPathResource resource = new ClassPathResource("binary/redis/redis-server-6.0.10-mac-arm64");
         return resource.getFile();
     }
 }

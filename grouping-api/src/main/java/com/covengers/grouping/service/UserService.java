@@ -14,6 +14,7 @@ import com.covengers.grouping.vo.CheckEmailResultVo;
 import com.covengers.grouping.vo.CheckPhoneNumberResultVo;
 import com.covengers.grouping.vo.FriendListResultVo;
 import com.covengers.grouping.vo.GroupListResponseVo;
+import com.covengers.grouping.vo.GroupingUserInfoVo;
 import com.covengers.grouping.vo.GroupingUserVo;
 import com.covengers.grouping.vo.PhoneNationCodeSeparationVo;
 import com.covengers.grouping.vo.ResetPasswordRequestVo;
@@ -34,7 +35,7 @@ public class UserService {
 
         boolean isEmailAvailable = false;
 
-        if (!groupingUserOptional.isPresent()) {
+        if (groupingUserOptional.isEmpty()) {
             isEmailAvailable = true;
         }
 
@@ -55,7 +56,7 @@ public class UserService {
 
         boolean isPhoneNumberAvailable = false;
 
-        if (!groupingUserOptional.isPresent()) {
+        if (groupingUserOptional.isEmpty()) {
             isPhoneNumberAvailable = true;
         }
 
@@ -69,7 +70,7 @@ public class UserService {
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
-        if (!groupingUserOptional.isPresent()) {
+        if (groupingUserOptional.isEmpty()) {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
         }
 
@@ -83,7 +84,7 @@ public class UserService {
         final Optional<GroupingUser> groupingUserOptional =
                 groupingUserRepository.findTopById(groupingUserId);
 
-        if (!groupingUserOptional.isPresent()) {
+        if (groupingUserOptional.isEmpty()) {
             throw new CommonException(ResponseCode.USER_NOT_EXISTED);
         }
 
@@ -92,21 +93,16 @@ public class UserService {
                                  .build();
     }
 
-    public GroupingUserVo checkUserWithEmailAndPhoneNumber(String email, String phoneNumber) {
-
-        final PhoneNationCodeSeparationVo phoneNationCodeSeparationVo =
-                phoneNationCodeClassifier.separate(phoneNumber);
+    public GroupingUserVo getUserInfo(GroupingUserInfoVo groupingUserInfoVo) {
 
         final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopByEmailAndPhoneNumberAndNationCode(
-                        email,
-                        phoneNationCodeSeparationVo.getPurePhoneNumber(),
-                        phoneNationCodeSeparationVo.getNationCode());
+                groupingUserRepository.findTopById(groupingUserInfoVo.getGroupingUserId());
 
-        final GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+        if (groupingUserOptional.isEmpty()) {
+            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
+        }
 
-        return groupingUser.toVo();
+        return groupingUserOptional.get().toVo();
     }
 
     @Transactional
