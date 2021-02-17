@@ -37,6 +37,10 @@ public class RouteConfiguration {
                 .route(r -> r.path("/" + groupingVersion + "/chat/**")
                         .uri(groupingUrlChat)
                         .id("grouping-chat:chat"))
+                .route(r -> r.path("/websocket/**")
+                        .filters(f -> f.rewritePath("/websocket/(?.*)", "/${remains}"))
+                        .uri(groupingUrlChat)
+                        .id("grouping-chat:ws"))
                 .build();
     }
 }

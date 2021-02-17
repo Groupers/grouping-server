@@ -52,7 +52,7 @@ public class ChatService {
             final GroupingUser groupingUser =
                     groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
 
-            groupChatRoom.getChatUserList().add(groupingUser);
+            groupChatRoom.getUserList().add(groupingUser);
         }
         return groupChatRoom.toVo();
     }
