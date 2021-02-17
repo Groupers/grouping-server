@@ -1,5 +1,6 @@
 package com.covengers.grouping.controller;
 
+import com.covengers.grouping.dto.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,11 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.covengers.grouping.component.CommonResponseMaker;
 import com.covengers.grouping.component.RequestContextHelper;
 import com.covengers.grouping.constant.ResponseCode;
-import com.covengers.grouping.dto.CommonResponse;
-import com.covengers.grouping.dto.FriendListResultDto;
-import com.covengers.grouping.dto.GroupListResponseDto;
-import com.covengers.grouping.dto.GroupingUserDto;
-import com.covengers.grouping.dto.ResetPasswordRequestDto;
 import com.covengers.grouping.service.UserService;
 import com.covengers.grouping.vo.GroupingUserInfoVo;
 

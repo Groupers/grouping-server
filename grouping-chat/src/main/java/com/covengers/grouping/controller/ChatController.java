@@ -38,7 +38,7 @@ public class ChatController extends AppChatV1Controller {
     }
     */
 
-    @MessageMapping("/chat/message")
+    @MessageMapping("/message")
     public void sendMessage(ChatMessage chatMessage) {
         chatService.sendMessage(chatMessage);
     }
