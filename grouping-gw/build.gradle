@@ -20,6 +20,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.3.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.3.RELEASE'
     implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.3"

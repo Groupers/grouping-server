@@ -34,7 +34,7 @@ public class GroupChatRoom extends AbstractAuditingEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_chat_room_id")
-    private List<GroupingUser> chatUserList = new ArrayList<>();
+    private List<GroupingUser> userList = new ArrayList<>();
 
     public GroupChatRoom(String title) {
         this.title = title;
