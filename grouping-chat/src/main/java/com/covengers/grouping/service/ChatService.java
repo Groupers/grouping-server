@@ -2,13 +2,14 @@ package com.covengers.grouping.service;
 
 import com.covengers.grouping.component.GroupRepositoryDecorator;
 import com.covengers.grouping.component.GroupingUserRepositoryDecorator;
-import com.covengers.grouping.domain.ChatMessage;
-import com.covengers.grouping.domain.Group;
-import com.covengers.grouping.domain.GroupChatRoom;
-import com.covengers.grouping.domain.GroupingUser;
+import com.covengers.grouping.domain.*;
+import com.covengers.grouping.dto.CreateUserChatRoomRequestDto;
 import com.covengers.grouping.repository.GroupChatRoomRepository;
+import com.covengers.grouping.repository.UserChatRoomRepository;
 import com.covengers.grouping.vo.CreateGroupChatRoomRequestVo;
+import com.covengers.grouping.vo.CreateUserChatRoomRequestVo;
 import com.covengers.grouping.vo.GroupChatRoomVo;
+import com.covengers.grouping.vo.UserChatRoomVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ChatService {
 
     private final GroupChatRoomRepository groupChatRoomRepository;
+    private final UserChatRoomRepository userChatRoomRepository;
     private final GroupRepositoryDecorator groupRepository;
     private final GroupingUserRepositoryDecorator groupingUserRepository;
     private final SimpMessageSendingOperations messagingTemplate;
@@ -46,6 +48,23 @@ public class ChatService {
         }
 
         return groupChatRoom.toVo();
+    }
+
+    @Transactional
+    public UserChatRoomVo createUserChatRoom(CreateUserChatRoomRequestVo requestVo) {
+
+        final UserChatRoom userChatRoom = new UserChatRoom();
+
+        userChatRoomRepository.save(userChatRoom);
+
+        final List<Long> groupingUserIdList = requestVo.getGroupingUserIdList();
+
+        for (Long id : groupingUserIdList) {
+            final GroupingUser groupingUser = groupingUserRepository.findTopById(id);
+            userChatRoom.getUserList().add(groupingUser);
+        }
+
+        return userChatRoom.toVo();
     }
 
     /**

@@ -22,9 +22,6 @@ public abstract class ChatRoom extends AbstractAuditingEntity {
     @Column(name = "chat_room_id")
     protected Long id;
 
-    @Column(name = "title")
-    protected String title;
-
     @Column(name = "topic_id")
     protected String topicId;
 
