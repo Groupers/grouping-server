@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import com.covengers.grouping.component.GroupRepositoryDecorator;
+import com.covengers.grouping.component.GroupingUserRepositoryDecorator;
 import com.covengers.grouping.vo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,16 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.covengers.grouping.component.HashtagRecommender;
 import com.covengers.grouping.constant.GroupUserType;
-import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.Group;
 import com.covengers.grouping.domain.GroupHashtagMapping;
 import com.covengers.grouping.domain.GroupingUser;
 import com.covengers.grouping.domain.Hashtag;
 import com.covengers.grouping.domain.UserGroupMapping;
-import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupHashtagMappingRepository;
-import com.covengers.grouping.repository.GroupRepository;
-import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.repository.HashtagRepository;
 import com.covengers.grouping.repository.UserGroupMappingRepository;
 
@@ -35,10 +33,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GroupService {
     private final HashtagRecommender hashtagRecommender;
-    private final GroupRepository groupRepository;
+    private final GroupRepositoryDecorator groupRepository;
     private final HashtagRepository hashtagRepository;
     private final GroupHashtagMappingRepository groupHashtagMappingRepository;
-    private final GroupingUserRepository groupingUserRepository;
+    private final GroupingUserRepositoryDecorator groupingUserRepository;
     private final UserGroupMappingRepository userGroupMappingRepository;
 
     @Transactional
@@ -57,11 +55,7 @@ public class GroupService {
 
         groupRepository.save(group);
 
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(requestVo.getRepresentGroupingUserId());
-
-        final GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+        final GroupingUser groupingUser = groupingUserRepository.findTopById(requestVo.getRepresentGroupingUserId());
 
         final UserGroupMapping userGroupMapping = new UserGroupMapping(groupingUser, group, GroupUserType.MASTER);
 
@@ -85,7 +79,7 @@ public class GroupService {
     @Transactional
     public GroupVo uploadGroupImage(MultipartFile imageFile, Long groupId) throws IOException {
         imageFile.transferTo(new File(System.getProperty("user.home")+ "/" + imageFile.getOriginalFilename()));
-        final Group group = groupRepository.getOne(groupId);
+        final Group group = groupRepository.findById(groupId);
         group.setRepresentGroupImage(imageFile.getOriginalFilename());
         return group.toVo();
     }
@@ -99,7 +93,7 @@ public class GroupService {
         for (String hashtagString : recommendHashtagVo.getHashtagList()) {
             final Optional<Hashtag> hashtag = hashtagRepository.findByHashtag(hashtagString);
 
-            if (!hashtag.isPresent()) {
+            if (hashtag.isEmpty()) {
                 continue;
             }
 
@@ -115,15 +109,10 @@ public class GroupService {
 
     public GroupChatRoomListResponseVo getGroupChatRoomList(Long groupId) {
 
-        final Optional<Group> groupOptional =
-                groupRepository.findById(groupId);
-
-        if (!groupOptional.isPresent()) {
-            throw new CommonException(ResponseCode.GROUP_NOT_EXISTED);
-        }
+        final Group group = groupRepository.findById(groupId);
 
         return GroupChatRoomListResponseVo.builder()
-                .groupChatRoomList(groupOptional.get().toGroupChatRoomList())
+                .groupChatRoomList(group.toGroupChatRoomList())
                 .build();
     }
 }

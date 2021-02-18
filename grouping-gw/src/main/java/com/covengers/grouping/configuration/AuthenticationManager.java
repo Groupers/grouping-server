@@ -1,7 +1,7 @@
 package com.covengers.grouping.configuration;
 
 import com.covengers.grouping.component.JwtTokenProvider;
-import com.covengers.grouping.service.GroupingUserRepositoryDecorator;
+import com.covengers.grouping.service.UserDetailsServiceDecorator;
 import com.covengers.grouping.vo.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 
     private final JwtTokenProvider tokenProvider;
 
-    private final GroupingUserRepositoryDecorator groupingUserRepository;
+    private final UserDetailsServiceDecorator userDetailsService;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
@@ -32,7 +32,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
             }
             final Long groupingUserId = tokenProvider.getUserIdFromJwt(jwt);
 
-            final UserPrincipal userPrincipal = groupingUserRepository.loadUserById(groupingUserId);
+            final UserPrincipal userPrincipal = userDetailsService.loadUserById(groupingUserId);
 
             final UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(userPrincipal, null,

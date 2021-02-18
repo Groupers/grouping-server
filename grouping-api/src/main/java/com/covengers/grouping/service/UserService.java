@@ -2,14 +2,12 @@ package com.covengers.grouping.service;
 
 import java.util.Optional;
 
+import com.covengers.grouping.component.GroupingUserRepositoryDecorator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.covengers.grouping.component.PhoneNationCodeClassifier;
-import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
-import com.covengers.grouping.exception.CommonException;
-import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.vo.CheckEmailResultVo;
 import com.covengers.grouping.vo.CheckPhoneNumberResultVo;
 import com.covengers.grouping.vo.FriendListResultVo;
@@ -26,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final GroupingUserRepository groupingUserRepository;
+    private final GroupingUserRepositoryDecorator groupingUserRepository;
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
 
     public CheckEmailResultVo checkEmail(String email) {
@@ -67,52 +65,33 @@ public class UserService {
 
     public GroupListResponseVo getGroupList(Long groupingUserId) {
 
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(groupingUserId);
-
-        if (groupingUserOptional.isEmpty()) {
-            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
-        }
+        final GroupingUser groupingUser = groupingUserRepository.findTopById(groupingUserId);
 
         return GroupListResponseVo.builder()
-                                  .groupList(groupingUserOptional.get().toGroupList())
+                                  .groupList(groupingUser.toGroupList())
                                   .build();
     }
 
     public FriendListResultVo getFriendList(Long groupingUserId) {
 
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(groupingUserId);
-
-        if (groupingUserOptional.isEmpty()) {
-            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
-        }
+        final GroupingUser groupingUser = groupingUserRepository.findTopById(groupingUserId);
 
         return FriendListResultVo.builder()
-                                 .friendList(groupingUserOptional.get().toFriendList())
+                                 .friendList(groupingUser.toFriendList())
                                  .build();
     }
 
     public GroupingUserVo getUserInfo(GroupingUserInfoVo groupingUserInfoVo) {
 
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(groupingUserInfoVo.getGroupingUserId());
+        final GroupingUser groupingUser = groupingUserRepository.findTopById(groupingUserInfoVo.getGroupingUserId());
 
-        if (groupingUserOptional.isEmpty()) {
-            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
-        }
-
-        return groupingUserOptional.get().toVo();
+        return groupingUser.toVo();
     }
 
     @Transactional
     public void resetPassword(Long groupingUserId, ResetPasswordRequestVo requestVo) {
 
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(groupingUserId);
-
-        final GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+        final GroupingUser groupingUser = groupingUserRepository.findTopById(groupingUserId);
 
         groupingUser.setPassword(requestVo.getPassword());
 

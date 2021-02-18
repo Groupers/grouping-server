@@ -1,14 +1,12 @@
 package com.covengers.grouping.service;
 
-import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.component.GroupRepositoryDecorator;
+import com.covengers.grouping.component.GroupingUserRepositoryDecorator;
 import com.covengers.grouping.domain.ChatMessage;
 import com.covengers.grouping.domain.Group;
 import com.covengers.grouping.domain.GroupChatRoom;
 import com.covengers.grouping.domain.GroupingUser;
-import com.covengers.grouping.exception.CommonException;
 import com.covengers.grouping.repository.GroupChatRoomRepository;
-import com.covengers.grouping.repository.GroupRepository;
-import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.vo.CreateGroupChatRoomRequestVo;
 import com.covengers.grouping.vo.GroupChatRoomVo;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -26,17 +23,14 @@ import java.util.Optional;
 public class ChatService {
 
     private final GroupChatRoomRepository groupChatRoomRepository;
-    private final GroupRepository groupRepository;
-    private final GroupingUserRepository groupingUserRepository;
+    private final GroupRepositoryDecorator groupRepository;
+    private final GroupingUserRepositoryDecorator groupingUserRepository;
     private final SimpMessageSendingOperations messagingTemplate;
 
     @Transactional
     public GroupChatRoomVo createGroupChatRoom(CreateGroupChatRoomRequestVo requestVo) {
 
-        final Optional<Group> groupOptional = groupRepository.findById(requestVo.getGroupId());
-
-        final Group group =
-                groupOptional.orElseThrow(() -> new CommonException(ResponseCode.GROUP_NOT_EXISTED));
+        final Group group = groupRepository.findById(requestVo.getGroupId());
 
         final GroupChatRoom groupChatRoom = new GroupChatRoom(requestVo.getChatRoomTitle());
 
@@ -47,13 +41,10 @@ public class ChatService {
         final List<Long> groupingUserIdList = requestVo.getGroupingUserIdList();
 
         for (Long id : groupingUserIdList) {
-            final Optional<GroupingUser> groupingUserOptional = groupingUserRepository.findById(id);
-
-            final GroupingUser groupingUser =
-                    groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
-
+            final GroupingUser groupingUser = groupingUserRepository.findTopById(id);
             groupChatRoom.getUserList().add(groupingUser);
         }
+
         return groupChatRoom.toVo();
     }
 
