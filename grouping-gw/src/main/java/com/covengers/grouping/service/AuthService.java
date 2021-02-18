@@ -1,17 +1,16 @@
 package com.covengers.grouping.service;
 
+import com.covengers.grouping.component.GroupingUserRepositoryDecorator;
 import com.covengers.grouping.component.PhoneNationCodeClassifier;
 import com.covengers.grouping.constant.ResponseCode;
 import com.covengers.grouping.domain.GroupingUser;
 import com.covengers.grouping.exception.CommonException;
-import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.vo.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,9 +30,9 @@ import java.util.Optional;
 @Slf4j
 public class AuthService {
 
-    private final GroupingUserRepository groupingUserRepository;
+    private final GroupingUserRepositoryDecorator groupingUserRepository;
 
-    private final GroupingUserRepositoryDecorator groupingUserRepositoryDecorator;
+    private final UserDetailsServiceDecorator userDetailsService;
 
     private final PhoneNationCodeClassifier phoneNationCodeClassifier;
 
@@ -112,7 +111,7 @@ public class AuthService {
 
         final List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-        final UserDetails userDetails = groupingUserRepositoryDecorator.loadUserByUsername(phoneOrEmail);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(phoneOrEmail);
 
         final Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
