@@ -1,10 +1,8 @@
 package com.covengers.grouping.service;
 
-import com.covengers.grouping.constant.ResponseCode;
+import com.covengers.grouping.component.GroupingUserRepositoryDecorator;
 import com.covengers.grouping.domain.GroupingUser;
 import com.covengers.grouping.domain.Keyword;
-import com.covengers.grouping.exception.CommonException;
-import com.covengers.grouping.repository.GroupingUserRepository;
 import com.covengers.grouping.repository.KeywordRepository;
 import com.covengers.grouping.vo.KeywordVo;
 import com.covengers.grouping.vo.SearchHistoryListResultVo;
@@ -20,20 +18,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class KeywordService {
-    private final GroupingUserRepository groupingUserRepository;
+    private final GroupingUserRepositoryDecorator groupingUserRepository;
     private final KeywordRepository keywordRepository;
 
     public SearchHistoryListResultVo getSearchHistoryList(Long groupingUserId) {
 
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(groupingUserId);
-
-        if (!groupingUserOptional.isPresent()) {
-            throw new CommonException(ResponseCode.USER_NOT_EXISTED);
-        }
+        final GroupingUser groupingUser= groupingUserRepository.findTopById(groupingUserId);
 
         return SearchHistoryListResultVo.builder()
-                .searchHistoryList(groupingUserOptional.get().toSearchHistoryList())
+                .searchHistoryList(groupingUser.toSearchHistoryList())
                 .build();
     }
 
@@ -68,11 +61,7 @@ public class KeywordService {
     @Transactional
     public void addSearchHistory(Long groupingUserId, String keyword) {
 
-        final Optional<GroupingUser> groupingUserOptional =
-                groupingUserRepository.findTopById(groupingUserId);
-
-        final GroupingUser groupingUser =
-                groupingUserOptional.orElseThrow(() -> new CommonException(ResponseCode.USER_NOT_EXISTED));
+        final GroupingUser groupingUser= groupingUserRepository.findTopById(groupingUserId);
 
         final Keyword keywordEntity = new Keyword(keyword);
 

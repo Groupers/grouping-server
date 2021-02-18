@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class GroupingUserRepositoryDecorator implements UserDetailsService {
+public class UserDetailsServiceDecorator implements UserDetailsService {
 
     private final GroupingUserRepository groupingUserRepository;
 
