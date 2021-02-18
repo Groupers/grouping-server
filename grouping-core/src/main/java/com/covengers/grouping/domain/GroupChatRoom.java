@@ -17,24 +17,10 @@ import java.util.UUID;
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Table(name = "group_chat_room")
-public class GroupChatRoom extends AbstractAuditingEntity {
+@DiscriminatorValue("group")
+public class GroupChatRoom extends ChatRoom {
 
     private static final long serialVersionUID = 1489983754860461043L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "group_chat_room_id")
-    private Long id;
-
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "topic_id")
-    private String topicId;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_chat_room_id")
-    private List<GroupingUser> userList = new ArrayList<>();
 
     public GroupChatRoom(String title) {
         this.title = title;
