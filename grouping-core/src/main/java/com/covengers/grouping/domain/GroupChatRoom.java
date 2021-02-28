@@ -22,6 +22,9 @@ public class GroupChatRoom extends ChatRoom {
 
     private static final long serialVersionUID = 1489983754860461043L;
 
+    @Column(name = "title")
+    private String title;
+
     public GroupChatRoom(String title) {
         this.title = title;
         this.topicId = UUID.randomUUID().toString();
