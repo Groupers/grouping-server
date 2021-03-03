@@ -1,14 +1,6 @@
 spring:
   application:
-    name: chat
-
-  profiles:
-    active: local
-
----
-
-spring:
-  profiles: local
+    name: grouping-chat
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -61,8 +53,10 @@ spring:
   #      max-file-size: 100MB
   #      max-request-size: 100MB
 
-server:
-  address: localhost
-  port: 10756
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10752/eureka
 
----
+server:
+  port: 10756
