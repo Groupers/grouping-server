@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: grouping-discovery
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    service-url:
+      defaultZone: http://localhost:10752/eureka
+
+server:
+  port: 10752

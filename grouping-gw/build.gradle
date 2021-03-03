@@ -11,7 +11,7 @@ version '0.0.1-SNAPSHOT'
 sourceCompatibility = 11
 
 ext {
-    set('springCloudVersion', "Hoxton.SR9")
+    set('springCloudVersion', "Hoxton.SR10")
 }
 
 dependencies {
@@ -20,11 +20,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 //    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.3.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.3.RELEASE'
+
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger2:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
     implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.3"
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

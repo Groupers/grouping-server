@@ -34,6 +34,12 @@ public class SecurityConfiguration {
             "/v1/sign/login/phone-number",
     };
 
+    private static final String[] EXCLUDE_SWAGGER_REQUEST_PATH = {
+            "/v2/api-docs/**", "/swagger-resources/configuration/ui",
+            "/swagger-resources","/swagger-resources/configuration/security",
+            "/swagger-ui/","/webjars/**"
+    };
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -58,6 +64,8 @@ public class SecurityConfiguration {
                 .pathMatchers(EXCLUDE_POST_REQUEST_PATH)
                 .permitAll()
                 .pathMatchers(HttpMethod.GET, EXCLUDE_GET_REQUEST_PATH)
+                .permitAll()
+                .pathMatchers(EXCLUDE_SWAGGER_REQUEST_PATH)
                 .permitAll()
                 .anyExchange()
                 .authenticated()

@@ -4,4 +4,5 @@ include 'grouping-core'
 include 'grouping-batch'
 include 'grouping-gw'
 include 'grouping-chat'
+include 'grouping-discovery'
 

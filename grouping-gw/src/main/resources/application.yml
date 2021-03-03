@@ -1,24 +1,6 @@
 spring:
   application:
-    name: gateway
-
-  profiles:
-    active: local
-
-app:
-  jwtSecret: groupingGauza!
-  jwtExpirationInMilliSecond: 86400000
-
-grouping:
-  url:
-    api: http://127.0.0.1:10754/
-    chat: http://127.0.0.1:10756/
-  version: v1
-
----
-
-spring:
-  profiles: local
+    name: grouping-gateway
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -36,6 +18,11 @@ spring:
       ddl-auto: create
 #    show-sql: true
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10752/eureka
+
   sleuth:
     sampler:
       probability: 1.0
@@ -44,7 +31,8 @@ spring:
     base-url: http://localhost:9411/
 
 server:
-  address: localhost
   port: 10753
 
----
+app:
+  jwtSecret: groupingGauza!
+  jwtExpirationInMilliSecond: 86400000
