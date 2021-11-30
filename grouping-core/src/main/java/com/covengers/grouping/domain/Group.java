@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
@@ -97,58 +96,58 @@ public class Group extends AbstractAuditingEntity {
 
     public GroupVo toVoForGroupingUser() {
         return GroupVo.builder()
-                      .id(getId())
-                      .title(getTitle())
-                      .isHidden(getIsHidden())
-                      .maxUserAge(getMaxUserAge())
-                      .minUserAge(getMinUserAge())
-                      .availableGender(getAvailableGender())
-                      .description(getDescription())
-                      .pointX(getPointX())
-                      .pointY(getPointY())
-                      .pointDescription(getPointDescription())
-                      .representGroupImage(Optional.ofNullable(getRepresentGroupImage()))
-                      .build();
+                .id(id)
+                .title(title)
+                .isHidden(isHidden)
+                .maxUserAge(maxUserAge)
+                .minUserAge(minUserAge)
+                .availableGender(availableGender)
+                .description(description)
+                .pointX(pointX)
+                .pointY(pointY)
+                .pointDescription(pointDescription)
+                .representGroupImage(Optional.ofNullable(representGroupImage))
+                .build();
     }
 
     public GroupVo toVoForHashtag() {
         return GroupVo.builder()
-                      .id(getId())
-                      .title(getTitle())
-                      .isHidden(getIsHidden())
-                      .maxUserAge(getMaxUserAge())
-                      .minUserAge(getMinUserAge())
-                      .availableGender(getAvailableGender())
-                      .description(getDescription())
-                      .pointX(getPointX())
-                      .pointY(getPointY())
-                      .pointDescription(getPointDescription())
-                      .representGroupImage(Optional.ofNullable(getRepresentGroupImage()))
-                      .build();
+                .id(id)
+                .title(title)
+                .isHidden(isHidden)
+                .maxUserAge(maxUserAge)
+                .minUserAge(minUserAge)
+                .availableGender(availableGender)
+                .description(description)
+                .pointX(pointX)
+                .pointY(pointY)
+                .pointDescription(pointDescription)
+                .representGroupImage(Optional.ofNullable(representGroupImage))
+                .build();
     }
 
     public GroupVo toVo() {
         return GroupVo.builder()
-                      .id(id)
-                      .title(title)
-                      .isHidden(getIsHidden())
-                      .maxUserAge(maxUserAge)
-                      .minUserAge(minUserAge)
-                      .availableGender(availableGender)
-                      .description(description)
-                      .pointX(pointX)
-                      .pointY(pointY)
-                      .pointDescription(description)
-                      .representGroupImage(Optional.ofNullable(representGroupImage))
-                      .build();
+                .id(id)
+                .title(title)
+                .isHidden(isHidden)
+                .maxUserAge(maxUserAge)
+                .minUserAge(minUserAge)
+                .availableGender(availableGender)
+                .description(description)
+                .pointX(pointX)
+                .pointY(pointY)
+                .pointDescription(description)
+                .representGroupImage(Optional.ofNullable(representGroupImage))
+                .build();
     }
 
     public List<HashtagVo> getHashtagList() {
         return groupHashtagMappingList.stream()
-                                      .map(groupHashtagMapping ->
-                                                   groupHashtagMapping.getHashtag()
-                                                                      .toVoForGroup())
-                                      .collect(Collectors.toList());
+                .map(groupHashtagMapping ->
+                        groupHashtagMapping.getHashtag()
+                                .toVoForGroup())
+                .collect(Collectors.toList());
     }
 
     public List<GroupChatRoomVo> toGroupChatRoomList() {

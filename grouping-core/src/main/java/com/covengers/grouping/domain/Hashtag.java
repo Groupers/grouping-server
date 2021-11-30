@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
@@ -51,8 +50,8 @@ public class Hashtag extends AbstractAuditingEntity {
 
     public HashtagVo toVoForGroup() {
         return HashtagVo.builder()
-                        .id(getId())
-                        .hashtag(getHashtag())
+                        .id(id)
+                        .hashtag(hashtag)
                         .build();
     }
 

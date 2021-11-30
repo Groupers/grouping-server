@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Getter
-@Setter
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Table(name = "user_chat_room")
